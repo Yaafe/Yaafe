@@ -45,7 +45,7 @@ copyright = u'2009-2011 Institut Télécom - Télécom Paristech'
 # built documents.
 #
 # The short X.Y version.
-version = '0.63'
+version = '0.64'
 # The full version, including alpha/beta/rc tags.
 release = version
 

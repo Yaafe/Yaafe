@@ -43,7 +43,7 @@ Download
 
 *Yaafe*'s source code is released under the terms of the GNU LGPLv3 License. *Yaafe* source code compiles on **Linux** and **MacOsX** platforms.
 
-Download current release: `yaafe-v0.63.tgz <https://sourceforge.net/projects/yaafe/files/yaafe-v0.63.tgz/download>`_, see :doc:`changelog <changelog>`.
+Download current release: `yaafe-v0.64.tgz <https://sourceforge.net/projects/yaafe/files/yaafe-v0.64.tgz/download>`_, see :doc:`changelog <changelog>`.
   
 View all releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
 
@@ -59,8 +59,6 @@ Documentation
 
 * :doc:`User Manual </manual>`
 * :doc:`Available features documentation </features>`
-
-See old documentations :doc:`here <olddocs>`. 
 
 Support
 -------

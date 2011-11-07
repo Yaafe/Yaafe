@@ -1,6 +1,12 @@
 Changelog
 =========
 
+**v0.64**, 2011-11-07
+    Minor release.
+
+    * Fix compilation issue: missing cstddef include in ``src_cpp/yaafe-core/Buffer.h``
+    * Added MelSpectrum feature
+
 **v0.63**, 2011-08-10
     Minor release.
     
