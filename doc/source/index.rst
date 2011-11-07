@@ -23,7 +23,7 @@ Project's status
 ----------------
 
 .. highlights::
-	Current version is Yaafe |version|,  released on 2011-08-10.
+	Current version is Yaafe |version|,  released on 2011-11-07.
 
 *Yaafe* may evolve in future versions, but current code is pretty stable and feature computation is already reliable.
 *Yaafe* is already used in some Music Information Retrieval systems.
