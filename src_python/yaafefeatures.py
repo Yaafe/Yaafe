@@ -371,6 +371,29 @@ class Cepstrum(AudioFeature):
         dataflow_safe_append(df,'Cepstrum',params)
         return df
 
+class MelSpectrum(AudioFeature):
+    '''
+    Compute the Mel-frequencies spectrum [DM1980]_.
+    
+    Mel filter bank is built as 40 log-spaced filters according to the following mel-scale:
+    
+    .. math:: melfreq = 1127 * log(1 + \\frac{freq}{700})
+    
+    Each filter is a triangular filter with height :math:`2/(f_{max}-f_{min})`.
+    
+    .. [DM1980] S.B. Davis and P.Mermelstrin, *Comparison of parametric representations for monosyllabic word recognition in continuously spoken sentences.* IEEE Transactions on Acoustics, Speech and Signal Processing, 28 :357-366, 1980.
+
+    '''
+    COMPONENT_LIBS = ['yaafe-components']
+    PARAMS = [(MagnitudeSpectrum,{'FFTLength':None}),
+              ('MelFilterBank',{})]
+    @classmethod
+    @check_dataflow_params
+    def get_dataflow(cls,params,samplerate):
+        df = MagnitudeSpectrum.get_dataflow(MagnitudeSpectrum.filter_params(params), samplerate)
+        dataflow_safe_append(df,'MelFilterBank',params)
+        return df
+
 class MFCC(AudioFeature):
     '''
     Compute the Mel-frequencies cepstrum coefficients [DM1980]_.
