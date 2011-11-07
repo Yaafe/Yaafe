@@ -380,8 +380,6 @@ class MelSpectrum(AudioFeature):
     .. math:: melfreq = 1127 * log(1 + \\frac{freq}{700})
     
     Each filter is a triangular filter with height :math:`2/(f_{max}-f_{min})`.
-    
-    .. [DM1980] S.B. Davis and P.Mermelstrin, *Comparison of parametric representations for monosyllabic word recognition in continuously spoken sentences.* IEEE Transactions on Acoustics, Speech and Signal Processing, 28 :357-366, 1980.
 
     '''
     COMPONENT_LIBS = ['yaafe-components']
