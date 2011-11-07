@@ -27,6 +27,7 @@
 
 #include <list>
 #include <assert.h>
+#include <cstddef>
 
 namespace YAAFE
 {
