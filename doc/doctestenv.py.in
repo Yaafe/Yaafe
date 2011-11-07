@@ -1,0 +1,3 @@
+audiofile = '@CMAKE_SOURCE_DIR@/resources/yaafe_check.wav'
+featureplan = '@CMAKE_SOURCE_DIR@/resources/featureplan'
+dataflow_file = '@CMAKE_SOURCE_DIR@/resources/yaflow32k'

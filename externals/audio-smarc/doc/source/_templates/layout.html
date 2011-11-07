@@ -1,0 +1,27 @@
+{#
+    basic/layout.html
+    ~~~~~~~~~~~~~~~~~
+
+    Master layout template for Sphinx themes.
+
+    :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{% extends "!layout.html" %}
+{% block relbar1 %}{% endblock %}
+{% block footer %}
+    <div class="footer">
+    {%- if hasdoc('copyright') %}
+      {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+    {%- else %}
+      {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
+    {%- endif %}
+    {%- if last_updated %}
+      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+    {%- endif %}
+    {%- if show_sphinx %}
+      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    {%- endif %}
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/audio-smarc"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+{% endblock  %}

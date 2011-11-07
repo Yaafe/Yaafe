@@ -1,0 +1,38 @@
+file(GLOB_RECURSE yaafe_io_SOURCES *.cpp)
+
+set(yaafe_io_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${SMARC_INCLUDE_DIR})
+set(yaafe_io_LIBS "")
+
+if (WITH_SNDFILE)
+   list(APPEND yaafe_io_LIBS ${SNDFILE_LIBRARY})
+   list(APPEND yaafe_io_INCLUDE_DIRS ${SNDFILE_INCLUDE_DIR})
+else (WITH_SNDFILE)
+    file(GLOB tmpfile io/AudioFileReader.cpp)
+    list(REMOVE_ITEM yaafe_io_SOURCES ${tmpfile})
+endif (WITH_SNDFILE)
+
+if (WITH_HDF5)
+   list(APPEND yaafe_io_LIBS ${HDF5_LIBRARY} ${HDF5_HL_LIBRARY})
+   list(APPEND yaafe_io_INCLUDE_DIRS ${HDF5_INCLUDE_DIR})
+else (WITH_HDF5)
+    file(GLOB tmpfile io/H5DatasetWriter.cpp)
+    list(REMOVE_ITEM yaafe_io_SOURCES ${tmpfile})
+endif (WITH_HDF5)
+
+if (WITH_MPG123)
+   list(APPEND yaafe_io_LIBS ${MPG123_LIBRARY})
+   list(APPEND yaafe_io_INCLUDE_DIRS ${MPG123_INCLUDE_DIR})
+else (WITH_MPG123)
+    file(GLOB tmpfile io/MP3FileReader.cpp)
+    list(REMOVE_ITEM yaafe_io_SOURCES ${tmpfile})
+endif (WITH_MPG123)
+
+include_directories(${yaafe_io_INCLUDE_DIRS})
+link_directories(${CMAKE_BINARY_DIR}/src_cpp/yaafe-core)
+add_library (yaafe-io MODULE ${yaafe_io_SOURCES})
+if (NOT APPLE)
+   set_target_properties(yaafe-io PROPERTIES VERSION ${YAAFE_LIBVERSION} SOVERSION ${YAAFE_API_VERSION})
+endif (NOT APPLE)
+target_link_libraries(yaafe-io yaafe-core audio-smarc ${yaafe_io_LIBS})
+
+install(TARGETS yaafe-io DESTINATION ${CMAKE_INSTALL_LIBDIR})

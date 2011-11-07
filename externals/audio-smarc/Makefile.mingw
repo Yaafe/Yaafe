@@ -1,0 +1,40 @@
+#######################################################
+# Change following variable to match your configuration
+#######################################################
+
+# put your favorite compilation options here
+CFLAGS := -msse -msse2 -ffast-math -mfpmath=sse -Wall -fPIC
+
+# switch comment to build DEBUG version 
+CFLAGS  := $(CFLAGS) -DNDEBUG -O3 -g0
+#CFLAGS := $(CFLAGS) -DDEBUG  -O0 -g2
+
+# Add include locations and library locations
+CFLAGS := $(CFLAGS) -I.
+LDFLAGS := $(LDFLAGS) -L.
+
+##############################################
+# Following lines should not be edited by user
+##############################################
+
+LDFLAGS := libsndfile-1.dll
+
+SRC = main.c remez_lp.c smarc.c stage_impl.c filtering.c polyfilt.c multi_stage.c
+
+TARGET = smarc
+OBJECTS = $(patsubst %.c,%.o,$(SRC))
+
+ARGTABLE_LIB_A := argtable2.dll
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	gcc.exe -Xlinker --enable-auto-import $(LDFLAGS) $(OBJECTS) $(ARGTABLE_LIB_A) -o $(TARGET)
+	
+%.o: %.c
+	echo "compiling $<"
+	gcc.exe $(CFLAGS) -c $<
+	
+clean:
+	rm -f $(OBJECTS)
+

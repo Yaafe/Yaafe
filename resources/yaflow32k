@@ -1,0 +1,32 @@
+useComponentLibrary yaafe-components
+audio := Input SampleRate="32000"
+n1 := FrameTokenizer blockSize="512" stepSize="256"
+n2 := FFT FFTLength="512" FFTWindow="Hanning"
+n3 := Abs
+n4 := MelFilterBank MelMaxFreq="6854.0" MelMinFreq="130.0" MelNbFilters="40"
+n5 := Cepstrum CepsIgnoreFirstCoeff="1" CepsNbCoeffs="13"
+mfcc := Output normalize="-1" version="v0.6" yaafedefinition="MFCC blockSize=512 stepSize=256"
+n7 := Derivate DO1Len="4" DO2Len="1" DOrder="1"
+mfcc_d1 := Output normalize="-1" version="v0.6" yaafedefinition="MFCC blockSize=512 stepSize=256 > Derivate DOrder=1"
+n9 := Derivate DO1Len="4" DO2Len="1" DOrder="2"
+mfcc_d2 := Output normalize="-1" version="v0.6" yaafedefinition="MFCC blockSize=512 stepSize=256 > Derivate DOrder=2"
+n11 := Flatness
+sf := Output normalize="-1" version="v0.6" yaafedefinition="SpectralFlatness blockSize=512 stepSize=256"
+n13 := Sqr
+n14 := Rolloff
+sr := Output normalize="-1" version="v0.6" yaafedefinition="SpectralRolloff blockSize=512 stepSize=256"
+audio > n1
+n1 > n2
+n2 > n3
+n3 > n4
+n4 > n5
+n5 > mfcc
+n5 > n7
+n7 > mfcc_d1
+n5 > n9
+n9 > mfcc_d2
+n3 > n11
+n11 > sf
+n3 > n13
+n13 > n14
+n14 > sr

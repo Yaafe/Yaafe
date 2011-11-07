@@ -1,0 +1,14 @@
+
+YAAFE is released under the version 3 of the GNU Lesser General Public License.
+
+Note that YAAFE is provided with a "home made" computation of the FFT. If you 
+make the choice of using the library FFTW, please, note that this library is 
+under the GNU General Public License (GPL). So if you ship a binary-only of 
+YAAFE, it is up to you to make sure you do not infringe the FFTW license, or 
+the license of any other library that's linked by YAAFE. If you cannot do that,
+then you cannot distribute your binary-only module.
+
+Moreover you cannot redistribute the source code of YAAFE with the FFTW library
+without infringing the LGPL license of YAAFE. The new code, linked to the FFTW 
+library, will have to be released under the GPL license.
+
