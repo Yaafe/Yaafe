@@ -108,7 +108,7 @@ bool MelFilterBank::init(const ParameterMap& params, const Ports<StreamInfo>& in
 		int fStart=0;
 		while (fullfilt(fStart)==0.0) fStart++;
 		int fEnd=fStart+1;
-		while (fullfilt(fEnd)!=0.0) fEnd++;
+		while ((fEnd<m_size) && (fullfilt(fEnd)!=0.0)) fEnd++;
 		m_filterStart.push_back(fStart);
 		m_filters.push_back(RowVectorXd());
 		m_filters.back() = fullfilt.segment(fStart,fEnd-fStart);
