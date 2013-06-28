@@ -26,23 +26,27 @@ you can compile with the following steps:
  5. make install
 
 Several options can control Yaafe compilation. More details can be found at:
-   https://yaafe.sourceforge.net/manual/install.html
+	https://yaafe.sourceforge.net/manual/install.html
 
 
 Environment
 ===========
 
-You *must* set your YAAFE_PATH environment var to the "yaafe_extensions" dir so that yaafe can find available features.
-export YAAFE_PATH=$DEST_DIR/yaafe_extensions
+You *must* set your YAAFE_PATH environment var to the "yaafe_extensions" dir so that yaafe can find available features::
 
-To easily use Yaafe, you should set the following environment vars:
-export PATH=$PATH:$DEST_DIR/bin
-# on MacOsX replace LD_LIBRARY_PATH => DYLD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEST_DIR/lib
-export PYTHONPATH=$PYTHONPATH:$DEST_DIR/python_packages
+ export YAAFE_PATH=$DEST_DIR/yaafe_extensions
 
-if you use Matlab, you can set your MATLABPATH var:
-export MATLABPATH=$MATLABPATH:$DEST_DIR/matlab
+To easily use Yaafe, you should set the following environment vars::
+
+ export PATH=$PATH:$DEST_DIR/bin
+ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEST_DIR/lib
+ export PYTHONPATH=$PYTHONPATH:$DEST_DIR/python_packages
+
+On MacOsX replace LD_LIBRARY_PATH by DYLD_LIBRARY_PATH
+
+If you use Matlab, you can set your MATLABPATH var::
+
+ export MATLABPATH=$MATLABPATH:$DEST_DIR/matlab
 
 
 Documentation
