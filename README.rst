@@ -70,5 +70,4 @@ Support
 =======
 
 To get help with YAAFE, use the mailing-list yaafe-users@lists.sourceforge.net (registration
-at https://lists.sourceforge.net/lists/listinfo/yaafe-users ) or contact the main author at
-benoit.mathieu@telecom-paristech.fr . 
+at https://lists.sourceforge.net/lists/listinfo/yaafe-users ).
