@@ -65,7 +65,13 @@ ComponentPool::ComponentPool() {
 
 ComponentPool::~ComponentPool() {
 	for (PoolType::iterator it=m_pool.begin();it!=m_pool.end();it++)
-		delete it->second;
+	{
+		if (it->second)
+		{
+			delete it->second;
+			it->second = NULL;
+		}
+	}
 }
 
 Component* ComponentPool::get(const std::string& id, const ParameterMap& params, const Ports<StreamInfo>& in)
@@ -104,14 +110,18 @@ void ComponentPool::release(Component* c)
 		return;
 	pair<PoolType::iterator,PoolType::iterator> range = m_pool.equal_range(c->getIdentifier());
 	for (PoolType::iterator it=range.first;it!=range.second; it++)
-		if (c==it->second->m_component)
+	{
+		if (it->second && c==it->second->m_component)
 		{
 			it->second->m_used--;
 			if (it->second->m_used==0) {
+				delete it->second;
+				it->second = NULL;
 				m_pool.erase(it);
 			}
 			return;
 		}
+	}
 	cerr << "WARNING: component " << c->getIdentifier() << " not found in ComponentPool ! cannot release it !" << endl;
 }
 
