@@ -32,17 +32,17 @@
 namespace YAAFE
 {
 
-class ComplexDomainFlux: public YAAFE::ComponentBase<ComplexDomainFlux>
-{
-public:
-    ComplexDomainFlux();
-    virtual ~ComplexDomainFlux();
+  class ComplexDomainFlux: public YAAFE::ComponentBase<ComplexDomainFlux>
+  {
+   public:
+     ComplexDomainFlux();
+     virtual ~ComplexDomainFlux();
 
-    virtual const std::string getIdentifier() const { return COMPLEX_DOMAIN_FLUX_ID;};
+     virtual const std::string getIdentifier() const { return COMPLEX_DOMAIN_FLUX_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-};
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+  };
 
 }
 

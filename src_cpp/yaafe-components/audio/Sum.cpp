@@ -30,39 +30,39 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-Sum::Sum()
-{
-}
+  Sum::Sum()
+  {
+  }
 
-Sum::~Sum()
-{
-}
+  Sum::~Sum()
+  {
+  }
 
-bool Sum::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool Sum::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	outStreamInfo().add(StreamInfo(in,1));
+    outStreamInfo().add(StreamInfo(in,1));
     return true;
-}
+  }
 
-bool Sum::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Sum::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	while (!in->empty())
-	{
-		Map<ArrayXd> inData(in->readToken(),in->info().size);
-		double* outData = out->writeToken();
-		*outData = inData.sum();
-		in->consumeToken();
-	}
+    while (!in->empty())
+    {
+      Map<ArrayXd> inData(in->readToken(),in->info().size);
+      double* outData = out->writeToken();
+      *outData = inData.sum();
+      in->consumeToken();
+    }
     return true;
-}
+  }
 
 }

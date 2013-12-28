@@ -32,17 +32,17 @@
 namespace YAAFE
 {
 
-class ZCR: public YAAFE::ComponentBase<ZCR>
-{
-public:
-    ZCR();
-    virtual ~ZCR();
+  class ZCR: public YAAFE::ComponentBase<ZCR>
+  {
+   public:
+     ZCR();
+     virtual ~ZCR();
 
-    virtual const std::string getIdentifier() const { return ZCR_ID;};
+     virtual const std::string getIdentifier() const { return ZCR_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-};
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+  };
 
 }
 

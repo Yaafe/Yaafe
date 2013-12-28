@@ -33,33 +33,33 @@ using namespace std;
 using namespace YAAFE;
 
 void* audiofileprocessor_create() {
-	return new AudioFileProcessor();
+  return new AudioFileProcessor();
 }
 
 void audiofileprocessor_destroy(void* afp)
 {
-	AudioFileProcessor* ptr = static_cast<AudioFileProcessor*>(afp);
-	delete ptr;
+  AudioFileProcessor* ptr = static_cast<AudioFileProcessor*>(afp);
+  delete ptr;
 }
 
 int audiofileprocessor_setOutputFormat(void* afp, char* format, char* outDir, char** params)
 {
-	AudioFileProcessor* afp_ = static_cast<AudioFileProcessor*>(afp);
-	ParameterMap paramMap;
-	char** ptr = params;
-	while (*ptr) {
-		paramMap.insert(make_pair(ptr[0],ptr[1]));
-		ptr += 2;
-	}
-	return (afp_->setOutputFormat(format, outDir, paramMap) ? 1 : 0);
+  AudioFileProcessor* afp_ = static_cast<AudioFileProcessor*>(afp);
+  ParameterMap paramMap;
+  char** ptr = params;
+  while (*ptr) {
+    paramMap.insert(make_pair(ptr[0],ptr[1]));
+    ptr += 2;
+  }
+  return (afp_->setOutputFormat(format, outDir, paramMap) ? 1 : 0);
 }
 
 int audiofileprocessor_processFile(void* afp,void* engine, char* filename)
 {
-	AudioFileProcessor* ptr = static_cast<AudioFileProcessor*>(afp);
-	Engine* e = static_cast<Engine*>(engine);
-	if (e==NULL)
-		return -11;
-	return ptr->processFile(*e,filename);
+  AudioFileProcessor* ptr = static_cast<AudioFileProcessor*>(afp);
+  Engine* e = static_cast<Engine*>(engine);
+  if (e==NULL)
+    return -11;
+  return ptr->processFile(*e,filename);
 }
 

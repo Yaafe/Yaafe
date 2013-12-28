@@ -33,44 +33,44 @@
 
 namespace YAAFE {
 
-class H5DatasetWriter: public YAAFE::ComponentBase<H5DatasetWriter> {
-public:
-	H5DatasetWriter();
-	virtual ~H5DatasetWriter();
+  class H5DatasetWriter: public YAAFE::ComponentBase<H5DatasetWriter> {
+   public:
+     H5DatasetWriter();
+     virtual ~H5DatasetWriter();
 
-	const std::string getIdentifier() const {
-		return H5_DATASET_WRITER_ID;
-	}
+     const std::string getIdentifier() const {
+       return H5_DATASET_WRITER_ID;
+     }
 
-    virtual bool stateLess() const { return false; };
+     virtual bool stateLess() const { return false; };
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-	virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-	virtual void reset();
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-	virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-
-
-private:
-	hid_t m_h5file;
-	hid_t m_table;
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual void reset();
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
 
-	struct H5FileHandler {
-		std::string filename;
-		hid_t id;
-		int count;
-	};
-	static std::vector<H5FileHandler> s_files;
-	static hid_t openH5File(const std::string& filename);
-	static void closeH5File(hid_t h5file);
+   private:
+     hid_t m_h5file;
+     hid_t m_table;
 
-	static bool exists_attr(hid_t h5file, const std::string& obj, const char* attrname);
-	static bool check_attr_string(hid_t h5file, const std::string& obj, const char* attrname, const std::string& attrvalue);
-	static bool check_attr_int(hid_t h5file, const std::string& obj, const char* attrname, int attrvalue);
-	static bool check_attr_double(hid_t h5file, const std::string& obj, const char* attrname, double attrvalue);
-};
+
+     struct H5FileHandler {
+       std::string filename;
+       hid_t id;
+       int count;
+     };
+     static std::vector<H5FileHandler> s_files;
+     static hid_t openH5File(const std::string& filename);
+     static void closeH5File(hid_t h5file);
+
+     static bool exists_attr(hid_t h5file, const std::string& obj, const char* attrname);
+     static bool check_attr_string(hid_t h5file, const std::string& obj, const char* attrname, const std::string& attrvalue);
+     static bool check_attr_int(hid_t h5file, const std::string& obj, const char* attrname, int attrvalue);
+     static bool check_attr_double(hid_t h5file, const std::string& obj, const char* attrname, double attrvalue);
+  };
 
 }
 

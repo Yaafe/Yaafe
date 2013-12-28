@@ -32,17 +32,17 @@
 
 namespace YAAFE {
 
-class HalfHannFilter: public YAAFE::TemporalFilter<HalfHannFilter> {
-public:
-	HalfHannFilter();
-	virtual ~HalfHannFilter();
+  class HalfHannFilter: public YAAFE::TemporalFilter<HalfHannFilter> {
+   public:
+     HalfHannFilter();
+     virtual ~HalfHannFilter();
 
-    virtual const std::string getIdentifier() const { return HALFHANNFILTER_ID;};
+     virtual const std::string getIdentifier() const { return HALFHANNFILTER_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool initFilter(const ParameterMap& params, const StreamInfo& in);
-};
+     virtual bool initFilter(const ParameterMap& params, const StreamInfo& in);
+  };
 
 }
 

@@ -26,11 +26,11 @@
 
 namespace YAAFE {
 
-DataFlowContext::DataFlowContext() :
-	m_dataflow(NULL), m_identifiers(), m_params()
-{}
+  DataFlowContext::DataFlowContext() :
+    m_dataflow(NULL), m_identifiers(), m_params()
+  {}
 
-DataFlowContext::~DataFlowContext()
-{}
+  DataFlowContext::~DataFlowContext()
+  {}
 
 }

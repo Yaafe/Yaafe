@@ -36,34 +36,34 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-Abs::Abs()
-{
-}
+  Abs::Abs()
+  {
+  }
 
-Abs::~Abs()
-{
-}
+  Abs::~Abs()
+  {
+  }
 
-StreamInfo Abs::init(const ParameterMap& params, const StreamInfo& in)
-{
+  StreamInfo Abs::init(const ParameterMap& params, const StreamInfo& in)
+  {
     if (in.size%2 != 0)
     {
-        cerr << "ERROR: Abs input size should be even" << endl;
-        return StreamInfo();
+      cerr << "ERROR: Abs input size should be even" << endl;
+      return StreamInfo();
     }
     return StreamInfo(in, in.size/2);
-}
+  }
 
-inline double nonZeroNorm(double r, double i)
-{
+  inline double nonZeroNorm(double r, double i)
+  {
     double n = std::sqrt(r*r + i*i);
     return n ? n : EPS;
-}
+  }
 
-void Abs::processToken(double* inData, const int inSize, double* outData, const int outSize)
-{
-	for (int i=0;i<outSize;++i)
-		outData[i] = nonZeroNorm(inData[2*i],inData[2*i+1]);
-}
+  void Abs::processToken(double* inData, const int inSize, double* outData, const int outSize)
+  {
+    for (int i=0;i<outSize;++i)
+      outData[i] = nonZeroNorm(inData[2*i],inData[2*i+1]);
+  }
 
 }

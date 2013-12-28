@@ -35,142 +35,142 @@ using namespace std;
 
 namespace YAAFE {
 
-bool hasEnding (const std::string& fullString, const std::string& ending)
-{
+  bool hasEnding (const std::string& fullString, const std::string& ending)
+  {
     if (fullString.length() > ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+      return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
     } else {
-        return false;
+      return false;
     }
-}
+  }
 
-AudioFileProcessor::AudioFileProcessor() : m_format(NULL) {
-}
+  AudioFileProcessor::AudioFileProcessor() : m_format(NULL) {
+  }
 
-AudioFileProcessor::~AudioFileProcessor() {
-	if (m_format)
-		delete m_format;
-}
+  AudioFileProcessor::~AudioFileProcessor() {
+    if (m_format)
+      delete m_format;
+  }
 
-bool AudioFileProcessor::setOutputFormat(const std::string& format,
-		const std::string& outDir,
-		const ParameterMap& params)
-{
-	if (m_format)
-		delete m_format;
-	const OutputFormat* prototype = OutputFormat::get(format);
-	if (prototype==NULL || !prototype->available())
-		return false;
-	m_format = prototype->clone();
-	m_format->setParameters(outDir,params);
-	return true;
-}
+  bool AudioFileProcessor::setOutputFormat(const std::string& format,
+      const std::string& outDir,
+      const ParameterMap& params)
+  {
+    if (m_format)
+      delete m_format;
+    const OutputFormat* prototype = OutputFormat::get(format);
+    if (prototype==NULL || !prototype->available())
+      return false;
+    m_format = prototype->clone();
+    m_format->setParameters(outDir,params);
+    return true;
+  }
 
-int AudioFileProcessor::processFile(Engine& engine, const std::string& filename)
-{
-	{
-		// check engine inputs
-		vector<string> inputs = engine.getInputs();
-		if (inputs.size()!=1) {
-			cerr << "ERROR: dataflow must have exactly 1 root node" << endl;
-			return -1;
-		}
-		if (inputs[0]!="audio") {
-			cerr << "ERROR: root node is not 'audio' node !" << endl;
-			return -2;
-		}
-	}
+  int AudioFileProcessor::processFile(Engine& engine, const std::string& filename)
+  {
+    {
+      // check engine inputs
+      vector<string> inputs = engine.getInputs();
+      if (inputs.size()!=1) {
+        cerr << "ERROR: dataflow must have exactly 1 root node" << endl;
+        return -1;
+      }
+      if (inputs[0]!="audio") {
+        cerr << "ERROR: root node is not 'audio' node !" << endl;
+        return -2;
+      }
+    }
 
-	int exitCode = 0;
-	ComponentFactory* factory = ComponentFactory::instance();
-	Component* reader = NULL;
-	std::vector<pair<string,Component*> > writers;
+    int exitCode = 0;
+    ComponentFactory* factory = ComponentFactory::instance();
+    Component* reader = NULL;
+    std::vector<pair<string,Component*> > writers;
 
-	cerr << "process file " << filename << endl;
-	clock_t end;
-	clock_t start = clock();
+    cerr << "process file " << filename << endl;
+    clock_t end;
+    clock_t start = clock();
 
-	// reset engine state
-	engine.reset();
+    // reset engine state
+    engine.reset();
 
-	// determine audio file format and select appropriate reader
-	std::string readerComponent = "";
-	{
-		std::string lowerFilename = filename;
-		transform(lowerFilename.begin(),lowerFilename.end(),lowerFilename.begin(),::tolower);
-		if (hasEnding(lowerFilename,"mp3")) {
-			if (!factory->exists("MP3FileReader")) {
-				cerr << "ERROR: cannot read mp3 file ! please compile yaafe with mpg123 support" << endl;
-				return -4;
-			}
-			readerComponent = "MP3FileReader";
-		} else {
-			if (!factory->exists("AudioFileReader")) {
-				cerr << "ERROR: please compile yaafe with libsndfile support" << endl;
-				return -3;
-			}
-			readerComponent = "AudioFileReader";
-		}
-	}
+    // determine audio file format and select appropriate reader
+    std::string readerComponent = "";
+    {
+      std::string lowerFilename = filename;
+      transform(lowerFilename.begin(),lowerFilename.end(),lowerFilename.begin(),::tolower);
+      if (hasEnding(lowerFilename,"mp3")) {
+        if (!factory->exists("MP3FileReader")) {
+          cerr << "ERROR: cannot read mp3 file ! please compile yaafe with mpg123 support" << endl;
+          return -4;
+        }
+        readerComponent = "MP3FileReader";
+      } else {
+        if (!factory->exists("AudioFileReader")) {
+          cerr << "ERROR: please compile yaafe with libsndfile support" << endl;
+          return -3;
+        }
+        readerComponent = "AudioFileReader";
+      }
+    }
 
-	// initialize reader
-	ParameterMap readerParams = engine.getInputParams("audio");
-	readerParams["File"] = filename;
-	reader = factory->createComponent(readerComponent);
-	Ports<StreamInfo> inports;
-	if (!reader->init(readerParams,inports)) {
-		cerr << "ERROR: cannot initialize reader " << readerComponent << " for file " << filename << endl;
-		exitCode = -6; goto exit;
-	}
+    // initialize reader
+    ParameterMap readerParams = engine.getInputParams("audio");
+    readerParams["File"] = filename;
+    reader = factory->createComponent(readerComponent);
+    Ports<StreamInfo> inports;
+    if (!reader->init(readerParams,inports)) {
+      cerr << "ERROR: cannot initialize reader " << readerComponent << " for file " << filename << endl;
+      exitCode = -6; goto exit;
+    }
 
-	// bind audio input
-	if (!engine.bindInput("audio",reader)) {
-		cerr << "ERROR: cannot bind audio reader" << endl;
-		exitCode = -7; goto exit;
-	}
+    // bind audio input
+    if (!engine.bindInput("audio",reader)) {
+      cerr << "ERROR: cannot bind audio reader" << endl;
+      exitCode = -7; goto exit;
+    }
 
-	// configure outputs
-	if (m_format)
-	{
-		vector<string> outputs = engine.getOutputs();
-		for (int i=0;i<outputs.size();i++) {
-			const string& outName = outputs[i];
-			Ports<StreamInfo> inp;
-			inp.add(engine.getOutput(outName)->info());
-			Component* writer = m_format->createWriter(filename,
-					outName,engine.getOutputParams(outName),inp);
-			if (!writer) {
-				cerr << "ERROR: cannot initialize writer for output " << outName << endl;
-				exitCode = -8; goto exit;
-			}
-			engine.bindOutput(outName,writer);
-			writers.push_back(make_pair(outName,writer));
-		}
-	}
+    // configure outputs
+    if (m_format)
+    {
+      vector<string> outputs = engine.getOutputs();
+      for (int i=0;i<outputs.size();i++) {
+        const string& outName = outputs[i];
+        Ports<StreamInfo> inp;
+        inp.add(engine.getOutput(outName)->info());
+        Component* writer = m_format->createWriter(filename,
+            outName,engine.getOutputParams(outName),inp);
+        if (!writer) {
+          cerr << "ERROR: cannot initialize writer for output " << outName << endl;
+          exitCode = -8; goto exit;
+        }
+        engine.bindOutput(outName,writer);
+        writers.push_back(make_pair(outName,writer));
+      }
+    }
 
-	// process audio
-	while (engine.process());
+    // process audio
+    while (engine.process());
 
-	// flush last samples
-	engine.flush();
+      // flush last samples
+      engine.flush();
 
-	end = clock();
-	cerr << "done in " << (float) (end - start)
-			/ (float) CLOCKS_PER_SEC << "s" << endl;
+      end = clock();
+      cerr << "done in " << (float) (end - start)
+        / (float) CLOCKS_PER_SEC << "s" << endl;
 
-	exit:
-	// detach and release reader
-	engine.detachInput("audio");
-	if (reader) delete reader;
-	// detach and release writers
-	vector<string> outputs  = engine.getOutputs();
-	for (vector<pair<string,Component*> >::iterator it=writers.begin();it!=writers.end();it++) {
-		engine.detachOutput(it->first);
-		delete it->second;
-	}
-	writers.clear();
-	return exitCode;
-}
+exit:
+      // detach and release reader
+      engine.detachInput("audio");
+      if (reader) delete reader;
+      // detach and release writers
+      vector<string> outputs  = engine.getOutputs();
+      for (vector<pair<string,Component*> >::iterator it=writers.begin();it!=writers.end();it++) {
+        engine.detachOutput(it->first);
+        delete it->second;
+      }
+      writers.clear();
+      return exitCode;
+  }
 
 
 }

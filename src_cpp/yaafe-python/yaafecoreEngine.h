@@ -27,34 +27,34 @@
 
 extern "C" {
 
-void* engine_create();
-void engine_destroy(void* engine);
+  void* engine_create();
+  void engine_destroy(void* engine);
 
-int engine_load(void* engine, void* dataflow);
+  int engine_load(void* engine, void* dataflow);
 
-char** engine_getInputList(void* engine);
-char** engine_getOutputList(void* engine);
-void engine_freeIOList(char** strList);
+  char** engine_getInputList(void* engine);
+  char** engine_getOutputList(void* engine);
+  void engine_freeIOList(char** strList);
 
-struct IOInfo {
-	double sampleRate;
-	int sampleStep;
-	int frameLength;
-	int size;
-	char** parameters;
-};
+  struct IOInfo {
+    double sampleRate;
+    int sampleStep;
+    int frameLength;
+    int size;
+    char** parameters;
+  };
 
-struct IOInfo* engine_getInputInfos(void* engine,char* input);
-struct IOInfo* engine_getOutputInfos(void* engine, char* output);
-void engine_freeIOInfos(struct IOInfo* i);
+  struct IOInfo* engine_getInputInfos(void* engine,char* input);
+  struct IOInfo* engine_getOutputInfos(void* engine, char* output);
+  void engine_freeIOInfos(struct IOInfo* i);
 
-void engine_input_write(void* engine, char* input, double* data, int size, int nbtokens);
-void engine_output_available(void* engine, char* output, int* size, int* tokens);
-int engine_output_read(void* engine, char* output, double* data, int size, int maxtokens);
+  void engine_input_write(void* engine, char* input, double* data, int size, int nbtokens);
+  void engine_output_available(void* engine, char* output, int* size, int* tokens);
+  int engine_output_read(void* engine, char* output, double* data, int size, int maxtokens);
 
-void engine_reset(void* engine);
-int engine_process(void* engine);
-void engine_flush(void* engine);
+  void engine_reset(void* engine);
+  int engine_process(void* engine);
+  void engine_flush(void* engine);
 
 }
 

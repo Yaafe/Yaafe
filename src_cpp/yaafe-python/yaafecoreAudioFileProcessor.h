@@ -27,12 +27,12 @@
 
 extern "C" {
 
-void* audiofileprocessor_create();
-void audiofileprocessor_destroy(void* afp);
+  void* audiofileprocessor_create();
+  void audiofileprocessor_destroy(void* afp);
 
-int audiofileprocessor_setOutputFormat(void* afp, char* format, char* outDir, char** params);
+  int audiofileprocessor_setOutputFormat(void* afp, char* format, char* outDir, char** params);
 
-int audiofileprocessor_processFile(void* afp,void* engine, char* filename);
+  int audiofileprocessor_processFile(void* afp,void* engine, char* filename);
 
 } // extern "C"
 

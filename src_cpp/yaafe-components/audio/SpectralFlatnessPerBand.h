@@ -33,29 +33,29 @@
 namespace YAAFE
 {
 
-class SpectralFlatnessPerBand: public YAAFE::ComponentBase<SpectralFlatnessPerBand>
-{
-public:
-    SpectralFlatnessPerBand();
-    virtual ~SpectralFlatnessPerBand();
+  class SpectralFlatnessPerBand: public YAAFE::ComponentBase<SpectralFlatnessPerBand>
+  {
+   public:
+     SpectralFlatnessPerBand();
+     virtual ~SpectralFlatnessPerBand();
 
-    virtual const std::string getIdentifier() const { return SPECTRALFLATNESSPERBAND_ID;};
-    virtual const std::string getDescription() const { return "Spectral Flatness per log-spaced band of 1/4 octave."; }
+     virtual const std::string getIdentifier() const { return SPECTRALFLATNESSPERBAND_ID;};
+     virtual const std::string getDescription() const { return "Spectral Flatness per log-spaced band of 1/4 octave."; }
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_inSize;
-    struct bandinfo_ {
-    	int start;
-    	int end;
-    	int group;
-    	int length() { return end-start; }
-    };
-    typedef struct bandinfo_ bandinfo;
-    std::vector<bandinfo> m_band; // start,end,group for each band
-};
+   private:
+     int m_inSize;
+     struct bandinfo_ {
+       int start;
+       int end;
+       int group;
+       int length() { return end-start; }
+     };
+     typedef struct bandinfo_ bandinfo;
+     std::vector<bandinfo> m_band; // start,end,group for each band
+  };
 
 }
 

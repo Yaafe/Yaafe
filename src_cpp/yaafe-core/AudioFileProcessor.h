@@ -31,16 +31,16 @@
 
 namespace YAAFE {
 
-class AudioFileProcessor {
-public:
-	AudioFileProcessor();
-	virtual ~AudioFileProcessor();
+  class AudioFileProcessor {
+   public:
+     AudioFileProcessor();
+     virtual ~AudioFileProcessor();
 
-	bool setOutputFormat(const std::string& format, const std::string& outdir, const ParameterMap& params);
-	int processFile(Engine& engine, const std::string& filename);
-private:
-	OutputFormat* m_format;
-};
+     bool setOutputFormat(const std::string& format, const std::string& outdir, const ParameterMap& params);
+     int processFile(Engine& engine, const std::string& filename);
+   private:
+     OutputFormat* m_format;
+  };
 
 }
 

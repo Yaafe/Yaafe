@@ -27,10 +27,10 @@
 
 extern "C" {
 
-/**
- * Register library components to the given componentFactory.
- */
-void registerYaafeComponents(void* componentFactory);
+  /**
+   * Register library components to the given componentFactory.
+   */
+  void registerYaafeComponents(void* componentFactory);
 
 }
 

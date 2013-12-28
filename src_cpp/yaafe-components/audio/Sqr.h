@@ -32,18 +32,18 @@
 namespace YAAFE
 {
 
-class Sqr: public YAAFE::ComponentBase<Sqr>
-{
-public:
-    Sqr();
-    virtual ~Sqr();
+  class Sqr: public YAAFE::ComponentBase<Sqr>
+  {
+   public:
+     Sqr();
+     virtual ~Sqr();
 
-    const std::string getIdentifier() const { return SQR_ID; };
+     const std::string getIdentifier() const { return SQR_ID; };
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-};
+  };
 
 }
 

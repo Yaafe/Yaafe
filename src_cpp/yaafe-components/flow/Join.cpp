@@ -30,67 +30,67 @@ using namespace std;
 
 namespace YAAFE {
 
-Join::Join() {
-}
+  Join::Join() {
+  }
 
-Join::~Join() {
-}
+  Join::~Join() {
+  }
 
-bool Join::init(const ParameterMap& params,const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()>0);
-	const StreamInfo& inref = inp[0].data;
-	int outSize = inref.size;
+  bool Join::init(const ParameterMap& params,const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()>0);
+    const StreamInfo& inref = inp[0].data;
+    int outSize = inref.size;
 
-	for (int i=1;i<inp.size();++i)
-	{
-		const StreamInfo& in = inp[i].data;
-		if (std::fabs(inref.sampleRate/inref.sampleStep - in.sampleRate/in.sampleStep)>0.000001)
-		{
-			cerr << "ERROR: try to join streams with differents sample rates" << endl;
-			return false;
-		}
-		outSize += in.size;
-	}
+    for (int i=1;i<inp.size();++i)
+    {
+      const StreamInfo& in = inp[i].data;
+      if (std::fabs(inref.sampleRate/inref.sampleStep - in.sampleRate/in.sampleStep)>0.000001)
+      {
+        cerr << "ERROR: try to join streams with differents sample rates" << endl;
+        return false;
+      }
+      outSize += in.size;
+    }
 
-	outStreamInfo().add(StreamInfo(inref,outSize));
+    outStreamInfo().add(StreamInfo(inref,outSize));
 
-	return true;
-}
+    return true;
+  }
 
-bool Join::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()>0);
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Join::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()>0);
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	int insize[inp.size()];
-	for (int i=0;i<inp.size();++i)
-		insize[i] = inp[i].data->info().size;
+    int insize[inp.size()];
+    for (int i=0;i<inp.size();++i)
+      insize[i] = inp[i].data->info().size;
 
-	bool doneSomething = false;
-	while (true)
-	{
-		// check if all input buffers have tokens
-		for (int i=0;i<inp.size();i++)
-			if (inp[i].data->empty())
-				return doneSomething;
+    bool doneSomething = false;
+    while (true)
+    {
+      // check if all input buffers have tokens
+      for (int i=0;i<inp.size();i++)
+        if (inp[i].data->empty())
+          return doneSomething;
 
-		// copy all input tokens into output token
-		double* outData = out->writeToken();
-		for (int i=0;i<inp.size();i++)
-		{
-			InputBuffer* in = inp[i].data;
-			memcpy(outData,in->readToken(),insize[i] * sizeof(double));
-			outData += insize[i];
-			in->consumeToken();
-		}
+      // copy all input tokens into output token
+      double* outData = out->writeToken();
+      for (int i=0;i<inp.size();i++)
+      {
+        InputBuffer* in = inp[i].data;
+        memcpy(outData,in->readToken(),insize[i] * sizeof(double));
+        outData += insize[i];
+        in->consumeToken();
+      }
 
-		doneSomething = true;
-	}
+      doneSomething = true;
+    }
 
-	return doneSomething;
-}
+    return doneSomething;
+  }
 
 
 }

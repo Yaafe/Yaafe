@@ -30,21 +30,21 @@
 
 namespace YAAFE {
 
-class ComponentPool {
-public:
-	ComponentPool();
-	virtual ~ComponentPool();
+  class ComponentPool {
+   public:
+     ComponentPool();
+     virtual ~ComponentPool();
 
-	Component* get(const std::string& id, const ParameterMap& params, const Ports<StreamInfo>& in);
-	void release(Component* c);
+     Component* get(const std::string& id, const ParameterMap& params, const Ports<StreamInfo>& in);
+     void release(Component* c);
 
-private:
+   private:
 
-	class ComponentProxy;
-	typedef std::multimap<std::string, ComponentProxy*> PoolType;
-	PoolType m_pool;
+     class ComponentProxy;
+     typedef std::multimap<std::string, ComponentProxy*> PoolType;
+     PoolType m_pool;
 
-};
+  };
 
 }
 

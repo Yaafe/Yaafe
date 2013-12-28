@@ -31,13 +31,13 @@
 namespace YAAFE
 {
 
-class SmarcPFilterCache {
-public:
-	static struct PFilter* getPFilter(int fsint, int fsout);
-	static void release();
-private:
-	static std::list<struct PFilter*> s_cache;
-};
+  class SmarcPFilterCache {
+   public:
+     static struct PFilter* getPFilter(int fsint, int fsout);
+     static void release();
+   private:
+     static std::list<struct PFilter*> s_cache;
+  };
 
 }
 

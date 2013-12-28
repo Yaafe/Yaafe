@@ -32,50 +32,50 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-LoudnessSpread::LoudnessSpread()
-{
-}
+  LoudnessSpread::LoudnessSpread()
+  {
+  }
 
-LoudnessSpread::~LoudnessSpread()
-{
-}
+  LoudnessSpread::~LoudnessSpread()
+  {
+  }
 
-bool LoudnessSpread::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool LoudnessSpread::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	outStreamInfo().add(StreamInfo(in,1));
+    outStreamInfo().add(StreamInfo(in,1));
     return true;
-}
+  }
 
-bool LoudnessSpread::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool LoudnessSpread::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-//	DMat loudness(in->readToken(),shape(in->available(),in->info().size));
-//    DVec spread(out->reserve(in->available()),in->available());
-//    spread = sqr(1 - max(loudness, tensor::j));
-//    out->append(in->available());
-//    in->forward(in->available());
-//	const int av = in->available();
-//	Map<MatrixXd> loudness(in->readToken(),in->info().size,av);
-//	Map<RowVectorXd> spread(out->reserve(av),av);
-//	spread = (-loudness.colwise().maxCoeff().array() + 1).array().square();
-//	out->append(av);
-//	in->forward(av);
-	while (!in->empty()) {
-		Map<VectorXd> loudness(in->readToken(),in->info().size);
-		double spread = (1 - loudness.maxCoeff());
-		spread *= spread;
-		out->write(&spread,1);
-		in->consumeToken();
-	}
+    //	DMat loudness(in->readToken(),shape(in->available(),in->info().size));
+    //    DVec spread(out->reserve(in->available()),in->available());
+    //    spread = sqr(1 - max(loudness, tensor::j));
+    //    out->append(in->available());
+    //    in->forward(in->available());
+    //	const int av = in->available();
+    //	Map<MatrixXd> loudness(in->readToken(),in->info().size,av);
+    //	Map<RowVectorXd> spread(out->reserve(av),av);
+    //	spread = (-loudness.colwise().maxCoeff().array() + 1).array().square();
+    //	out->append(av);
+    //	in->forward(av);
+    while (!in->empty()) {
+      Map<VectorXd> loudness(in->readToken(),in->info().size);
+      double spread = (1 - loudness.maxCoeff());
+      spread *= spread;
+      out->write(&spread,1);
+      in->consumeToken();
+    }
     return true;
-}
+  }
 
 }

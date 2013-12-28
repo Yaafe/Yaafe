@@ -32,17 +32,17 @@
 namespace YAAFE
 {
 
-class ShapeStatistics: public YAAFE::ComponentBase<ShapeStatistics>
-{
-public:
-    ShapeStatistics();
-    virtual ~ShapeStatistics();
+  class ShapeStatistics: public YAAFE::ComponentBase<ShapeStatistics>
+  {
+   public:
+     ShapeStatistics();
+     virtual ~ShapeStatistics();
 
-    virtual const std::string getIdentifier() const { return SHAPESTATISTICS_ID;};
+     virtual const std::string getIdentifier() const { return SHAPESTATISTICS_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-};
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+  };
 
 }
 

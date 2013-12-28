@@ -32,16 +32,16 @@
 
 namespace YAAFE {
 
-class DataFlowContext {
-public:
-  DataFlowContext();
-  ~DataFlowContext();
+  class DataFlowContext {
+   public:
+     DataFlowContext();
+     ~DataFlowContext();
 
-  DataFlow* m_dataflow;
-  std::map<std::string,Graph<NodeDesc>::Node*> m_identifiers;
-  ParameterMap m_params;
+     DataFlow* m_dataflow;
+     std::map<std::string,Graph<NodeDesc>::Node*> m_identifiers;
+     ParameterMap m_params;
 
-};
+  };
 
 }
 

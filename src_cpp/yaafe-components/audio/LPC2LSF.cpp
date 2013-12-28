@@ -30,17 +30,17 @@ using namespace std;
 namespace YAAFE
 {
 
-LPC2LSF::LPC2LSF() :
+  LPC2LSF::LPC2LSF() :
     m_displacement(-1)
-{
-}
+  {
+  }
 
-LPC2LSF::~LPC2LSF()
-{
-}
+  LPC2LSF::~LPC2LSF()
+  {
+  }
 
-ParameterDescriptorList LPC2LSF::getParameterDescriptorList() const
-{
+  ParameterDescriptorList LPC2LSF::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -55,32 +55,32 @@ ParameterDescriptorList LPC2LSF::getParameterDescriptorList() const
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-StreamInfo LPC2LSF::init(const ParameterMap& params, const StreamInfo& in)
-{
-	m_displacement = getIntParam("LSFDisplacement",params);
-	m_nbCoeffs = getIntParam("LSFNbCoeffs",params);
+  StreamInfo LPC2LSF::init(const ParameterMap& params, const StreamInfo& in)
+  {
+    m_displacement = getIntParam("LSFDisplacement",params);
+    m_nbCoeffs = getIntParam("LSFNbCoeffs",params);
 
-	return StreamInfo(in, m_nbCoeffs);
-}
+    return StreamInfo(in, m_nbCoeffs);
+  }
 
-void LPC2LSF::processToken(double* lpc, const int inSize, double* lsf, const int outSize)
-{
-	int nbLPC = m_nbCoeffs - (m_displacement<2?1:m_displacement);
+  void LPC2LSF::processToken(double* lpc, const int inSize, double* lsf, const int outSize)
+  {
+    int nbLPC = m_nbCoeffs - (m_displacement<2?1:m_displacement);
     assert(nbLPC<=inSize);
-	bool hasNaN = false;
-	for (int i=0;i<nbLPC;i++)
-		if (std::isnan(lpc[i])) {
-			hasNaN = true;
-			break;
-		}
-	if (!hasNaN)
-		a2lsf(lpc,m_displacement,lsf, m_nbCoeffs);
-	else {
-		for (int i=0;i<m_nbCoeffs;i++)
-			lsf[i] = nan("undefined");
-	}
-}
+    bool hasNaN = false;
+    for (int i=0;i<nbLPC;i++)
+      if (std::isnan(lpc[i])) {
+        hasNaN = true;
+        break;
+      }
+    if (!hasNaN)
+      a2lsf(lpc,m_displacement,lsf, m_nbCoeffs);
+    else {
+      for (int i=0;i<m_nbCoeffs;i++)
+        lsf[i] = nan("undefined");
+    }
+  }
 
 }

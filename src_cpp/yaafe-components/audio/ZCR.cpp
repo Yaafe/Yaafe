@@ -27,55 +27,55 @@
 namespace YAAFE
 {
 
-ZCR::ZCR()
-{
-}
+  ZCR::ZCR()
+  {
+  }
 
-ZCR::~ZCR()
-{
-}
+  ZCR::~ZCR()
+  {
+  }
 
-bool ZCR::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool ZCR::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	outStreamInfo() = StreamInfo(in,1);
+    outStreamInfo() = StreamInfo(in,1);
     return true;
-}
+  }
 
-bool ZCR::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return true;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool ZCR::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return true;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
     while (!in->empty())
     {
-        double* prev = in->readToken();
-        double* current = prev +1;
-        double zcr = 0;
-        for (int i=in->info().size-1;i>0;--i)
+      double* prev = in->readToken();
+      double* current = prev +1;
+      double zcr = 0;
+      for (int i=in->info().size-1;i>0;--i)
+      {
+        if (*current != 0.0)
         {
-            if (*current != 0.0)
-            {
-                if (*prev * *current < 0)
-                    zcr += 1;
-                prev = current;
-                current ++;
-                continue;
-            } else {
-                current++;
-                continue;
-            }
+          if (*prev * *current < 0)
+            zcr += 1;
+          prev = current;
+          current ++;
+          continue;
+        } else {
+          current++;
+          continue;
         }
-        zcr /= in->info().size;
-        out->write(&zcr,1);
-        in->consumeToken();
+      }
+      zcr /= in->info().size;
+      out->write(&zcr,1);
+      in->consumeToken();
     }
     return true;
-}
+  }
 
 }

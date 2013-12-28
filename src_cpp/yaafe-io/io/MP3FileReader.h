@@ -31,28 +31,28 @@
 
 namespace YAAFE {
 
-class MP3FileReader: public ComponentBase<MP3FileReader> {
-public:
-	MP3FileReader();
-	virtual ~MP3FileReader();
+  class MP3FileReader: public ComponentBase<MP3FileReader> {
+   public:
+     MP3FileReader();
+     virtual ~MP3FileReader();
 
-    virtual const std::string getIdentifier() const { return MP3_FILE_READER_ID;};
-    virtual bool stateLess() const { return false; };
+     virtual const std::string getIdentifier() const { return MP3_FILE_READER_ID;};
+     virtual bool stateLess() const { return false; };
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-    virtual void flush(InputBuffer* in, OutputBuffer* out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(InputBuffer* in, OutputBuffer* out);
 
-private:
-    class MP3Decoder;
-    MP3Decoder* m_decoder;
+   private:
+     class MP3Decoder;
+     MP3Decoder* m_decoder;
 
-    bool m_rescale;
-    double m_mean;
-    double m_factor;
-};
+     bool m_rescale;
+     double m_mean;
+     double m_factor;
+  };
 
 }
 

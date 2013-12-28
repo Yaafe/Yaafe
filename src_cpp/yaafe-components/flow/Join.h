@@ -31,16 +31,16 @@
 
 namespace YAAFE {
 
-class Join: public YAAFE::ComponentBase<Join> {
-public:
-	Join();
-	virtual ~Join();
+  class Join: public YAAFE::ComponentBase<Join> {
+   public:
+     Join();
+     virtual ~Join();
 
-    const std::string getIdentifier() const  { return JOIN_ID; }
+     const std::string getIdentifier() const  { return JOIN_ID; }
 
-	virtual bool init(const ParameterMap& params,const Ports<StreamInfo>& in);
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-};
+     virtual bool init(const ParameterMap& params,const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+  };
 
 }
 

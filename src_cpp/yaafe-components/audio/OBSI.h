@@ -33,24 +33,24 @@
 namespace YAAFE
 {
 
-class OBSI: public YAAFE::ComponentBase<OBSI>
-{
-public:
-    OBSI();
-    virtual ~OBSI();
+  class OBSI: public YAAFE::ComponentBase<OBSI>
+  {
+   public:
+     OBSI();
+     virtual ~OBSI();
 
-    virtual const std::string getIdentifier() const { return OBSI_ID;};
+     virtual const std::string getIdentifier() const { return OBSI_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_inSize;
-    std::vector<int> m_filterStarts;
-    std::vector<Eigen::ArrayXd> m_filters;
-};
+   private:
+     int m_inSize;
+     std::vector<int> m_filterStarts;
+     std::vector<Eigen::ArrayXd> m_filters;
+  };
 
 }
 

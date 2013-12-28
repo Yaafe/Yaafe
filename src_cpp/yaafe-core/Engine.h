@@ -33,60 +33,60 @@
 namespace YAAFE
 {
 
-class Engine
-{
-public:
-    Engine();
-    virtual ~Engine();
+  class Engine
+  {
+   public:
+     Engine();
+     virtual ~Engine();
 
-    bool load(const DataFlow& df);
+     bool load(const DataFlow& df);
 
-    OutputBuffer* getInput(const std::string& id);
-    ParameterMap getInputParams(const std::string& id);
-    bool bindInput(const std::string& id, Component* component);
-    void detachInput(const std::string& id);
-    std::vector<std::string> getInputs();
+     OutputBuffer* getInput(const std::string& id);
+     ParameterMap getInputParams(const std::string& id);
+     bool bindInput(const std::string& id, Component* component);
+     void detachInput(const std::string& id);
+     std::vector<std::string> getInputs();
 
-    InputBuffer* getOutput(const std::string& id);
-    ParameterMap getOutputParams(const std::string& id);
-    void bindOutput(const std::string& id, Component* component);
-    void detachOutput(const std::string& id);
-    std::vector<std::string> getOutputs();
+     InputBuffer* getOutput(const std::string& id);
+     ParameterMap getOutputParams(const std::string& id);
+     void bindOutput(const std::string& id, Component* component);
+     void detachOutput(const std::string& id);
+     std::vector<std::string> getOutputs();
 
-    void reset();
-    bool process();
-    void flush();
+     void reset();
+     bool process();
+     void flush();
 
-private:
-	ComponentPool m_pool;
+   private:
+     ComponentPool m_pool;
 
-	class ProcessingStep {
-	public:
-		ProcessingStep();
-		~ProcessingStep();
-		std::string m_id;
-		ParameterMap m_params;
-		Component* m_component;
-		ComponentPool* m_pool;
-		Ports<InputBuffer*> m_input;
-		Ports<OutputBuffer*> m_output;
+     class ProcessingStep {
+      public:
+        ProcessingStep();
+        ~ProcessingStep();
+        std::string m_id;
+        ParameterMap m_params;
+        Component* m_component;
+        ComponentPool* m_pool;
+        Ports<InputBuffer*> m_input;
+        Ports<OutputBuffer*> m_output;
 
-		bool hasInputAvailable() const;
-	};
+        bool hasInputAvailable() const;
+     };
 
-	typedef Graph<ProcessingStep> ProcessFlow;
-	ProcessFlow* m_graph;
-	ProcessFlow::NodeList m_startNodes;
+     typedef Graph<ProcessingStep> ProcessFlow;
+     ProcessFlow* m_graph;
+     ProcessFlow::NodeList m_startNodes;
 
-	static inline bool initStep(ProcessFlow::Node& step);
-	static inline bool resetStep(ProcessFlow::Node& step);
-	static inline bool processStep(ProcessFlow::Node& step);
-	static inline bool flushStep(ProcessFlow::Node& step);
+     static inline bool initStep(ProcessFlow::Node& step);
+     static inline bool resetStep(ProcessFlow::Node& step);
+     static inline bool processStep(ProcessFlow::Node& step);
+     static inline bool flushStep(ProcessFlow::Node& step);
 
-	ProcessingStep* getInputNode(const std::string& id);
-	ProcessingStep* getOutputNode(const std::string& id);
+     ProcessingStep* getInputNode(const std::string& id);
+     ProcessingStep* getOutputNode(const std::string& id);
 
-};
+  };
 
 }
 

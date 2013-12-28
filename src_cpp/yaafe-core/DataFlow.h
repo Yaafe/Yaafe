@@ -35,51 +35,51 @@
 namespace YAAFE
 {
 
-struct NodeDesc {
-	std::string componentId;
-	std::map<std::string,std::string> params;
+  struct NodeDesc {
+    std::string componentId;
+    std::map<std::string,std::string> params;
 
-	NodeDesc(const std::string& id, const std::map<std::string,std::string>& p) :
-		componentId(id), params(p) {};
-	NodeDesc(const NodeDesc& a) :
-		componentId(a.componentId), params(a.params) {};
-	bool operator==(const NodeDesc& nd) const {
-		return ((componentId==nd.componentId) && (params==nd.params));
-	}
-//	NodeDesc& operator=(const NodeDesc& d) {
-//		componentId = d.componentId;
-//		params = d.params;
-//		return *this;
-//	}
-};
+    NodeDesc(const std::string& id, const std::map<std::string,std::string>& p) :
+      componentId(id), params(p) {};
+    NodeDesc(const NodeDesc& a) :
+      componentId(a.componentId), params(a.params) {};
+    bool operator==(const NodeDesc& nd) const {
+      return ((componentId==nd.componentId) && (params==nd.params));
+    }
+    //	NodeDesc& operator=(const NodeDesc& d) {
+    //		componentId = d.componentId;
+    //		params = d.params;
+    //		return *this;
+    //	}
+  };
 
-class DataFlow : public Graph<NodeDesc>
-{
-	friend class Engine;
-public:
-	/**
-	 * convenient function to append a dataflow to an existing one.
-	 * The dataFlow object must have at most one final node and given
-	 * dataflow to append must have only one root node.
-	 */
-	void append(const DataFlow& df);
+  class DataFlow : public Graph<NodeDesc>
+  {
+    friend class Engine;
+   public:
+    /**
+     * convenient function to append a dataflow to an existing one.
+     * The dataFlow object must have at most one final node and given
+     * dataflow to append must have only one root node.
+     */
+    void append(const DataFlow& df);
 
-	void merge(const DataFlow& df);
+    void merge(const DataFlow& df);
 
-	bool load(const std::string& filename);
-	void save(const std::string& filename);
-	void dumpdot(const std::string& filename);
-	void display();
+    bool load(const std::string& filename);
+    void save(const std::string& filename);
+    void dumpdot(const std::string& filename);
+    void display();
 
-	void useComponentLibrary(const std::string& lib);
-	const std::set<std::string>& getComponentLibraries() const;
+    void useComponentLibrary(const std::string& lib);
+    const std::set<std::string>& getComponentLibraries() const;
 
-private:
-	static void mergeFlow(Graph<NodeDesc>* f,const Graph<NodeDesc>* g, std::map<Node*,Node*>& mapping);
-	void print(std::ostream& out);
+   private:
+    static void mergeFlow(Graph<NodeDesc>* f,const Graph<NodeDesc>* g, std::map<Node*,Node*>& mapping);
+    void print(std::ostream& out);
 
-	std::set<std::string> m_libs;
-};
+    std::set<std::string> m_libs;
+  };
 
 }
 

@@ -27,7 +27,7 @@
 
 extern "C" {
 
-struct H5FeatureDescription {
+  struct H5FeatureDescription {
     char* name;
     int dim;
     int nbframes;
@@ -35,10 +35,10 @@ struct H5FeatureDescription {
     int blockSize;
     int stepSize;
     char** attrs;
-};
+  };
 
-struct H5FeatureDescription** readH5FeatureDescriptions(char* h5filename);
-void freeH5FeatureDescriptions(struct H5FeatureDescription** feats);
+  struct H5FeatureDescription** readH5FeatureDescriptions(char* h5filename);
+  void freeH5FeatureDescriptions(struct H5FeatureDescription** feats);
 
 }
 

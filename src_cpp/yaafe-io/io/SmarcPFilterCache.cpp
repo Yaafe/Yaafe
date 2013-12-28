@@ -35,40 +35,40 @@ using namespace std;
 
 namespace YAAFE {
 
-std::list<struct PFilter*> SmarcPFilterCache::s_cache;
+  std::list<struct PFilter*> SmarcPFilterCache::s_cache;
 
-struct PFilter* SmarcPFilterCache::getPFilter(int fsin, int fsout)
-{
-	if (fsin==fsout)
-		return NULL;
-	// check cache
-	for (list<struct PFilter*>::iterator it=s_cache.begin();it!=s_cache.end();it++)
-	{
-		if ((smarc_get_fs_in(*it)==fsin) && (smarc_get_fs_out(*it)==fsout))
-		{
-			struct PFilter* f = *it;
-			s_cache.erase(it);
-			s_cache.push_front(f);
-			return f;
-		}
-	}
-	// create filter and put in cache
-	cerr << "initializing Smarc resampler " << fsin << " => " << fsout << endl;
-	s_cache.push_front(smarc_init_pfilter(fsin,fsout,BANDWIDTH,RP,RS,TOL,NULL,1));
-	cerr << "Smarc resampler ok !" << endl;
-	// release old pfilter if cache exceeds size
-	if (s_cache.size()>CACHE_SIZE) {
-		smarc_destroy_pfilter(s_cache.back());
-		s_cache.pop_back();
-	}
-	return s_cache.front();
-}
+  struct PFilter* SmarcPFilterCache::getPFilter(int fsin, int fsout)
+  {
+    if (fsin==fsout)
+      return NULL;
+    // check cache
+    for (list<struct PFilter*>::iterator it=s_cache.begin();it!=s_cache.end();it++)
+    {
+      if ((smarc_get_fs_in(*it)==fsin) && (smarc_get_fs_out(*it)==fsout))
+      {
+        struct PFilter* f = *it;
+        s_cache.erase(it);
+        s_cache.push_front(f);
+        return f;
+      }
+    }
+    // create filter and put in cache
+    cerr << "initializing Smarc resampler " << fsin << " => " << fsout << endl;
+    s_cache.push_front(smarc_init_pfilter(fsin,fsout,BANDWIDTH,RP,RS,TOL,NULL,1));
+    cerr << "Smarc resampler ok !" << endl;
+    // release old pfilter if cache exceeds size
+    if (s_cache.size()>CACHE_SIZE) {
+      smarc_destroy_pfilter(s_cache.back());
+      s_cache.pop_back();
+    }
+    return s_cache.front();
+  }
 
-void SmarcPFilterCache::release() {
-	for (list<struct PFilter*>::iterator it=s_cache.begin();it!=s_cache.end();it++)
-	{
-		smarc_destroy_pfilter(*it);
-	}
-}
+  void SmarcPFilterCache::release() {
+    for (list<struct PFilter*>::iterator it=s_cache.begin();it!=s_cache.end();it++)
+    {
+      smarc_destroy_pfilter(*it);
+    }
+  }
 
 }

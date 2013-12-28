@@ -30,9 +30,9 @@
 
 namespace YAAFE {
 
-int preparedirs(const std::string& filename);
+  int preparedirs(const std::string& filename);
 
-std::map<std::string,std::string> decodeAttributeStr(const std::string& str);
+  std::map<std::string,std::string> decodeAttributeStr(const std::string& str);
 
 }
 

@@ -35,116 +35,116 @@
 
 namespace YAAFE {
 
-/**
- * The Component class represent a computation step. The 4 main methods are
- * init, reset, process, flush. Theses methods are called according to this order:
- *
- * 1. init(...) always called first and only once
- * 2. reset() once
- * 3. process() called as many times as necessary
- * 4. flush() once
- * 5. If there is another data stream to process, go to 2.
- */
-class Component {
+  /**
+   * The Component class represent a computation step. The 4 main methods are
+   * init, reset, process, flush. Theses methods are called according to this order:
+   *
+   * 1. init(...) always called first and only once
+   * 2. reset() once
+   * 3. process() called as many times as necessary
+   * 4. flush() once
+   * 5. If there is another data stream to process, go to 2.
+   */
+  class Component {
 
-/**
- * Specializable methods
- */
-public:
-	Component();
-	virtual ~Component();
+    /**
+     * Specializable methods
+     */
+   public:
+     Component();
+     virtual ~Component();
 
-	/**
-	 * Returns the component's identifier
-	 */
-	virtual const std::string getIdentifier() const = 0;
+     /**
+      * Returns the component's identifier
+      */
+     virtual const std::string getIdentifier() const = 0;
 
-	/**
-	 * Returns a description
-	 */
-	virtual const std::string getDescription() const { return "";}
+     /**
+      * Returns a description
+      */
+     virtual const std::string getDescription() const { return "";}
 
-	/**
-	 * Return a new instance of the same component. (Prototype design pattern)
-	 */
-	virtual Component* clone() const = 0;
+     /**
+      * Return a new instance of the same component. (Prototype design pattern)
+      */
+     virtual Component* clone() const = 0;
 
-	/**
-	 * A component is stateless if it doesn't hold any information between sucessive calls
-	 * to init, process and flush methods. If so, it can be used to process several
-	 * data streams at the same time.
-	 */
-	virtual bool stateLess() const { return false; }
+     /**
+      * A component is stateless if it doesn't hold any information between sucessive calls
+      * to init, process and flush methods. If so, it can be used to process several
+      * data streams at the same time.
+      */
+     virtual bool stateLess() const { return false; }
 
-	/**
-	 * Returns the list of acceptable parameters
-	 */
-	virtual ParameterDescriptorList getParameterDescriptorList() const;
+     /**
+      * Returns the list of acceptable parameters
+      */
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-	/**
-	 * Initialize the component with parameters and input data stream infos.
-	 */
-	virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in) = 0;
+     /**
+      * Initialize the component with parameters and input data stream infos.
+      */
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in) = 0;
 
-	/**
-	 * Reset the component state so that a new data stream can be processed.
-	 */
-	virtual void reset() = 0;
+     /**
+      * Reset the component state so that a new data stream can be processed.
+      */
+     virtual void reset() = 0;
 
-	/**
-	 * Process available data from input data streams, and write to output data streams.
-	 */
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
+     /**
+      * Process available data from input data streams, and write to output data streams.
+      */
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
 
-	/**
-	 * Process remaining data from input streams, write all data to output streams.
-	 */
-	virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
+     /**
+      * Process remaining data from input streams, write all data to output streams.
+      */
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
 
-/**
- * Internal Methods
- */
-public:
-	const Ports<StreamInfo>& getOutStreamInfo() const;
+     /**
+      * Internal Methods
+      */
+   public:
+     const Ports<StreamInfo>& getOutStreamInfo() const;
 
-protected:
-	std::string getStringParam(const std::string& id, const ParameterMap& params);
-	int getIntParam(const std::string& id, const ParameterMap& params);
-	double getDoubleParam(const std::string& id, const ParameterMap& params);
+   protected:
+     std::string getStringParam(const std::string& id, const ParameterMap& params);
+     int getIntParam(const std::string& id, const ParameterMap& params);
+     double getDoubleParam(const std::string& id, const ParameterMap& params);
 
-	Ports<StreamInfo>& outStreamInfo();
+     Ports<StreamInfo>& outStreamInfo();
 
-private:
-	Ports<StreamInfo> m_outInfo;
-};
+   private:
+     Ports<StreamInfo> m_outInfo;
+  };
 
 
-inline const Ports<StreamInfo>& Component::getOutStreamInfo() const
-{
-	return m_outInfo;
-}
+  inline const Ports<StreamInfo>& Component::getOutStreamInfo() const
+  {
+    return m_outInfo;
+  }
 
-inline Ports<StreamInfo>& Component::outStreamInfo()
-{
-	return m_outInfo;
-}
+  inline Ports<StreamInfo>& Component::outStreamInfo()
+  {
+    return m_outInfo;
+  }
 
-template<class T>
-class ComponentBase : public Component {
-public:
-	virtual const std::string getIdentifier() const  = 0;
-	virtual const std::string getDescription() const { return "";}
+  template<class T>
+    class ComponentBase : public Component {
+     public:
+       virtual const std::string getIdentifier() const  = 0;
+       virtual const std::string getDescription() const { return "";}
 
-	virtual Component* clone() const { return new T();}
-	virtual int getRevision() const { return 0; }
+       virtual Component* clone() const { return new T();}
+       virtual int getRevision() const { return 0; }
 
-	virtual ParameterDescriptorList getParameterDescriptorList() const { return ParameterDescriptorList();};
+       virtual ParameterDescriptorList getParameterDescriptorList() const { return ParameterDescriptorList();};
 
-	virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in) = 0;
-	virtual void reset() {/* nothing to do */};
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
-	virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) { process(in,out);};
-};
+       virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in) = 0;
+       virtual void reset() {/* nothing to do */};
+       virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) = 0;
+       virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out) { process(in,out);};
+    };
 
 }
 

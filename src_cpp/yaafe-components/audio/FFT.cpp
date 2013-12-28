@@ -34,60 +34,60 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-FFT::FFT() :
+  FFT::FFT() :
     m_window(), m_plan(), m_nfft(0)
-{
+  {
 #ifdef WITH_FFTW3
-	m_plan = NULL;
+    m_plan = NULL;
 #else
-	m_plan.SetFlag(Eigen::FFT<double>::HalfSpectrum);
+    m_plan.SetFlag(Eigen::FFT<double>::HalfSpectrum);
 #endif
-}
+  }
 
-FFT::~FFT()
-{
+  FFT::~FFT()
+  {
 #ifdef WITH_FFTW3
-	if (m_plan)
-		fftw_destroy_plan(m_plan);
+    if (m_plan)
+      fftw_destroy_plan(m_plan);
 #endif
-}
+  }
 
-ParameterDescriptorList FFT::getParameterDescriptorList() const
-{
+  ParameterDescriptorList FFT::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
     p.m_identifier = "FFTLength";
     p.m_description
-            = "Frame's length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.";
+      = "Frame's length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.";
     p.m_defaultValue = "0";
     pList.push_back(p);
 
     p.m_identifier = "FFTWindow";
     p.m_description
-            = "Weighting window to apply before fft. Hanning|Hamming|None";
+      = "Weighting window to apply before fft. Hanning|Hamming|None";
     p.m_defaultValue = "Hanning";
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-StreamInfo FFT::init(const ParameterMap& params, const StreamInfo& in)
-{
+  StreamInfo FFT::init(const ParameterMap& params, const StreamInfo& in)
+  {
     int len = getIntParam("FFTLength", params);
     if (len == 0)
-        len = in.size;
+      len = in.size;
     string w = getStringParam("FFTWindow", params);
     if (w != "None")
     {
-        if (w == "Hanning")
-            m_window = ehanningPeriodic(in.size);
-        else if (w == "Hamming")
-            m_window = ehammingPeriodic(in.size);
-        else
-        {
-            cerr << "FFT: invalid Window parameter value " << w << " ignore it !" << endl;
-        }
+      if (w == "Hanning")
+        m_window = ehanningPeriodic(in.size);
+      else if (w == "Hamming")
+        m_window = ehammingPeriodic(in.size);
+      else
+      {
+        cerr << "FFT: invalid Window parameter value " << w << " ignore it !" << endl;
+      }
     }
     // init plan
     m_nfft = len;
@@ -104,32 +104,32 @@ StreamInfo FFT::init(const ParameterMap& params, const StreamInfo& in)
 #endif
 
     return StreamInfo(in,len+2);
-}
+  }
 
-void FFT::processToken(double* inPtr, const int N, double* out, const int outSize)
-{
+  void FFT::processToken(double* inPtr, const int N, double* out, const int outSize)
+  {
 #ifdef WITH_FFTW3
     double* inFFT = (double*) fftw_malloc(m_nfft*sizeof(double));
     complex<double>* outFFT = (complex<double>*) fftw_malloc((m_nfft/2+1)*sizeof(complex<double>));
     Map<VectorXd> infft(inFFT,m_nfft);
 #else
-	VectorXd infft(m_nfft);
+    VectorXd infft(m_nfft);
 #endif
-	Map<VectorXd> inData(inPtr,N);
-	if (m_window.size()>0)
-		infft.segment(0,N) = m_window.array() * inData.array();
-	else
-		infft.segment(0,N) = inData;
-	if (N<m_nfft)
-		infft.segment(N,m_nfft-N).setZero();
+    Map<VectorXd> inData(inPtr,N);
+    if (m_window.size()>0)
+      infft.segment(0,N) = m_window.array() * inData.array();
+    else
+      infft.segment(0,N) = inData;
+    if (N<m_nfft)
+      infft.segment(N,m_nfft-N).setZero();
 #ifdef WITH_FFTW3
-	fftw_execute_dft_r2c(m_plan,inFFT,(fftw_complex*)outFFT);
-	memcpy(out,outFFT,outSize*sizeof(double));
-	fftw_free(inFFT);
-	fftw_free(outFFT);
+    fftw_execute_dft_r2c(m_plan,inFFT,(fftw_complex*)outFFT);
+    memcpy(out,outFFT,outSize*sizeof(double));
+    fftw_free(inFFT);
+    fftw_free(outFFT);
 #else
-	m_plan.fwd((std::complex<double>*) out,infft.data(),m_nfft);
+    m_plan.fwd((std::complex<double>*) out,infft.data(),m_nfft);
 #endif
-}
+  }
 
 }

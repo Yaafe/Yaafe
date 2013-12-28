@@ -33,59 +33,59 @@ using namespace std;
 namespace YAAFE
 {
 
-ComplexDomainFlux::ComplexDomainFlux()
-{
-}
+  ComplexDomainFlux::ComplexDomainFlux()
+  {
+  }
 
-ComplexDomainFlux::~ComplexDomainFlux()
-{
-}
+  ComplexDomainFlux::~ComplexDomainFlux()
+  {
+  }
 
-bool ComplexDomainFlux::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool ComplexDomainFlux::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	outStreamInfo().add(StreamInfo(in,1));
+    outStreamInfo().add(StreamInfo(in,1));
     return true;
-}
+  }
 
-template<typename Scalar>
-struct rotatorOp {
-  complex<Scalar> operator()(const complex<Scalar>& x) const { return ((x.real()!=0) || (x.imag()!=0)) ? x / abs(x) : 1;}
-};
+  template<typename Scalar>
+    struct rotatorOp {
+      complex<Scalar> operator()(const complex<Scalar>& x) const { return ((x.real()!=0) || (x.imag()!=0)) ? x / abs(x) : 1;}
+    };
 
-bool ComplexDomainFlux::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool ComplexDomainFlux::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	if ((out->tokenno()==0) && (in->tokenno()!=-2))
-		in->prependZeros(2);
-	if (!in->hasTokens(3)) return false;
+    if ((out->tokenno()==0) && (in->tokenno()!=-2))
+      in->prependZeros(2);
+    if (!in->hasTokens(3)) return false;
 
-	const int N = in->info().size/2;
-	ArrayXcd inPredPredRotator(N);
-	ArrayXcd inPredRotator(N);
-	rotatorOp<double> op;
-	{
-		Map<ArrayXcd> inPredPredData((complex<double>*) in->token(0),N);
-		inPredPredRotator = inPredPredData.unaryExpr(op);
-	}
-	while (in->hasTokens(3))
-	{
-		Map<ArrayXcd> inPredData((complex<double>*) in->token(1),N);
-		Map<ArrayXcd> inData((complex<double>*) in->token(2), N);
-		inPredRotator = inPredData.unaryExpr(op);
-		double* output = out->writeToken();
-		*output++ = (inData - (inPredData * (inPredRotator * inPredPredRotator.conjugate()))).abs().sum();
-		in->consumeToken();
-		inPredPredRotator.swap(inPredRotator);
-	}
+    const int N = in->info().size/2;
+    ArrayXcd inPredPredRotator(N);
+    ArrayXcd inPredRotator(N);
+    rotatorOp<double> op;
+    {
+      Map<ArrayXcd> inPredPredData((complex<double>*) in->token(0),N);
+      inPredPredRotator = inPredPredData.unaryExpr(op);
+    }
+    while (in->hasTokens(3))
+    {
+      Map<ArrayXcd> inPredData((complex<double>*) in->token(1),N);
+      Map<ArrayXcd> inData((complex<double>*) in->token(2), N);
+      inPredRotator = inPredData.unaryExpr(op);
+      double* output = out->writeToken();
+      *output++ = (inData - (inPredData * (inPredRotator * inPredPredRotator.conjugate()))).abs().sum();
+      in->consumeToken();
+      inPredPredRotator.swap(inPredRotator);
+    }
 
     return true;
-}
+  }
 
 }

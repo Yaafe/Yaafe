@@ -34,46 +34,46 @@
 namespace YAAFE
 {
 
-class AudioFileReader: public ComponentBase<AudioFileReader>
-{
-public:
-    AudioFileReader();
-    virtual ~AudioFileReader();
+  class AudioFileReader: public ComponentBase<AudioFileReader>
+  {
+   public:
+     AudioFileReader();
+     virtual ~AudioFileReader();
 
-    virtual const std::string getIdentifier() const  { return AUDIO_FILE_READER_ID; }
-    virtual bool stateLess() const { return false; };
+     virtual const std::string getIdentifier() const  { return AUDIO_FILE_READER_ID; }
+     virtual bool stateLess() const { return false; };
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
 
-private:
-	int m_sampleRate;
-    int m_bufferSize;
-    SNDFILE* m_sndfile;
-    SF_INFO m_sfinfo;
-    double* m_readBuffer;
+   private:
+     int m_sampleRate;
+     int m_bufferSize;
+     SNDFILE* m_sndfile;
+     SF_INFO m_sfinfo;
+     double* m_readBuffer;
 
-    struct PFilter* m_filter;
-    struct PState* m_state;
-    int m_resampleBufferSize;
-    double* m_resampleBuffer;
+     struct PFilter* m_filter;
+     struct PState* m_state;
+     int m_resampleBufferSize;
+     double* m_resampleBuffer;
 
-    bool m_resample;
-    bool m_removemean;
-    double m_scaleMax;
+     bool m_resample;
+     bool m_removemean;
+     double m_scaleMax;
 
-    bool m_rescale;
-    double m_mean;
-    double m_factor;
+     bool m_rescale;
+     double m_mean;
+     double m_factor;
 
-    bool openFile(const std::string& filename);
-    void closeFile();
-    int readFramesIntoBuffer(); // read m_bufferSize frames
+     bool openFile(const std::string& filename);
+     void closeFile();
+     int readFramesIntoBuffer(); // read m_bufferSize frames
 
-};
+  };
 
 }
 

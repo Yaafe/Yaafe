@@ -32,17 +32,17 @@ using namespace std;
 
 namespace YAAFE {
 
-SpectralCrestFactorPerBand::SpectralCrestFactorPerBand() {
+  SpectralCrestFactorPerBand::SpectralCrestFactorPerBand() {
 
-}
+  }
 
-SpectralCrestFactorPerBand::~SpectralCrestFactorPerBand() {
-}
+  SpectralCrestFactorPerBand::~SpectralCrestFactorPerBand() {
+  }
 
-bool SpectralCrestFactorPerBand::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool SpectralCrestFactorPerBand::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
     m_inSize = in.size;
 
     double fs = in.sampleRate;
@@ -54,87 +54,87 @@ bool SpectralCrestFactorPerBand::init(const ParameterMap& params, const Ports<St
     int k = 0;
     while (true)
     {
-        k++;
-        double f_lo_nom = loedge * pow(2,(double)(k-1)/4.0);
-        double f_hi_nom = loedge * pow(2,(double)k/4.0);
-        double f_lo = f_lo_nom * (1 - OVERLAP);
-        double f_hi = f_hi_nom * (1 + OVERLAP);
-        int i_lo = (int) round(f_lo / (fs/blockSize));
-        int i_hi = (int) round(f_hi / (fs/blockSize));
+      k++;
+      double f_lo_nom = loedge * pow(2,(double)(k-1)/4.0);
+      double f_hi_nom = loedge * pow(2,(double)k/4.0);
+      double f_lo = f_lo_nom * (1 - OVERLAP);
+      double f_hi = f_hi_nom * (1 + OVERLAP);
+      int i_lo = (int) round(f_lo / (fs/blockSize));
+      int i_hi = (int) round(f_hi / (fs/blockSize));
 
-        if (f_lo_nom >= hiedge) break;
-        if (f_hi > fs/2) break;
+      if (f_lo_nom >= hiedge) break;
+      if (f_hi > fs/2) break;
 
-        int grpsize = 1;
-        if (f_lo_nom >= 1000)
-        {
-            grpsize = (int) round(pow(2, floor(log2(f_lo_nom/500.0))));
-            i_hi = (int) round((double)(i_hi-i_lo+1)/grpsize)*grpsize + i_lo-1;
-        }
+      int grpsize = 1;
+      if (f_lo_nom >= 1000)
+      {
+        grpsize = (int) round(pow(2, floor(log2(f_lo_nom/500.0))));
+        i_hi = (int) round((double)(i_hi-i_lo+1)/grpsize)*grpsize + i_lo-1;
+      }
 
-    	bandinfo bi;
-    	bi.start = i_lo;
-    	bi.end = i_hi+1;
-    	bi.group = grpsize;
-        m_band.push_back(bi);
+      bandinfo bi;
+      bi.start = i_lo;
+      bi.end = i_hi+1;
+      bi.group = grpsize;
+      m_band.push_back(bi);
     }
 
     outStreamInfo().add(StreamInfo(in,m_band.size()));
     return true;
-}
+  }
 
-bool SpectralCrestFactorPerBand::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool SpectralCrestFactorPerBand::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	int nbBands = m_band.size();
+    int nbBands = m_band.size();
     double* tmp = new double[in->info().size];
     while (!in->empty())
     {
-    	double* inData = in->readToken();
-    	double* output = out->writeToken();
-    	for (int k=0;k<nbBands;++k)
-    	{
-    		bandinfo& bi = m_band[k];
-    		double* data = &inData[bi.start];
-    		int datalen = bi.length();
-    		if (bi.group>1) // grpsize > 1
-    		{
-    			data = tmp;
-    			datalen /= bi.group;
-    			double* ptr = &inData[bi.start];
-    			for (int d=0;d<datalen;d++) {
-    				double s = 0;
-    				for (int g=0;g<bi.group;g++)
-    					s += *ptr++;
-    				data[d] = s;
-    			}
-    		}
-    		double am = 0;
-    		double maxdata = data[0];
-    		for (int i=0;i<datalen;i++)
-    		{
-    			am += data[i];
-    			if (data[i]>maxdata) {
-    				maxdata = data[i];
-    			}
-    		}
-    		if (am!=0) {
-    			output[k] = maxdata * datalen / am;
-    			continue;
-    		}
-    		output[k] = maxdata / EPS;
-    	}
+      double* inData = in->readToken();
+      double* output = out->writeToken();
+      for (int k=0;k<nbBands;++k)
+      {
+        bandinfo& bi = m_band[k];
+        double* data = &inData[bi.start];
+        int datalen = bi.length();
+        if (bi.group>1) // grpsize > 1
+        {
+          data = tmp;
+          datalen /= bi.group;
+          double* ptr = &inData[bi.start];
+          for (int d=0;d<datalen;d++) {
+            double s = 0;
+            for (int g=0;g<bi.group;g++)
+              s += *ptr++;
+            data[d] = s;
+          }
+        }
+        double am = 0;
+        double maxdata = data[0];
+        for (int i=0;i<datalen;i++)
+        {
+          am += data[i];
+          if (data[i]>maxdata) {
+            maxdata = data[i];
+          }
+        }
+        if (am!=0) {
+          output[k] = maxdata * datalen / am;
+          continue;
+        }
+        output[k] = maxdata / EPS;
+      }
 
-        in->consumeToken();
+      in->consumeToken();
     }
     delete [] tmp;
 
     return true;
-}
+  }
 
 }

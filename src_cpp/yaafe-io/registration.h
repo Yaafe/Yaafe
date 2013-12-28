@@ -27,7 +27,7 @@
 
 extern "C" {
 
-void registerYaafeComponents(void* componentFactory);
+  void registerYaafeComponents(void* componentFactory);
 
 }
 

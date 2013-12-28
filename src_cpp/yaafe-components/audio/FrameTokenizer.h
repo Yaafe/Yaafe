@@ -32,24 +32,24 @@
 namespace YAAFE
 {
 
-class FrameTokenizer: public YAAFE::ComponentBase<FrameTokenizer>
-{
-public:
-    FrameTokenizer();
-    virtual ~FrameTokenizer();
+  class FrameTokenizer: public YAAFE::ComponentBase<FrameTokenizer>
+  {
+   public:
+     FrameTokenizer();
+     virtual ~FrameTokenizer();
 
-    const std::string getIdentifier() const { return FRAME_TOKENIZER_ID; };
+     const std::string getIdentifier() const { return FRAME_TOKENIZER_ID; };
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-	virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-	virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-	virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_blockSize;
-    int m_stepSize;
-};
+   private:
+     int m_blockSize;
+     int m_stepSize;
+  };
 
 }
 

@@ -29,51 +29,51 @@ using namespace std;
 
 namespace YAAFE {
 
-FilterSmallValues::FilterSmallValues() :
-	m_threshold(0) {
+  FilterSmallValues::FilterSmallValues() :
+    m_threshold(0) {
 
-}
+    }
 
-FilterSmallValues::~FilterSmallValues() {
-}
+  FilterSmallValues::~FilterSmallValues() {
+  }
 
-ParameterDescriptorList FilterSmallValues::getParameterDescriptorList() const {
-	ParameterDescriptorList pList;
-	ParameterDescriptor p;
+  ParameterDescriptorList FilterSmallValues::getParameterDescriptorList() const {
+    ParameterDescriptorList pList;
+    ParameterDescriptor p;
 
-	p.m_identifier = "FSVThreshold";
-	p.m_description = "Values less than FSVThreshold will be set to eps.";
-	p.m_defaultValue = "0.001";
-	pList.push_back(p);
+    p.m_identifier = "FSVThreshold";
+    p.m_description = "Values less than FSVThreshold will be set to eps.";
+    p.m_defaultValue = "0.001";
+    pList.push_back(p);
 
-	return pList;
-}
+    return pList;
+  }
 
-bool FilterSmallValues::init(const ParameterMap& params, const Ports<StreamInfo>& inp) {
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool FilterSmallValues::init(const ParameterMap& params, const Ports<StreamInfo>& inp) {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_threshold = getDoubleParam("FSVThreshold",params);
-	outStreamInfo().add(StreamInfo(in));
-	return true;
-}
+    m_threshold = getDoubleParam("FSVThreshold",params);
+    outStreamInfo().add(StreamInfo(in));
+    return true;
+  }
 
-bool FilterSmallValues::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp) {
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool FilterSmallValues::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp) {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	assert(in->info().size==out->info().size);
-	while (!in->empty()) {
-		const double* inData = in->readToken();
-		double* outData = out->writeToken();
-		for (int i=0;i<in->info().size;i++)
-			outData[i] = (inData[i]>m_threshold) ? inData[i] : EPS;
-		in->consumeToken();
-	}
-	return true;
-}
+    assert(in->info().size==out->info().size);
+    while (!in->empty()) {
+      const double* inData = in->readToken();
+      double* outData = out->writeToken();
+      for (int i=0;i<in->info().size;i++)
+        outData[i] = (inData[i]>m_threshold) ? inData[i] : EPS;
+      in->consumeToken();
+    }
+    return true;
+  }
 
 }

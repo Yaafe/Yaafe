@@ -31,47 +31,47 @@ using namespace std;
 namespace YAAFE
 {
 
-Slope::Slope() :
+  Slope::Slope() :
     m_size(0)
-{
-}
+  {
+  }
 
-Slope::~Slope()
-{
-}
+  Slope::~Slope()
+  {
+  }
 
-bool Slope::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool Slope::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_size = in.size;
-	m_freqs.resize(m_size);
-	m_freqs = VectorXd::LinSpaced(m_size,0,m_size-1) * (in.sampleRate) / in.frameLength;
-	m_sumFreqs = m_freqs.sum();
-	m_slopeNorm = m_size * m_freqs.array().square().sum() - pow2(m_freqs.sum());
+    m_size = in.size;
+    m_freqs.resize(m_size);
+    m_freqs = VectorXd::LinSpaced(m_size,0,m_size-1) * (in.sampleRate) / in.frameLength;
+    m_sumFreqs = m_freqs.sum();
+    m_slopeNorm = m_size * m_freqs.array().square().sum() - pow2(m_freqs.sum());
 
-	outStreamInfo().add(StreamInfo(in,1));
+    outStreamInfo().add(StreamInfo(in,1));
     return true;
-}
+  }
 
-bool Slope::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Slope::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
     while (!in->empty())
     {
-    	Map<VectorXd> spec(in->readToken(),m_size);
-    	double sumSpec = spec.sum();
-    	sumSpec = (m_size * spec.dot(m_freqs) - m_sumFreqs * sumSpec) / (sumSpec * m_slopeNorm);
-    	out->write(&sumSpec,1);
-        in->consumeToken();
+      Map<VectorXd> spec(in->readToken(),m_size);
+      double sumSpec = spec.sum();
+      sumSpec = (m_size * spec.dot(m_freqs) - m_sumFreqs * sumSpec) / (sumSpec * m_slopeNorm);
+      out->write(&sumSpec,1);
+      in->consumeToken();
     }
     return true;
-}
+  }
 
 }

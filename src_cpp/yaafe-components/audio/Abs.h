@@ -32,17 +32,17 @@
 namespace YAAFE
 {
 
-class Abs: public YAAFE::StateLessOneInOneOutComponent<Abs>
-{
-public:
-    Abs();
-    virtual ~Abs();
+  class Abs: public YAAFE::StateLessOneInOneOutComponent<Abs>
+  {
+   public:
+     Abs();
+     virtual ~Abs();
 
-    const std::string getIdentifier() const  { return ABS_ID; }
+     const std::string getIdentifier() const  { return ABS_ID; }
 
-	StreamInfo init(const ParameterMap& params,const StreamInfo& in);
-	void processToken(double* inData, const int inSize, double* out, const int outSize);
-};
+     StreamInfo init(const ParameterMap& params,const StreamInfo& in);
+     void processToken(double* inData, const int inSize, double* out, const int outSize);
+  };
 
 }
 

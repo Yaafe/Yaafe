@@ -35,16 +35,16 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-Cepstrum::Cepstrum()
-{
-}
+  Cepstrum::Cepstrum()
+  {
+  }
 
-Cepstrum::~Cepstrum()
-{
-}
+  Cepstrum::~Cepstrum()
+  {
+  }
 
-ParameterDescriptorList Cepstrum::getParameterDescriptorList() const
-{
+  ParameterDescriptorList Cepstrum::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -59,59 +59,59 @@ ParameterDescriptorList Cepstrum::getParameterDescriptorList() const
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-bool Cepstrum::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool Cepstrum::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_ignoreFirst = getIntParam("CepsIgnoreFirstCoeff",params);
-	m_nbCoeffs = getIntParam("CepsNbCoeffs",params);
-	if (m_nbCoeffs+m_ignoreFirst>in.size)
-	{
-		cerr << "Warning: cannot compute " << m_nbCoeffs << " for input of size " << in.size << endl;
-		m_nbCoeffs = in.size - m_ignoreFirst;
-		cerr << "compute only " << m_nbCoeffs << " coefficients" << endl;
-	}
+    m_ignoreFirst = getIntParam("CepsIgnoreFirstCoeff",params);
+    m_nbCoeffs = getIntParam("CepsNbCoeffs",params);
+    if (m_nbCoeffs+m_ignoreFirst>in.size)
+    {
+      cerr << "Warning: cannot compute " << m_nbCoeffs << " for input of size " << in.size << endl;
+      m_nbCoeffs = in.size - m_ignoreFirst;
+      cerr << "compute only " << m_nbCoeffs << " coefficients" << endl;
+    }
 
-	m_dctPlan.resize(in.size,in.size);
-	for (int j=0;j<in.size;j++)
-		m_dctPlan(0,j) = 1.0 / sqrt((double)in.size);
-	for (int i=1;i<in.size;i++)
-		for (int j=0;j<in.size;j++)
-			m_dctPlan(i,j) = sqrt(2.0 / in.size) * cos(PI * (j + 0.5) * i / in.size);
+    m_dctPlan.resize(in.size,in.size);
+    for (int j=0;j<in.size;j++)
+      m_dctPlan(0,j) = 1.0 / sqrt((double)in.size);
+    for (int i=1;i<in.size;i++)
+      for (int j=0;j<in.size;j++)
+        m_dctPlan(i,j) = sqrt(2.0 / in.size) * cos(PI * (j + 0.5) * i / in.size);
 
-	outStreamInfo().add(StreamInfo(in, m_nbCoeffs));
+    outStreamInfo().add(StreamInfo(in, m_nbCoeffs));
     return true;
-}
+  }
 
-template<typename Scalar>
-struct safeLogOp {
-  safeLogOp() : m_logeps(log(EPS)) {};
-  const Scalar operator()(const Scalar& x) const { return x>0 ? log10(x) : m_logeps; };
-  Scalar m_logeps;
-};
+  template<typename Scalar>
+    struct safeLogOp {
+      safeLogOp() : m_logeps(log(EPS)) {};
+      const Scalar operator()(const Scalar& x) const { return x>0 ? log10(x) : m_logeps; };
+      Scalar m_logeps;
+    };
 
-bool Cepstrum::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty())
-		return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Cepstrum::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty())
+      return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
     safeLogOp<double> slop;
     VectorXd outDct;
     while (!in->empty())
     {
-        Map<VectorXd> inData(in->readToken(),in->info().size);
-        outDct.noalias() = m_dctPlan * inData.unaryExpr(slop);
-        memcpy(out->writeToken(),outDct.data() + m_ignoreFirst, out->info().size*sizeof(double));
-        in->consumeToken();
+      Map<VectorXd> inData(in->readToken(),in->info().size);
+      outDct.noalias() = m_dctPlan * inData.unaryExpr(slop);
+      memcpy(out->writeToken(),outDct.data() + m_ignoreFirst, out->info().size*sizeof(double));
+      in->consumeToken();
     }
     return true;
-}
+  }
 
 }

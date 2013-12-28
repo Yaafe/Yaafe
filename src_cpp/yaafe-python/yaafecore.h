@@ -27,31 +27,31 @@
 
 extern "C" {
 
-void destroyFactory();
+  void destroyFactory();
 
-const char* getYaafeVersion();
-int loadComponentLibrary(char* filename);
-int isComponentAvailable(char* id);
+  const char* getYaafeVersion();
+  int loadComponentLibrary(char* filename);
+  int isComponentAvailable(char* id);
 
-char** getComponentList();
-char** getOutputFormatList();
-void freeComponentList(char** strList);
+  char** getComponentList();
+  char** getOutputFormatList();
+  void freeComponentList(char** strList);
 
-char* getOutputFormatDescription(char* id);
-void freeOutputFormatDescription(char* desc);
+  char* getOutputFormatDescription(char* id);
+  void freeOutputFormatDescription(char* desc);
 
-struct ComponentParameter {
-	char* identifier;
-	char* defaultValue;
-	char* description;
-};
+  struct ComponentParameter {
+    char* identifier;
+    char* defaultValue;
+    char* description;
+  };
 
-struct ComponentParameter** getComponentParameters(const char* id);
-struct ComponentParameter** getOutputFormatParameters(const char* id);
-void freeComponentParameters(struct ComponentParameter** params);
+  struct ComponentParameter** getComponentParameters(const char* id);
+  struct ComponentParameter** getOutputFormatParameters(const char* id);
+  void freeComponentParameters(struct ComponentParameter** params);
 
-void setPreferedDataBlockSize(int size);
-void setVerbose(int value);
+  void setPreferedDataBlockSize(int size);
+  void setVerbose(int value);
 
 }
 

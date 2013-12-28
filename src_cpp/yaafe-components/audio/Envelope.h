@@ -32,23 +32,23 @@
 namespace YAAFE
 {
 
-class Envelope: public YAAFE::ComponentBase<Envelope>
-{
-public:
-    Envelope();
-    virtual ~Envelope();
+  class Envelope: public YAAFE::ComponentBase<Envelope>
+  {
+   public:
+     Envelope();
+     virtual ~Envelope();
 
-    virtual const std::string getIdentifier() const { return ENVELOPE_ID;};
+     virtual const std::string getIdentifier() const { return ENVELOPE_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    class ComputingContext;
-    ComputingContext* m_context;
-};
+   private:
+     class ComputingContext;
+     ComputingContext* m_context;
+  };
 
 }
 

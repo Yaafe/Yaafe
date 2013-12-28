@@ -32,17 +32,17 @@
 namespace YAAFE
 {
 
-class Decrease: public YAAFE::StateLessOneInOneOutComponent<Decrease>
-{
-public:
-    Decrease();
-    virtual ~Decrease();
+  class Decrease: public YAAFE::StateLessOneInOneOutComponent<Decrease>
+  {
+   public:
+     Decrease();
+     virtual ~Decrease();
 
-    virtual const std::string getIdentifier() const { return DECREASE_ID;};
+     virtual const std::string getIdentifier() const { return DECREASE_ID;};
 
-    StreamInfo init(const ParameterMap& params, const StreamInfo& in);
-    void processToken(double* inData, const int inSize, double* out, const int outSize);
-};
+     StreamInfo init(const ParameterMap& params, const StreamInfo& in);
+     void processToken(double* inData, const int inSize, double* out, const int outSize);
+  };
 
 }
 
