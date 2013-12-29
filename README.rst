@@ -1,3 +1,8 @@
+Yaafe(Yet Another Audio Feature Extractor)
+==========================================
+[![Build Status](https://travis-ci.org/mckelvin/Yaafe.png)](https://travis-ci.org/mckelvin/Yaafe)
+
+
 Install
 =======
 
@@ -19,7 +24,10 @@ To use the *yaafe.py* script you need Python >= 2.5, and the numpy package.
 Once previous libraries are installed (some may have been locally installed in <lib-path>),
 you can compile with the following steps:
 
- 1. mkdir build
+ 
+ 1. git submodule init  # to prepare Eigen code under the externals directory
+ 2. git submodule update
+ 2. mkdir build
  2. cd build
  3. ccmake -DCMAKE_PREFIX_PATH=<lib-path> -DCMAKE_INSTALL_PREFIX=<install-path> ..
  4. make
@@ -32,17 +40,11 @@ Several options can control Yaafe compilation. More details can be found at:
 Environment
 ===========
 
-You *must* set your YAAFE_PATH environment var to the "yaafe_extensions" dir so that yaafe can find available features::
-
- export YAAFE_PATH=$DEST_DIR/yaafe_extensions
-
 To easily use Yaafe, you should set the following environment vars::
 
- export PATH=$PATH:$DEST_DIR/bin
  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEST_DIR/lib
- export PYTHONPATH=$PYTHONPATH:$DEST_DIR/python_packages
 
-On MacOsX replace LD_LIBRARY_PATH by DYLD_LIBRARY_PATH
+On MacOsX replace `LD_LIBRARY_PATH` by `DYLD_FALLBACK_LIBRARY_PATH`
 
 If you use Matlab, you can set your MATLABPATH var::
 
