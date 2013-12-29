@@ -1,0 +1,30 @@
+language: cpp
+
+compiler:
+  - c++
+
+python:
+  - 2.7
+
+before_install:
+  - git submodule init
+  - git submodule update
+
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-serial-dev libhdf5-serial-1.8.4
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script:
+  - make
+  - make install
+  - make doctest
+
+branches:
+  only:
+    - master
+    - develop
