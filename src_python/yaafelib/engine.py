@@ -48,25 +48,23 @@ class Engine(object):
             >>> engine.load(fp.getDataFlow())
             True
             >>> # get input metadata
-            >>> engine.getInputs()
-            {'audio': {'sampleRate': 16000.0,
-                       'frameLength': 1,
-                       'sampleStep': 1,
-                       'parameters': {'SampleRate': '16000'},
-                       'size': 1}}
+            >>> eng_out = engine.getInputs()
+            >>> sorted(eng_out.keys())
+            ['audio']
+            >>> sorted(eng_out['audio'].items())
+            [('frameLength', 1), ('parameters', {...}), ('sampleRate', 16000.0), ('sampleStep', 1), ('size', 1)]
+            >>> sorted(eng_out['audio']['parameters'].items())
+            [('Resample', 'no'), ('SampleRate', '16000')]
+            >>>
             >>>
             >>> # get output metadata
-            >>> engine.getOutputs()
-            {'sr': {'sampleRate': 16000.0,
-                    'frameLength': 512,
-                    'sampleStep': 256,
-                    'parameters': {'normalize': '-1',
-                                   'yaafedefinition': 'SpectralRolloff blockSize=512 stepSize=256',
-                                   'version': '...'},
-                    'size': 1},
-             'sf': ...,
-             'mfcc': ...}
-            >>>
+            >>> eng_out = engine.getOutputs()
+            >>> sorted(eng_out.items())
+            [('mfcc', {...}), ('sf', {...}), ('sr', {...})]
+            >>> sorted(eng_out['sr'].items())
+            [('frameLength', 512), ('parameters', {...}), ('sampleRate', 16000.0), ('sampleStep', 256), ('size', 1)]
+            >>> sorted(eng_out['sr']['parameters'].items())
+            [('normalize', '-1'), ('resample', 'no'), ('samplerate', '16000'), ('version', '0.64'), ('yaafedefinition', 'SpectralRolloff blockSize=512 stepSize=256')]
             >>> # extract features from a numpy array
             >>> import numpy # needs numpy
             >>> audio = numpy.random.randn(1,1000000)

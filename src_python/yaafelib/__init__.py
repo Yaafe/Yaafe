@@ -62,17 +62,25 @@ __all__ = ['loadComponentLibrary',
 
 def loadPlugins():
     # load available plugins
-    if os.getenv('YAAFE_PATH'):
-        if not os.getenv('YAAFE_PATH') in sys.path:
-            sys.path.append(os.getenv('YAAFE_PATH'))
-        for f in os.listdir(os.getenv('YAAFE_PATH')):
-            parts = f.split('.')
-            if parts[-1]=='py':
-                extension = '.'.join(parts[0:-1])
-                try:
-                    __import__(extension,globals(),locals(),[],-1)
-                except ImportError,e:
-                    print 'ERROR: cannot load yaafe extension %s !'%extension
-                    print e
+    __import__(
+        'yaafe_extensions.yaafefeatures',
+        globals(), locals(), [], -1
+    )
+
+    yaafe_path = os.getenv('YAAFE_PATH')
+    if not yaafe_path:
+        return
+    if not yaafe_path in sys.path:
+        sys.path.append(yaafe_path)
+    for f in os.listdir(yaafe_path):
+        parts = f.split('.')
+        if not parts[-1] == 'py':
+            continue
+        extension = '.'.join(parts[:-1])
+        try:
+            __import__(extension, globals(), locals(), [], -1)
+        except ImportError, err:
+            print 'ERROR: cannot load yaafe extension %s !' % extension
+            print err
 
 loadPlugins()

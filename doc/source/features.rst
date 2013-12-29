@@ -5,4 +5,4 @@
 Yaafe core features
 ===================
 
-.. automodule:: yaafefeatures
+.. automodule:: yaafelib.yaafe_extensions.yaafefeatures
