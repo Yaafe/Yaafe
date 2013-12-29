@@ -16,6 +16,8 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "-DDEBUG -ftemplate-depth-30 -g2" CACHE STRING "CXX DEBUG FLAGS" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "-DDEBUG -g2" CACHE STRING "C DEBUG FLAGS" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math" CACHE STRING "CXX RELEASE FLAGS" FORCE)
+set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math" CACHE STRING "C RELEASE FLAGS" FORCE)
 add_definitions(-Wno-write-strings)
 
 find_package(Argtable2 REQUIRED)
@@ -93,12 +95,12 @@ endif(WITH_TIMERS)
 
 FIND_PROGRAM(SPHINX_BUILD sphinx-build PATHS ENV PATH DOC "sphinx-build script used to build documentation")
 
+execute_process ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(prefix='')" OUTPUT_VARIABLE python_packages OUTPUT_STRIP_TRAILING_WHITESPACE )
 # install paths
 set(CMAKE_INSTALL_BINDIR bin CACHE PATH "Output directory for programs")
 set(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output directory for libraries")
 set(CMAKE_INSTALL_INCLUDE include CACHE PATH "Output directory for header files")
-set(CMAKE_INSTALL_PYTHON_PACKAGES python_packages CACHE PATH "Output directory for yaafe Python packages")
-set(CMAKE_INSTALL_YAAFE_EXTENSIONS yaafe_extensions CACHE PATH "Output directory for yaafe features libraries")
+set(CMAKE_INSTALL_PYTHON_PACKAGES ${python_packages} CACHE PATH "Output directory for yaafe Python packages")
 set(CMAKE_INSTALL_MATLAB_SCRIPTS matlab CACHE PATH "Output directory for matlab scripts")
 
 # add targets
