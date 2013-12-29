@@ -33,7 +33,14 @@ class FeaturePlan(object):
         specific sample rate.
         
         :param sample_rate: analysis samplerate
-        :param normalize: signal maximum normalization, in ]0,1], or `None` to skip normalization.
+        :param normalize: signal maximum normalization, in [0,1], or `None` to skip normalization.
+        :param resample: force resample the sample rate of input audio to param `sample_rate`, default: False.
+        :param trim_beginning_silence: trim silence at the beginning, default: False.
+        :param time_start: time offset where to start analyse,if given a negative value(e.g: \"-10s\" ),
+            it will start at the last 10s. default: 0.0(s)
+        :param time_limit: longest time duration to keep, 0s means no limit.
+            If the given value is longer than the available duration,
+            the excess should be ignored. default: 0.0(s)
         
         This collection can be load from a file using the :py:meth:`loadFeaturePlan` method,
         or built by adding features with the :py:meth:`addFeature` method.
@@ -54,7 +61,8 @@ class FeaturePlan(object):
             ...        
     """
 
-    def __init__(self,sample_rate=44100,normalize=None,resample=False):
+    def __init__(self, sample_rate=44100, normalize=None, resample=False,
+                trim_beginning_silence=False, time_start=0.0, time_limit=0.0):
         if type(normalize)==int:
             normalize = '%i'%normalize
         elif type(normalize)==float:
@@ -64,7 +72,13 @@ class FeaturePlan(object):
         self.features = {}
         self.resample=resample
         self.sample_rate = sample_rate
-        self.audio_params = {'SampleRate': str(sample_rate), 'Resample' : 'yes' if resample else 'no'}
+        self.audio_params = {
+            'SampleRate': str(sample_rate),
+            'Resample' : 'yes' if resample else 'no',
+            'TrimBeginningSilence': 'yes' if trim_beginning_silence else 'no',
+            'TimeStart': '%ss' % time_start,
+            'TimeLimit': '%ss' % time_limit
+        }
         if normalize:
             self.audio_params['RemoveMean'] = 'yes'
             self.audio_params['ScaleMax'] = normalize
