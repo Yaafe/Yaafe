@@ -100,6 +100,24 @@ namespace YAAFE
 
 #endif
 
+#ifdef NDEBUG
+#define DBLOG(...)
+#define DBLOG_IF(...)
+#else
+#define DBLOG(...) \
+  do{ \
+    fprintf(stderr, __VA_ARGS__); \
+    fprintf(stderr, "\n"); \
+  } while(0)
+#define DBLOG_IF(cond, ...) \
+  do{ \
+    if (cond) { \
+      fprintf(stderr, __VA_ARGS__); \
+      fprintf(stderr, "\n"); \
+    } \
+  } while(0)
+#endif
+
 } // end YAAFE
 
 #endif /* UTILS_H_ */
