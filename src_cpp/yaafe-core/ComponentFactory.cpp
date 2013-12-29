@@ -136,6 +136,17 @@ namespace YAAFE {
         // file exists
         complete_name = tmp;
       }
+    }
+
+    // then look at VIRTUAL_ENV/lib
+    if (getenv("VIRTUAL_ENV"))
+    {
+      string tmp = string(getenv("VIRTUAL_ENV")) + string("/lib/") + complete_name;
+      struct stat st;
+      if (stat(tmp.c_str(),&st)==0)
+      {
+        complete_name = tmp;
+      }
     } // else look at library in default library accessible dirs
 
     const char* libname = complete_name.c_str();

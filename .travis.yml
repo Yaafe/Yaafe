@@ -1,4 +1,4 @@
-language: cpp
+language: python
 
 compiler:
   - c++
@@ -13,11 +13,14 @@ before_install:
 install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-serial-dev libhdf5-serial-1.8.4
+  - pip install -r requirements.txt
 
 before_script:
+  - 
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DCMAKE_INSTALL_PREFIX=$VIRTUAL_ENV ..
+  - export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib
 
 script:
   - make
