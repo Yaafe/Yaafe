@@ -52,6 +52,7 @@ namespace YAAFE {
      bool m_rescale;
      double m_mean;
      double m_factor;
+     bool m_trim_beginning_silence;
   };
 
 }

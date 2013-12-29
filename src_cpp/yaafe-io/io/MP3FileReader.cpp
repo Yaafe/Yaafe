@@ -31,6 +31,7 @@
 #include <cmath>
 
 #define MAX_INT_16 32768.0
+#define SILENCE_THRESHOLD 1e-4
 
 using namespace std;
 
@@ -47,10 +48,15 @@ namespace YAAFE {
      int decode();
      double* outBuffer() { return (m_filter ? m_resampleBuffer : m_outbuffer); }
 
+     double m_start_second;
+     double m_limit_second;
+     off_t m_frame_left;
+
    private:
      long m_rate;
      int m_channels;
      mpg123_handle* m_mh;
+     mpg123_pars* m_mp;
      unsigned char* m_buffer;
      double* m_outbuffer;
      size_t m_bufferSize;
@@ -70,7 +76,8 @@ namespace YAAFE {
 
   MP3FileReader::MP3Decoder::MP3Decoder() :
     m_rate(0), m_channels(0), m_mh(NULL), m_buffer(NULL), m_outbuffer(NULL), m_bufferSize(0),
-    m_filter(NULL), m_state(NULL), m_resampleBufferSize(0), m_resampleBuffer(NULL)
+    m_filter(NULL), m_state(NULL), m_resampleBufferSize(0), m_resampleBuffer(NULL),
+    m_start_second(0.0), m_limit_second(0.0), m_frame_left(0)
   {
     if (s_mpg123refcount == 0)
     {
@@ -84,20 +91,20 @@ namespace YAAFE {
     s_mpg123refcount++;
 
     int err = MPG123_OK;
-    m_mh = mpg123_new(NULL,&err);
+    m_mp = mpg123_new_pars(&err);
+    mpg123_par(m_mp, MPG123_ADD_FLAGS, MPG123_QUIET, 0);
+    mpg123_par(m_mp, MPG123_RESYNC_LIMIT, -1, 0);
+    m_mh = mpg123_parnew(m_mp, NULL, &err);
   }
 
   MP3FileReader::MP3Decoder::~MP3Decoder()
   {
-    if (m_buffer)
-      free(m_buffer);
-    if (m_outbuffer)
-      free(m_outbuffer);
-    if (m_resampleBuffer)
-      free(m_resampleBuffer);
-    if (m_state)
-      smarc_destroy_pstate(m_state);
+    closeFile();
+    if (m_filter) {
+      SmarcPFilterCache::release();
+    }
     mpg123_close(m_mh);
+    mpg123_delete_pars(m_mp);
     mpg123_delete(m_mh);
     s_mpg123refcount--;
     if (s_mpg123refcount == 0)
@@ -120,11 +127,7 @@ namespace YAAFE {
       mpg123_close(m_mh);
       return false;
     }
-    if (m_channels > 1)
-    {
-      cerr    << "Warning: MP3FileReader will convert stereo audio file to mono doing mean of channels"
-        << endl;
-    }
+    DBLOG_IF(m_channels > 1, "Warning: MP3FileReader will convert stereo audio file to mono doing mean of channels");
     err = mpg123_format(m_mh, m_rate, m_channels, MPG123_ENC_SIGNED_16);
     if (err != MPG123_OK)
     {
@@ -168,11 +171,50 @@ namespace YAAFE {
       }
     }
 
+    assert(mpg123_tell(m_mh) == 0);
+    off_t start_frame = 0;
+    mpg123_scan(m_mh);
+    if (m_start_second != 0) {
+      //  m_start_second might be a negative value
+      start_frame = mpg123_timeframe(m_mh, m_start_second);
+      if (start_frame < 0) {
+        start_frame = mpg123_seek_frame(m_mh, -start_frame, SEEK_END);
+      } else {
+        start_frame = mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
+      }
+    }
+    DBLOG("start frame: %d, m_start_second: %lf", start_frame, m_start_second);
+    if (m_limit_second > 0) {
+      off_t limit_frame = mpg123_timeframe(m_mh, m_limit_second);
+      off_t stop_frame = mpg123_seek_frame(m_mh, limit_frame, SEEK_CUR);
+      DBLOG("stop frame: %d", stop_frame);
+      m_frame_left = stop_frame - start_frame + 1;
+      DBLOG("frame left: %d", m_frame_left);
+      mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
+      DBLOG("back to start frame: %d", mpg123_tellframe(m_mh));
+    }
     return true;
   }
 
   void MP3FileReader::MP3Decoder::closeFile()
   {
+    if (m_buffer) {
+      free(m_buffer);
+      m_buffer = NULL;
+    }
+    if (m_outbuffer) {
+      free(m_outbuffer);
+      m_outbuffer = NULL;
+    }
+    if (m_resampleBuffer) {
+      free(m_resampleBuffer);
+      m_resampleBuffer = NULL;
+    }
+    if (m_state) {
+      smarc_destroy_pstate(m_state);
+      m_state = NULL;
+    }
+
     mpg123_close(m_mh);
     m_filter = NULL;
   }
@@ -183,6 +225,14 @@ namespace YAAFE {
     int written;
     int err;
     do {
+      if (m_limit_second > 0) {
+        --m_frame_left;
+        if (m_frame_left < 0) {
+          written = 0;
+          break;
+        }
+      }
+
       err = mpg123_read(m_mh, m_buffer, m_bufferSize, &done);
       if (err != MPG123_OK && err != MPG123_DONE)
       {
@@ -264,6 +314,20 @@ namespace YAAFE {
     p.m_defaultValue = "no";
     pList.push_back(p);
 
+    p.m_identifier = "TimeStart";
+    p.m_description = "time position where to start process, if given a negative value(e.g: \"-10s\" ), it will start at the last 10s.";
+    p.m_defaultValue = "0s";
+    pList.push_back(p);
+
+    p.m_identifier = "TimeLimit";
+    p.m_description = "longest time duration to keep, 0s means no limit. If the given value is longer than the available duration, the excess should be ignored.";
+    p.m_defaultValue = "0s";
+    pList.push_back(p);
+
+    p.m_identifier = "TrimBeginningSilence";
+    p.m_identifier = "yes|no, trim silence at the beginning";
+    p.m_defaultValue = "no";
+    pList.push_back(p);
     return pList;
   }
 
@@ -276,6 +340,30 @@ namespace YAAFE {
     double scaleMax = getDoubleParam("ScaleMax",params);
     int sr = getIntParam("SampleRate",params);
     string filename = getStringParam("File",params);
+    m_trim_beginning_silence = (getStringParam("TrimBeginningSilence",params)=="yes");
+    string timeStart = getStringParam("TimeStart",params);
+    string timeLimit = getStringParam("TimeLimit",params);
+    double start_second, limit_second;
+
+    if (timeStart[timeStart.size()-1]=='s')
+    {
+      start_second = atof(timeStart.substr(0,timeStart.size()-1).c_str());
+    } else {
+      cerr << "ERROR: invalid TimeStart parameter !" << endl;
+      return false;
+    }
+
+    if (timeLimit[timeLimit.size()-1]=='s')
+    {
+      limit_second = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
+    } else {
+      cerr << "ERROR: invalid TimeLimit parameter !" << endl;
+      return false;
+    }
+
+    m_decoder->m_start_second = start_second;
+    m_decoder->m_limit_second = limit_second;
+    DBLOG("m_start_second: %f, m_limit_second: %f", start_second ,limit_second);
     if (!m_decoder->openFile(filename,resample,sr))
       return false;
 
@@ -335,10 +423,25 @@ namespace YAAFE {
       int read = m_decoder->decode();
       if (read==0) break;
       if (m_rescale) {
-        for (int i=0;i<read;i++)
+        for (int i=0;i<read;i++) {
           buf[i] = (buf[i]-m_mean)*m_factor;
+        }
       }
-      out->write(buf,read);
+
+      if (m_trim_beginning_silence) {
+        double max_mag = -1;
+        for (int i=0;i<read;i++){
+          if (fabs(buf[i]) > max_mag) {
+            max_mag = fabs(buf[i]);
+          }
+        }
+        //cout << nbRead << "/" << toRead << " " << max_mag << endl;
+        if (max_mag > max(0.0, (SILENCE_THRESHOLD-m_mean)*m_factor)) {
+          m_trim_beginning_silence = false;
+        }
+      } else {
+        out->write(buf,read);
+      }
       nbRead += read;
     }
     return (nbRead > 0);

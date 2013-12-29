@@ -25,6 +25,7 @@
 #include "AudioFileReader.h"
 #include "SmarcPFilterCache.h"
 #include <string.h>
+#include <cstdlib>
 #include <iostream>
 #include <cmath>
 
@@ -40,10 +41,11 @@ namespace YAAFE {
 
   AudioFileReader::~AudioFileReader() {
     closeFile();
+    if (m_filter) {
+      SmarcPFilterCache::release();
+    }
     if (m_readBuffer)
       delete[] m_readBuffer;
-    if (m_state)
-      smarc_destroy_pstate(m_state);
     if (m_resampleBuffer)
       delete[] m_resampleBuffer;
   }
@@ -157,6 +159,10 @@ namespace YAAFE {
   }
 
   void AudioFileReader::closeFile() {
+    if (m_state) {
+      smarc_destroy_pstate(m_state);
+      m_state = NULL;
+    }
     if (m_sndfile) {
       sf_close(m_sndfile);
       m_sndfile = NULL;
@@ -192,6 +198,16 @@ namespace YAAFE {
     p.m_defaultValue = "no";
     pList.push_back(p);
 
+    p.m_identifier = "TimeStart";
+    p.m_description = "time position where to start process";
+    p.m_defaultValue = "0s";
+    pList.push_back(p);
+
+    p.m_identifier = "TimeLimit";
+    p.m_description = "longest time duration to keep, 0s means no limit";
+    p.m_defaultValue = "0s";
+    pList.push_back(p);
+
     return pList;
   }
 
@@ -202,6 +218,26 @@ namespace YAAFE {
     m_scaleMax = getDoubleParam("ScaleMax",params);
     m_sampleRate = 	getIntParam("SampleRate",params);
 
+    double start_second=0,
+           limit_second=0;
+    string timeStart = getStringParam("TimeStart",params);
+    if (timeStart[timeStart.size()-1]=='s')
+    {
+      start_second = atof(timeStart.substr(0,timeStart.size()-1).c_str());
+    } else {
+      cerr << "ERROR: invalid TimeStart parameter !" << endl;
+      return false;
+    }
+    string timeLimit = getStringParam("TimeLimit",params);
+    if (timeLimit[timeLimit.size()-1]=='s')
+    {
+      limit_second = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
+    } else {
+      cerr << "ERROR: invalid TimeLimit parameter !" << endl;
+      return false;
+    }
+    //TODO: implements TimeStart, TimeLimit for AudioFileReader
+    cerr << "warning: parameter TimeStart and TimeLimit are not implemented in AudioFileReader yet." << endl;
     m_bufferSize = DataBlock::preferedBlockSize();
     m_readBuffer = new double[2*m_bufferSize]; // enough to read stereo if needed
 
