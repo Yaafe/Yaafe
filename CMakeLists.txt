@@ -76,7 +76,7 @@ if (WITH_FFTW3)
    add_definitions(-DEIGEN_FFTW_DEFAULT=1)
 endif (WITH_FFTW3)
 
-option(WITH_MATLAB_MEX "build matlab mex" OFF)
+option(WITH_MATLAB_MEX "build matlab mex and install matlab package" OFF)
 find_package(Matlab)
 if (WITH_MATLAB_MEX)
     if (NOT MATLAB_FOUND)
@@ -108,7 +108,9 @@ add_definitions(-DVERSION=${YAAFE_VERSION})
 add_subdirectory (externals)
 add_subdirectory (src_cpp)
 add_subdirectory (src_python)
+if (WITH_MATLAB_MEX)
 add_subdirectory (matlab)
+endif (WITH_MATLAB_MEX)
 add_subdirectory (doc)
 
 # export targets
