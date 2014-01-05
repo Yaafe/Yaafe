@@ -124,3 +124,11 @@ set (CPACK_RESOURCE_FILE_LICENSE
 set (CPACK_PACKAGE_VERSION_MAJOR "${YAAFE_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${YAAFE_VERSION_MINOR}")
 include (CPack)
+
+# add uninstall target
+configure_file(
+  "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
