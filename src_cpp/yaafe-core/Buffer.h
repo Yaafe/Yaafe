@@ -25,6 +25,7 @@
 #ifndef BUFFER_H_
 #define BUFFER_H_
 
+#include <ostream>
 #include <list>
 #include <assert.h>
 #include <cstddef>
