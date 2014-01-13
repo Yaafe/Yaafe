@@ -120,8 +120,9 @@ namespace YAAFE {
     int err = MPG123_OK;
     int encoding;
     // const_cast is necessary for working with old version of mpg123
-    if (mpg123_open(m_mh, const_cast<char*>(filename.c_str())) != MPG123_OK || mpg123_getformat(m_mh,
-          &m_rate, &m_channels, &encoding))
+    if (mpg123_open(m_mh, const_cast<char*>(filename.c_str())) != MPG123_OK ||
+        mpg123_getformat(m_mh, &m_rate, &m_channels, &encoding) ||
+        mpg123_format_none(m_mh))
     {
       cerr << "Trouble with mpg123: " << mpg123_strerror(m_mh) << endl;
       mpg123_close(m_mh);
@@ -172,10 +173,12 @@ namespace YAAFE {
     }
 
     assert(mpg123_tell(m_mh) == 0);
-    off_t start_frame = 0;
-    mpg123_scan(m_mh);
+    if (m_start_second != 0 || m_limit_second > 0) {
+      mpg123_scan(m_mh);
+    }
+
     if (m_start_second != 0) {
-      //  m_start_second might be a negative value
+      // NOTE: m_start_second might be a negative value
       start_frame = mpg123_timeframe(m_mh, m_start_second);
       if (start_frame < 0) {
         start_frame = mpg123_seek_frame(m_mh, -start_frame, SEEK_END);
@@ -183,15 +186,14 @@ namespace YAAFE {
         start_frame = mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
       }
     }
-    DBLOG("start frame: %d, m_start_second: %lf", start_frame, m_start_second);
+    DBLOG("start frame: %lld, m_start_second: %lf", start_frame, m_start_second);
     if (m_limit_second > 0) {
       off_t limit_frame = mpg123_timeframe(m_mh, m_limit_second);
       off_t stop_frame = mpg123_seek_frame(m_mh, limit_frame, SEEK_CUR);
-      DBLOG("stop frame: %d", stop_frame);
+      DBLOG("stop frame: %lld", stop_frame);
       m_frame_left = stop_frame - start_frame + 1;
-      DBLOG("frame left: %d", m_frame_left);
+      DBLOG("frame left: %lld", m_frame_left);
       mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
-      DBLOG("back to start frame: %d", mpg123_tellframe(m_mh));
     }
     return true;
   }
@@ -375,7 +377,7 @@ namespace YAAFE {
       long count = 0;
       int r = 0;
       double* buf = m_decoder->outBuffer();
-      while (r = m_decoder->decode()) {
+      while ( (r = m_decoder->decode()) ) {
         count += r;
         for (int i=0;i<r;i++) {
           register double v = buf[i];
