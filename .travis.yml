@@ -28,6 +28,5 @@ script:
   - make doctest
 
 branches:
-  only:
-    - master
-    - develop
+  except:
+    - legacy
