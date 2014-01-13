@@ -11,12 +11,12 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.append(os.path.abspath('../../src_python'))
+sys.path.append('@CMAKE_SOURCE_DIR@/src_python')
 
 # -- General configuration -----------------------------------------------------
 
@@ -31,7 +31,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 # The encoding of source files.
-source_encoding = 'iso-8859-1'
+source_encoding = 'utf-8'
 
 # The master toctree document.
 master_doc = 'index'
@@ -45,7 +45,7 @@ copyright = u'2009-2011 Institut Télécom - Télécom Paristech'
 # built documents.
 #
 # The short X.Y version.
-version = '0.64'
+version = '@YAAFE_VERSION@'
 # The full version, including alpha/beta/rc tags.
 release = version
 

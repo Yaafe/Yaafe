@@ -2,3 +2,6 @@ build
 venv
 *.pyc
 *.swp
+
+# the conf.py should be built from conf.py.in
+doc/doc_python/source/conf.py
