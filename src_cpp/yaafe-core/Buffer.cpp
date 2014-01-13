@@ -46,6 +46,13 @@ namespace YAAFE {
   StreamInfo::~StreamInfo() {
   }
 
+  ostream& operator<<(ostream& os, const StreamInfo& si)
+  {
+    os << "sampleRate: " << si.sampleRate << ", si.sampleStep: " << si.sampleStep <<
+          ", frameLength: " << si.frameLength << ", size:" << si.size << endl;
+    return os;
+  }
+
   DataBlock::DataBlock()
   {
   }

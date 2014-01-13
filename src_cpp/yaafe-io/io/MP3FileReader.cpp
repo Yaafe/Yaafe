@@ -173,6 +173,7 @@ namespace YAAFE {
     }
 
     assert(mpg123_tell(m_mh) == 0);
+    off_t start_frame = 0;
     if (m_start_second != 0 || m_limit_second > 0) {
       mpg123_scan(m_mh);
     }

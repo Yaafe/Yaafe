@@ -149,7 +149,8 @@ namespace YAAFE {
     }
 
     // process audio
-    while (engine.process());
+    while (engine.process())
+    ;
 
       // flush last samples
       engine.flush();

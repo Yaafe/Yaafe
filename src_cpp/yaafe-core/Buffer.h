@@ -58,6 +58,8 @@ namespace YAAFE
         (frameLength==info.frameLength));
   }
 
+  std::ostream& operator<<(std::ostream& os, const StreamInfo& si);
+
   /**
    * DataBlock manage a memory block used to store numerical data streams.
    * It's usually created by an OutputBuffer and filled with data. Then can
