@@ -27,6 +27,10 @@ set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/eigen)
 mark_as_advanced(FORCE EIGEN_INCLUDE_DIR) 
 set(SMARC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/audio-smarc)
 mark_as_advanced(FORCE SMARC_INCLUDE_DIR)
+if(APPLE)
+set(FMEMOPEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/fmemopen)
+mark_as_advanced(FORCE FMEMOPEN_INCLUDE_DIR)
+endif(APPLE)
 
 # optional packages
 option(WITH_SNDFILE "Use sndfile library" ON)

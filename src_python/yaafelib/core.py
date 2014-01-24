@@ -59,10 +59,10 @@ yaafecore.getOutputFormatList.restype = POINTER(c_char_p)
 yaafecore.getOutputFormatList.argtypes = []
 yaafecore.freeComponentList.restype = None
 yaafecore.freeComponentList.argtypes = [POINTER(c_char_p)]
-yaafecore.getOutputFormatDescription.restype = c_char_p
+yaafecore.getOutputFormatDescription.restype = c_void_p
 yaafecore.getOutputFormatDescription.argtypes = [c_char_p]
 yaafecore.freeOutputFormatDescription.restype = None
-yaafecore.freeOutputFormatDescription.argtypes = [c_char_p]
+yaafecore.freeOutputFormatDescription.argtypes = [c_void_p]
 yaafecore.setPreferedDataBlockSize.restype = None
 yaafecore.setVerbose.restype = None
 yaafecore.setVerbose.argtypes = [c_int]
@@ -117,7 +117,7 @@ def getOutputFormatList():
 
 def getOutputFormatDescription(name):
     ptr = yaafecore.getOutputFormatDescription(name)
-    res = ptr
+    res = cast(ptr, c_char_p).value
     yaafecore.freeOutputFormatDescription(ptr)
     return res
 
@@ -163,8 +163,13 @@ yaafecore.dataflow_create.restype = c_void_p
 yaafecore.dataflow_destroy.restype = None
 yaafecore.dataflow_destroy.argtypes = [c_void_p]
 yaafecore.dataflow_load.argtypes = [c_void_p,c_char_p]
+yaafecore.dataflow_loads.argtypes = [c_void_p,c_char_p]
 yaafecore.dataflow_save.restype = None
 yaafecore.dataflow_save.argtypes = [c_void_p,c_char_p]
+yaafecore.dataflow_stringify.restype = c_void_p
+yaafecore.dataflow_stringify.argtypes = [c_void_p]
+yaafecore.free_dataflow_stringify.restype = None
+yaafecore.free_dataflow_stringify.argtypes = [c_void_p]
 yaafecore.dataflow_dumpdot.restype = None
 yaafecore.dataflow_dumpdot.argtypes = [c_void_p, c_char_p]
 yaafecore.dataflow_display.restype = None

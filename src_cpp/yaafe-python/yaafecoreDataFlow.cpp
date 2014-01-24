@@ -46,10 +46,30 @@ int dataflow_load(void* dataflow, char* filename)
   return (df->load(filename) ? 1 : 0);
 }
 
+int dataflow_loads(void* dataflow, char* buf)
+{
+  DataFlow* df = static_cast<DataFlow*>(dataflow);
+  return (df->loads(buf) ? 1 : 0);
+}
+
 void dataflow_save(void* dataflow, char* filename)
 {
   DataFlow* df = static_cast<DataFlow*>(dataflow);
   df->save(filename);
+}
+
+const char* dataflow_stringify(void* dataflow)
+{
+  DataFlow* df = static_cast<DataFlow*>(dataflow);
+  return strdup(df->stringify().c_str());
+}
+
+void free_dataflow_stringify(char* buf)
+{
+  if (buf != NULL) {
+    free(buf);
+    buf = NULL;
+  }
 }
 
 void dataflow_dumpdot(void* dataflow, char* filename)

@@ -46,11 +46,11 @@ namespace YAAFE
     bool operator==(const NodeDesc& nd) const {
       return ((componentId==nd.componentId) && (params==nd.params));
     }
-    //	NodeDesc& operator=(const NodeDesc& d) {
-    //		componentId = d.componentId;
-    //		params = d.params;
-    //		return *this;
-    //	}
+    //  NodeDesc& operator=(const NodeDesc& d) {
+    //    componentId = d.componentId;
+    //    params = d.params;
+    //    return *this;
+    //  }
   };
 
   class DataFlow : public Graph<NodeDesc>
@@ -67,7 +67,9 @@ namespace YAAFE
     void merge(const DataFlow& df);
 
     bool load(const std::string& filename);
+    bool loads(const std::string& df_str);
     void save(const std::string& filename);
+    const std::string stringify();
     void dumpdot(const std::string& filename);
     void display();
 
@@ -77,6 +79,7 @@ namespace YAAFE
    private:
     static void mergeFlow(Graph<NodeDesc>* f,const Graph<NodeDesc>* g, std::map<Node*,Node*>& mapping);
     void print(std::ostream& out);
+    bool yyparse(FILE*);
 
     std::set<std::string> m_libs;
   };

@@ -29,10 +29,13 @@
 #include <sstream>
 #include "DataFlowParserContext.h"
 
+#ifdef __APPLE__
+#include "fmemopen.h"
+#endif
+
 using namespace std;
 
 extern "C" {
-  FILE *yyin;
   void df_parser_restart(FILE* yyin);
 }
 
@@ -195,12 +198,30 @@ namespace YAAFE
 
   bool DataFlow::load(const std::string& filename)
   {
-    yyin = fopen(filename.c_str(),"r");
+    FILE* yyin = fopen(filename.c_str(),"r");
     if (yyin==NULL)
     {
       cerr << "cannot open file " << filename << endl;
       return false;
     }
+    return yyparse(yyin);
+  }
+
+  bool DataFlow::loads(const std::string& df_str)
+  {
+    // fmemopen  http://www.delorie.com/gnu/docs/glibc/libc_228.html
+    const char* buf = df_str.c_str();
+    size_t buf_size = sizeof(char) * (df_str.size() + 1);
+    FILE* yyin = fmemopen((void *)buf, buf_size, "r");
+    if (yyin == NULL) {
+      cerr << "cannot parse dataflow:" << endl << df_str << endl;
+      return false;
+    }
+    return yyparse(yyin);
+  }
+
+  bool DataFlow::yyparse(FILE* yyin)
+  {
     df_parser_restart(yyin);
     DataFlowContext context;
     context.m_dataflow = this;
@@ -265,11 +286,15 @@ namespace YAAFE
 
   void DataFlow::display()
   {
-    ostringstream os;
-    this->print(os);
-    cout << os.str() << endl;
+    cout << stringify() << endl;
   }
 
+  const std::string DataFlow::stringify()
+  {
+    ostringstream oss;
+    print(oss);
+    return oss.str();
+  }
 
   void DataFlow::dumpdot(const std::string& filename)
   {

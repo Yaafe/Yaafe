@@ -31,7 +31,10 @@ extern "C" {
   void dataflow_destroy(void* dataflow);
 
   int dataflow_load(void* dataflow, char* filename);
+  int dataflow_loads(void* dataflow, char* buf);
   void dataflow_save(void* dataflow, char* filename);
+  const char* dataflow_stringify(void* dataflow);
+  void free_dataflow_stringify(char* buf);
   void dataflow_dumpdot(void* dataflow, char* filename);
   void dataflow_display(void* dataflow);
 

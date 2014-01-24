@@ -98,9 +98,12 @@ char* getOutputFormatDescription(char* id) {
   return strdup(proto->getDescription().c_str());
 }
 
-void freeOutputFormatDescription(char* desc) {
-  if (!desc)
+void freeOutputFormatDescription(char* desc)
+{
+  if (desc) {
     free(desc);
+    desc = NULL;
+  }
 }
 
 struct ComponentParameter** makeComponentParameterList(const ParameterDescriptorList& pList)

@@ -1,3 +1,6 @@
 [submodule "externals/eigen"]
 	path = externals/eigen
 	url = https://github.com/vancegroup-mirrors/eigen.git
+[submodule "externals/fmemopen"]
+	path = externals/fmemopen
+	url = https://github.com/jverkoey/fmemopen.git
