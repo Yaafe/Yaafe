@@ -228,6 +228,7 @@ void smarc_destroy_pstate(struct PState* pstate)
 {
 	for (int i=0;i<pstate->nb_stages;i++)
 		destroy_psstate(pstate->state[i]);
+	free(pstate->state);
 	free(pstate->buffer[0]->data);
 	for (int i=0;i<pstate->nb_stages+1;i++)
 		free(pstate->buffer[i]);
