@@ -35,7 +35,6 @@ class FeaturePlan(object):
         :param sample_rate: analysis samplerate
         :param normalize: signal maximum normalization, in [0,1], or `None` to skip normalization.
         :param resample: force resample the sample rate of input audio to param `sample_rate`, default: False.
-        :param trim_beginning_silence: trim silence at the beginning, default: False.
         :param time_start: time offset where to start analyse,if given a negative value(e.g: \"-10s\" ),
             it will start at the last 10s. default: 0.0(s)
         :param time_limit: longest time duration to keep, 0s means no limit.
@@ -62,7 +61,7 @@ class FeaturePlan(object):
     """
 
     def __init__(self, sample_rate=44100, normalize=None, resample=False,
-                trim_beginning_silence=False, time_start=0.0, time_limit=0.0):
+                 time_start=0.0, time_limit=0.0):
         if type(normalize)==int:
             normalize = '%i'%normalize
         elif type(normalize)==float:
@@ -74,8 +73,7 @@ class FeaturePlan(object):
         self.sample_rate = sample_rate
         self.audio_params = {
             'SampleRate': str(sample_rate),
-            'Resample' : 'yes' if resample else 'no',
-            'TrimBeginningSilence': 'yes' if trim_beginning_silence else 'no',
+            'Resample': 'yes' if resample else 'no',
             'TimeStart': '%ss' % time_start,
             'TimeLimit': '%ss' % time_limit
         }

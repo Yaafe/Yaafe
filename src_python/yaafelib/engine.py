@@ -65,8 +65,7 @@ class Engine(object):
              ('sampleRate', 16000.0), ('sampleStep', 1), ('size', 1)]
             >>> sorted(eng_out['audio']['parameters'].items())
             [('Resample', 'no'), ('SampleRate', '16000'),
-             ('TimeLimit', '0.0s'), ('TimeStart', '0.0s'),
-             ('TrimBeginningSilence', 'no')]
+             ('TimeLimit', '0.0s'), ('TimeStart', '0.0s')]
             >>>
             >>>
             >>> # get output metadata

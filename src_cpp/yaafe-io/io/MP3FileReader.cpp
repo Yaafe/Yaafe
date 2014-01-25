@@ -327,10 +327,6 @@ namespace YAAFE {
     p.m_defaultValue = "0s";
     pList.push_back(p);
 
-    p.m_identifier = "TrimBeginningSilence";
-    p.m_identifier = "yes|no, trim silence at the beginning";
-    p.m_defaultValue = "no";
-    pList.push_back(p);
     return pList;
   }
 
@@ -343,7 +339,6 @@ namespace YAAFE {
     double scaleMax = getDoubleParam("ScaleMax",params);
     int sr = getIntParam("SampleRate",params);
     string filename = getStringParam("File",params);
-    m_trim_beginning_silence = (getStringParam("TrimBeginningSilence",params)=="yes");
     string timeStart = getStringParam("TimeStart",params);
     string timeLimit = getStringParam("TimeLimit",params);
     double start_second, limit_second;
@@ -431,20 +426,7 @@ namespace YAAFE {
         }
       }
 
-      if (m_trim_beginning_silence) {
-        double max_mag = -1;
-        for (int i=0;i<read;i++){
-          if (fabs(buf[i]) > max_mag) {
-            max_mag = fabs(buf[i]);
-          }
-        }
-        //cout << nbRead << "/" << toRead << " " << max_mag << endl;
-        if (max_mag > max(0.0, (SILENCE_THRESHOLD-m_mean)*m_factor)) {
-          m_trim_beginning_silence = false;
-        }
-      } else {
-        out->write(buf,read);
-      }
+      out->write(buf,read);
       nbRead += read;
     }
     return (nbRead > 0);
