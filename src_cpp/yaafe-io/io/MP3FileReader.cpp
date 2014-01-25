@@ -48,9 +48,9 @@ namespace YAAFE {
      int decode();
      double* outBuffer() { return (m_filter ? m_resampleBuffer : m_outbuffer); }
 
-     double m_start_second;
-     double m_limit_second;
-     off_t m_frame_left;
+     double m_startSecond;
+     double m_limitSecond;
+     off_t m_frameLeft;
 
    private:
      long m_rate;
@@ -77,7 +77,7 @@ namespace YAAFE {
   MP3FileReader::MP3Decoder::MP3Decoder() :
     m_rate(0), m_channels(0), m_mh(NULL), m_buffer(NULL), m_outbuffer(NULL), m_bufferSize(0),
     m_filter(NULL), m_state(NULL), m_resampleBufferSize(0), m_resampleBuffer(NULL),
-    m_start_second(0.0), m_limit_second(0.0), m_frame_left(0)
+    m_startSecond(0.0), m_limitSecond(0.0), m_frameLeft(0)
   {
     if (s_mpg123refcount == 0)
     {
@@ -128,7 +128,8 @@ namespace YAAFE {
       mpg123_close(m_mh);
       return false;
     }
-    DBLOG_IF(m_channels > 1, "Warning: MP3FileReader will convert stereo audio file to mono doing mean of channels");
+    DBLOG_IF(m_channels > 1, "Warning: MP3FileReader will convert stereo "
+                             "audio file to mono doing mean of channels");
     err = mpg123_format(m_mh, m_rate, m_channels, MPG123_ENC_SIGNED_16);
     if (err != MPG123_OK)
     {
@@ -173,28 +174,30 @@ namespace YAAFE {
     }
 
     assert(mpg123_tell(m_mh) == 0);
-    off_t start_frame = 0;
-    if (m_start_second != 0 || m_limit_second > 0) {
+    off_t startFrame = 0;
+    if (m_startSecond != 0 || m_limitSecond > 0) {
       mpg123_scan(m_mh);
-    }
 
-    if (m_start_second != 0) {
-      // NOTE: m_start_second might be a negative value
-      start_frame = mpg123_timeframe(m_mh, m_start_second);
-      if (start_frame < 0) {
-        start_frame = mpg123_seek_frame(m_mh, -start_frame, SEEK_END);
-      } else {
-        start_frame = mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
+      if (m_startSecond != 0) {
+        // NOTE: m_startSecond might be a negative value
+        startFrame = mpg123_timeframe(m_mh, m_startSecond);
+        if (startFrame < 0) {
+          startFrame = mpg123_seek_frame(m_mh, -startFrame, SEEK_END);
+        } else {
+          startFrame = mpg123_seek_frame(m_mh, startFrame, SEEK_SET);
+        }
       }
-    }
-    DBLOG("start frame: %lld, m_start_second: %lf", start_frame, m_start_second);
-    if (m_limit_second > 0) {
-      off_t limit_frame = mpg123_timeframe(m_mh, m_limit_second);
-      off_t stop_frame = mpg123_seek_frame(m_mh, limit_frame, SEEK_CUR);
-      DBLOG("stop frame: %lld", stop_frame);
-      m_frame_left = stop_frame - start_frame + 1;
-      DBLOG("frame left: %lld", m_frame_left);
-      mpg123_seek_frame(m_mh, start_frame, SEEK_SET);
+
+      if (m_limitSecond > 0) {
+        off_t limit_frame = mpg123_timeframe(m_mh, m_limitSecond);
+        off_t stop_frame = mpg123_seek_frame(m_mh, limit_frame, SEEK_CUR);
+        m_frameLeft = stop_frame - startFrame + 1;
+        mpg123_seek_frame(m_mh, startFrame, SEEK_SET);
+      }
+
+      DBLOG("MP3FileReader::init startFrame: %lld, m_startSecond: %lf "
+            "m_frameLeft: %lld", startFrame, m_startSecond, m_frameLeft);
+
     }
     return true;
   }
@@ -228,9 +231,9 @@ namespace YAAFE {
     int written;
     int err;
     do {
-      if (m_limit_second > 0) {
-        --m_frame_left;
-        if (m_frame_left < 0) {
+      if (m_limitSecond > 0) {
+        --m_frameLeft;
+        if (m_frameLeft < 0) {
           written = 0;
           break;
         }
@@ -341,11 +344,11 @@ namespace YAAFE {
     string filename = getStringParam("File",params);
     string timeStart = getStringParam("TimeStart",params);
     string timeLimit = getStringParam("TimeLimit",params);
-    double start_second, limit_second;
+    double startSecond, limitSecond;
 
     if (timeStart[timeStart.size()-1]=='s')
     {
-      start_second = atof(timeStart.substr(0,timeStart.size()-1).c_str());
+      startSecond = atof(timeStart.substr(0,timeStart.size()-1).c_str());
     } else {
       cerr << "ERROR: invalid TimeStart parameter !" << endl;
       return false;
@@ -353,15 +356,14 @@ namespace YAAFE {
 
     if (timeLimit[timeLimit.size()-1]=='s')
     {
-      limit_second = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
+      limitSecond = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
     } else {
       cerr << "ERROR: invalid TimeLimit parameter !" << endl;
       return false;
     }
 
-    m_decoder->m_start_second = start_second;
-    m_decoder->m_limit_second = limit_second;
-    DBLOG("m_start_second: %f, m_limit_second: %f", start_second ,limit_second);
+    m_decoder->m_startSecond = startSecond;
+    m_decoder->m_limitSecond = limitSecond;
     if (!m_decoder->openFile(filename,resample,sr))
       return false;
 
