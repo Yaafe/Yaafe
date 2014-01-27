@@ -24,8 +24,8 @@
 
 from ctypes import cast, c_char_p
 
-from core import yaafecore as yc
-from core import iterPtrList, iterPtrDict
+from yaafelib.core import yaafecore as yc
+from yaafelib.core import iterPtrList, iterPtrDict
 
 
 class DataFlowNode(object):

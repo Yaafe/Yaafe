@@ -24,9 +24,9 @@
 
 from ctypes import c_int, pointer
 
-from core import yaafecore as yc
-from core import iterPtrList, iterPtrDict
-from dataflow import DataFlow
+from yaafelib.core import yaafecore as yc
+from yaafelib.core import iterPtrList, iterPtrDict
+from yaafelib.dataflow import DataFlow
 
 
 class Engine(object):
@@ -94,7 +94,7 @@ class Engine(object):
 
         .. testsetup:: blocks
 
-            from yaafelib import *
+            from yaafelib import FeaturePlan, Engine
             import numpy
             fp = FeaturePlan(sample_rate=16000)
             fp.addFeature('mfcc: MFCC blockSize=512 stepSize=256')
