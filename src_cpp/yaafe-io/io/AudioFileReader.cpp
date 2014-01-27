@@ -36,7 +36,8 @@ namespace YAAFE {
   AudioFileReader::AudioFileReader() :
     m_sampleRate(0), m_bufferSize(0), m_sndfile(NULL), m_sfinfo(), m_readBuffer(NULL),
     m_filter(NULL), m_state(NULL), m_resampleBufferSize(0), m_resampleBuffer(NULL),
-    m_resample(false), m_rescale(false), m_mean(0), m_factor(1) {
+    m_resample(false), m_rescale(false), m_mean(0), m_factor(1), m_startSecond(0),
+    m_limitSecond(0), m_frameLeft(0) {
     }
 
   AudioFileReader::~AudioFileReader() {
@@ -68,6 +69,12 @@ namespace YAAFE {
       }
     }
 
+    if (m_frameLeft > 0 ) {
+      m_frameLeft -= nbRead;
+      if (m_frameLeft <= 0) {
+        return 0;
+      }
+    }
     return nbRead;
   }
 
@@ -94,9 +101,8 @@ namespace YAAFE {
         closeFile();
         return false;
       }
-      cerr
-        << "Warning: AudioFileReader will convert stereo audio file to mono doing mean of channels"
-        << endl;
+      DBLOG_IF(m_sfinfo.channels > 1, "Warning: AudioFileReader will convert stereo "
+                               "audio file to mono doing mean of channels");
     }
 
     if (m_resample && (m_sampleRate!=m_sfinfo.samplerate)) {
@@ -113,47 +119,34 @@ namespace YAAFE {
 
     }
 
-    // find mean and max if needed
-    m_mean = 0;
-    m_factor = 1;
-    if (m_removemean || m_scaleMax>0)
-    {
-      m_rescale = true;
+    sf_count_t startFrame = static_cast<sf_count_t>(m_startSecond * m_sampleRate);
+    m_frameLeft = static_cast<sf_count_t>(m_limitSecond * m_sampleRate);
+    if (startFrame <= -m_sfinfo.frames) {
+      startFrame = 0; 
+    }
 
-      int count = 0;
-      double smean = 0;
-      double smin = 0;
-      double smax = 0;
-      while (true) {
-        int nbRead = readFramesIntoBuffer();
-        if (nbRead==0)
-          break;
-        for (int i=0;i<nbRead;i++)
-        {
-          smean += m_readBuffer[i];
-          if (m_readBuffer[i]<smin)
-            smin = m_readBuffer[i];
-          if (m_readBuffer[i]>smax)
-            smax = m_readBuffer[i];
-        }
-        count += nbRead;
-      }
-
-      if (m_removemean)
-        m_mean = smean / count;
-      if (m_scaleMax>0)
-        m_factor = m_scaleMax / max(abs( (smax-m_mean) ),abs( (smin-m_mean) ));
-
-      int res = sf_seek(m_sndfile,0,SEEK_SET);
-      if (res!=0)
-      {
-        cerr << "ERROR: cannot seek start in audio file !" << endl;
+    int res = 0;
+    if (startFrame !=0) {
+      if (!m_sfinfo.seekable) {
+        cerr << "ERROR: audio file " << filename << " is not seekable!" << endl;
         return false;
       }
-
-      if (verboseFlag)
-        cerr << "INFO: remove mean of input signal (" << m_mean << ") and scale to " << m_scaleMax << endl;
+      if (startFrame > 0) {
+        res = sf_seek(m_sndfile, startFrame, SEEK_SET);
+      }
+      else {
+        res = sf_seek(m_sndfile, startFrame, SEEK_END);
+      }
     }
+
+    if (res == -1)
+    {
+      cerr << "ERROR: cannot seek start in audio file !" << endl;
+      return false;
+    }
+
+    DBLOG("AudioFileReader::openFile startFrame: %lld, m_frameLeft: %lld",
+          startFrame, m_frameLeft);
 
     return true;
   }
@@ -217,13 +210,12 @@ namespace YAAFE {
     m_removemean = (getStringParam("RemoveMean",params)=="yes");
     m_scaleMax = getDoubleParam("ScaleMax",params);
     m_sampleRate = 	getIntParam("SampleRate",params);
-
-    double start_second=0,
-           limit_second=0;
+    string filename = getStringParam("File", params);
     string timeStart = getStringParam("TimeStart",params);
+
     if (timeStart[timeStart.size()-1]=='s')
     {
-      start_second = atof(timeStart.substr(0,timeStart.size()-1).c_str());
+      m_startSecond = atof(timeStart.substr(0,timeStart.size()-1).c_str());
     } else {
       cerr << "ERROR: invalid TimeStart parameter !" << endl;
       return false;
@@ -231,18 +223,64 @@ namespace YAAFE {
     string timeLimit = getStringParam("TimeLimit",params);
     if (timeLimit[timeLimit.size()-1]=='s')
     {
-      limit_second = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
+      m_limitSecond = atof(timeLimit.substr(0,timeLimit.size()-1).c_str());
     } else {
       cerr << "ERROR: invalid TimeLimit parameter !" << endl;
       return false;
     }
-    //TODO: implements TimeStart, TimeLimit for AudioFileReader
-    cerr << "warning: parameter TimeStart and TimeLimit are not implemented in AudioFileReader yet." << endl;
+
     m_bufferSize = DataBlock::preferedBlockSize();
     m_readBuffer = new double[2*m_bufferSize]; // enough to read stereo if needed
 
-    if (!openFile(getStringParam("File", params)))
+    if (!openFile(filename))
       return false;
+    
+    // find mean and max if needed
+    m_mean = 0;
+    m_factor = 1;
+    if (m_removemean || m_scaleMax>0)
+    {
+      m_rescale = true;
+
+      int count = 0;
+      double smean = 0;
+      double smin = 0;
+      double smax = 0;
+      while (true) {
+        int nbRead = readFramesIntoBuffer();
+        if (nbRead==0)
+          break;
+        for (int i=0;i<nbRead;i++)
+        {
+          smean += m_readBuffer[i];
+          if (m_readBuffer[i]<smin)
+            smin = m_readBuffer[i];
+          if (m_readBuffer[i]>smax)
+            smax = m_readBuffer[i];
+        }
+        count += nbRead;
+      }
+
+      if (m_removemean)
+        m_mean = smean / count;
+      if (m_scaleMax>0)
+        m_factor = m_scaleMax / max(abs( (smax-m_mean) ),abs( (smin-m_mean) ));
+
+      int res = sf_seek(m_sndfile,0,SEEK_SET);
+      if (res!=0)
+      {
+        cerr << "ERROR: cannot seek start in audio file !" << endl;
+        return false;
+      }
+
+      if (verboseFlag)
+        cerr << "INFO: remove mean of input signal (" << m_mean << ") and scale to " << m_scaleMax << endl;
+      closeFile();
+      if (!openFile(filename)) {
+        cerr << "ERROR: cannot re-open file " << filename << " !" << endl; 
+        return false;
+      }
+    }
 
     if ((!m_resample) && (m_sfinfo.samplerate != m_sampleRate)) {
       cerr << "ERROR: resampling is disabled and file has sample rate " << m_sfinfo.samplerate << " Hz. Expecting " << m_sampleRate << " Hz !" << endl;

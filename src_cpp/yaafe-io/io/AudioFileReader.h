@@ -69,6 +69,9 @@ namespace YAAFE
      double m_mean;
      double m_factor;
 
+     double m_startSecond, m_limitSecond;
+     sf_count_t m_frameLeft;
+
      bool openFile(const std::string& filename);
      void closeFile();
      int readFramesIntoBuffer(); // read m_bufferSize frames
