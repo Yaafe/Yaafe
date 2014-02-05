@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,30 +32,30 @@
 
 namespace YAAFE {
 
-class ComponentFactory {
-public:
-	virtual ~ComponentFactory();
+  class ComponentFactory {
+   public:
+     virtual ~ComponentFactory();
 
-	static const char* version(); // yaafe version
-    static ComponentFactory* instance(); // sigleton access method
-    static void destroy(); // release memory
+     static const char* version(); // yaafe version
+     static ComponentFactory* instance(); // sigleton access method
+     static void destroy(); // release memory
 
-    const std::vector<const Component*>& getPrototypeList();
-    const Component* getPrototype(const std::string& identifier);
-    bool exists(const std::string& identifier);
-    Component* createComponent(const std::string& identifier);
-    ParameterDescriptor getParameterDescriptor(const std::string& component, const std::string& param);
+     const std::vector<const Component*>& getPrototypeList();
+     const Component* getPrototype(const std::string& identifier);
+     bool exists(const std::string& identifier);
+     Component* createComponent(const std::string& identifier);
+     ParameterDescriptor getParameterDescriptor(const std::string& component, const std::string& param);
 
-    int loadLibrary(const std::string& libname);
-    void registerPrototype(const Component* p);
+     int loadLibrary(const std::string& libname);
+     void registerPrototype(const Component* p);
 
-private:
-    ComponentFactory(); // singleton: cannot be instanciated by others
+   private:
+     ComponentFactory(); // singleton: cannot be instanciated by others
 
-    std::map<std::string,LIBRARY_HANDLER> m_libs;
-    std::vector<const Component*> m_prototypes;
+     std::map<std::string,LIBRARY_HANDLER> m_libs;
+     std::vector<const Component*> m_prototypes;
 
-};
+  };
 
 }
 

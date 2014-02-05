@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -33,24 +33,24 @@
 namespace YAAFE
 {
 
-class Cepstrum: public YAAFE::ComponentBase<Cepstrum>
-{
-public:
-    Cepstrum();
-    virtual ~Cepstrum();
+  class Cepstrum: public YAAFE::ComponentBase<Cepstrum>
+  {
+   public:
+     Cepstrum();
+     virtual ~Cepstrum();
 
-    virtual const std::string getIdentifier() const { return CEPSTRUM_ID;};
+     virtual const std::string getIdentifier() const { return CEPSTRUM_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_nbCoeffs;
-    int m_ignoreFirst;
-    Eigen::MatrixXd m_dctPlan;
-};
+   private:
+     int m_nbCoeffs;
+     int m_ignoreFirst;
+     Eigen::MatrixXd m_dctPlan;
+  };
 
 }
 

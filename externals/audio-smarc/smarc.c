@@ -1,8 +1,8 @@
 /**
  * Smarc
  *
- * Copyright (c) 2009-2011 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2011 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Authors : Benoit Mathieu, Jacques Prado
  *
@@ -228,6 +228,7 @@ void smarc_destroy_pstate(struct PState* pstate)
 {
 	for (int i=0;i<pstate->nb_stages;i++)
 		destroy_psstate(pstate->state[i]);
+	free(pstate->state);
 	free(pstate->buffer[0]->data);
 	for (int i=0;i<pstate->nb_stages+1;i++)
 		free(pstate->buffer[i]);

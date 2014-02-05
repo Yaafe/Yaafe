@@ -49,7 +49,7 @@ Credits
 	:alt: Telecom Paristech
 	:target: http://www.tsi.telecom-paristech.fr/aao/en/
 
-*Smarc* is developed at Télécom ParisTech, France.
+*Smarc* is developed at TÃ©lÃ©com ParisTech, France.
 
 .. raw:: html
 

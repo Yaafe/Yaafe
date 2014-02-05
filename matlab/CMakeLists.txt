@@ -1,6 +1,3 @@
 # matlab files install
-file(GLOB MATLAB_FILES yaafe*.m)
-if (WITH_MATLAB_MEX)
-    list(APPEND MATLAB_FILES Yaafe.m)
-endif (WITH_MATLAB_MEX)
+file(GLOB MATLAB_FILES yaafe*.m Yaafe.m)
 install(FILES ${MATLAB_FILES} DESTINATION ${CMAKE_INSTALL_MATLAB_SCRIPTS})

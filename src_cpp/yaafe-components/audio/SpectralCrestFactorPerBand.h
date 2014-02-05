@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,28 +32,28 @@
 
 namespace YAAFE {
 
-class SpectralCrestFactorPerBand: public YAAFE::ComponentBase<SpectralCrestFactorPerBand> {
-public:
-    SpectralCrestFactorPerBand();
-    virtual ~SpectralCrestFactorPerBand();
+  class SpectralCrestFactorPerBand: public YAAFE::ComponentBase<SpectralCrestFactorPerBand> {
+   public:
+     SpectralCrestFactorPerBand();
+     virtual ~SpectralCrestFactorPerBand();
 
-    virtual const std::string getIdentifier() const { return SPECTRALCRESTFACTORPERBAND_ID;};
-    virtual const std::string getDescription() const { return "Crest factor per log-spaced band of 1/4 octave."; }
+     virtual const std::string getIdentifier() const { return SPECTRALCRESTFACTORPERBAND_ID;};
+     virtual const std::string getDescription() const { return "Crest factor per log-spaced band of 1/4 octave."; }
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_inSize;
-    struct bandinfo_ {
-    	int start;
-    	int end;
-    	int group;
-    	int length() { return end-start; }
-    };
-    typedef struct bandinfo_ bandinfo;
-    std::vector<bandinfo> m_band; // start,end,group for each band
-};
+   private:
+     int m_inSize;
+     struct bandinfo_ {
+       int start;
+       int end;
+       int group;
+       int length() { return end-start; }
+     };
+     typedef struct bandinfo_ bandinfo;
+     std::vector<bandinfo> m_band; // start,end,group for each band
+  };
 
 }
 

@@ -16,6 +16,8 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "-DDEBUG -ftemplate-depth-30 -g2" CACHE STRING "CXX DEBUG FLAGS" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "-DDEBUG -g2" CACHE STRING "C DEBUG FLAGS" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math" CACHE STRING "CXX RELEASE FLAGS" FORCE)
+set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math" CACHE STRING "C RELEASE FLAGS" FORCE)
 add_definitions(-Wno-write-strings)
 
 find_package(Argtable2 REQUIRED)
@@ -25,6 +27,10 @@ set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/eigen)
 mark_as_advanced(FORCE EIGEN_INCLUDE_DIR) 
 set(SMARC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/audio-smarc)
 mark_as_advanced(FORCE SMARC_INCLUDE_DIR)
+if(APPLE)
+set(FMEMOPEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/fmemopen)
+mark_as_advanced(FORCE FMEMOPEN_INCLUDE_DIR)
+endif(APPLE)
 
 # optional packages
 option(WITH_SNDFILE "Use sndfile library" ON)
@@ -74,7 +80,7 @@ if (WITH_FFTW3)
    add_definitions(-DEIGEN_FFTW_DEFAULT=1)
 endif (WITH_FFTW3)
 
-option(WITH_MATLAB_MEX "build matlab mex" OFF)
+option(WITH_MATLAB_MEX "build matlab mex and install matlab package" OFF)
 find_package(Matlab)
 if (WITH_MATLAB_MEX)
     if (NOT MATLAB_FOUND)
@@ -93,12 +99,12 @@ endif(WITH_TIMERS)
 
 FIND_PROGRAM(SPHINX_BUILD sphinx-build PATHS ENV PATH DOC "sphinx-build script used to build documentation")
 
+execute_process ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(prefix='')" OUTPUT_VARIABLE python_packages OUTPUT_STRIP_TRAILING_WHITESPACE )
 # install paths
 set(CMAKE_INSTALL_BINDIR bin CACHE PATH "Output directory for programs")
 set(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output directory for libraries")
 set(CMAKE_INSTALL_INCLUDE include CACHE PATH "Output directory for header files")
-set(CMAKE_INSTALL_PYTHON_PACKAGES python_packages CACHE PATH "Output directory for yaafe Python packages")
-set(CMAKE_INSTALL_YAAFE_EXTENSIONS yaafe_extensions CACHE PATH "Output directory for yaafe features libraries")
+set(CMAKE_INSTALL_PYTHON_PACKAGES ${python_packages} CACHE PATH "Output directory for yaafe Python packages")
 set(CMAKE_INSTALL_MATLAB_SCRIPTS matlab CACHE PATH "Output directory for matlab scripts")
 
 # add targets
@@ -106,7 +112,9 @@ add_definitions(-DVERSION=${YAAFE_VERSION})
 add_subdirectory (externals)
 add_subdirectory (src_cpp)
 add_subdirectory (src_python)
+if (WITH_MATLAB_MEX)
 add_subdirectory (matlab)
+endif (WITH_MATLAB_MEX)
 add_subdirectory (doc)
 
 # export targets
@@ -120,3 +128,11 @@ set (CPACK_RESOURCE_FILE_LICENSE
 set (CPACK_PACKAGE_VERSION_MAJOR "${YAAFE_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${YAAFE_VERSION_MINOR}")
 include (CPack)
+
+# add uninstall target
+configure_file(
+  "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")

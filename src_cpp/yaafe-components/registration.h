@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -27,10 +27,10 @@
 
 extern "C" {
 
-/**
- * Register library components to the given componentFactory.
- */
-void registerYaafeComponents(void* componentFactory);
+  /**
+   * Register library components to the given componentFactory.
+   */
+  void registerYaafeComponents(void* componentFactory);
 
 }
 

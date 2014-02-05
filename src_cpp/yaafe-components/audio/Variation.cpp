@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -31,50 +31,50 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-Variation::Variation()
-{
-}
+  Variation::Variation()
+  {
+  }
 
-Variation::~Variation()
-{
-}
+  Variation::~Variation()
+  {
+  }
 
-bool Variation::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
-	outStreamInfo().add(StreamInfo(in,1));
+  bool Variation::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
+    outStreamInfo().add(StreamInfo(in,1));
     return true;
-}
+  }
 
-bool Variation::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (!in->hasTokens(2)) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Variation::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (!in->hasTokens(2)) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	if ((out->tokenno()==0) && (in->tokenno()!=-1))
-		in->prependZeros(1);
+    if ((out->tokenno()==0) && (in->tokenno()!=-1))
+      in->prependZeros(1);
 
-	const int N = in->info().size;
+    const int N = in->info().size;
     double lastNorm = 0.0;
     double nextNorm = Map<VectorXd>(in->token(0),N).norm();
     while (in->hasTokens(2))
     {
-    	Map<VectorXd> last(in->token(0),N);
-        lastNorm = nextNorm;
-        Map<VectorXd> next(in->token(1),N);
-        nextNorm = next.norm();
-        if (lastNorm*nextNorm !=0)
-        	lastNorm = 1 - last.dot(next) / (lastNorm * nextNorm);
-        else
-        	lastNorm = 0.0;
-        out->write(&lastNorm,1);
-        in->consumeToken();
+      Map<VectorXd> last(in->token(0),N);
+      lastNorm = nextNorm;
+      Map<VectorXd> next(in->token(1),N);
+      nextNorm = next.norm();
+      if (lastNorm*nextNorm !=0)
+        lastNorm = 1 - last.dot(next) / (lastNorm * nextNorm);
+      else
+        lastNorm = 0.0;
+      out->write(&lastNorm,1);
+      in->consumeToken();
     }
     return true;
-}
+  }
 
 }

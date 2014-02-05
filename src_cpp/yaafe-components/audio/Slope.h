@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -33,24 +33,24 @@
 namespace YAAFE
 {
 
-class Slope: public YAAFE::ComponentBase<Slope>
-{
-public:
-    Slope();
-    virtual ~Slope();
+  class Slope: public YAAFE::ComponentBase<Slope>
+  {
+   public:
+     Slope();
+     virtual ~Slope();
 
-    virtual const std::string getIdentifier() const { return SLOPE_ID;};
+     virtual const std::string getIdentifier() const { return SLOPE_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_size;
-    Eigen::VectorXd m_freqs;
-    double m_sumFreqs;
-    double m_slopeNorm;
-//    DVec m_tmp;
-};
+   private:
+     int m_size;
+     Eigen::VectorXd m_freqs;
+     double m_sumFreqs;
+     double m_slopeNorm;
+     //    DVec m_tmp;
+  };
 
 }
 

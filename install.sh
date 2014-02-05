@@ -1,39 +1,28 @@
 #!/bin/sh
+#
+# build and install yaafe into a virtualenv
+#
 
-mkdir -p $1
-
-# deploy programs
-mkdir -p $1/bin
-cp src_python/yaafe.py yaafe-engine $1/bin
-
-# deploy libraries
-mkdir -p $1/lib
-cp libyaafe-core.so $1/lib
-
-# deploy python packages
-export PYPATH=$1/python_packages
-mkdir -p $PYPATH
-mkdir -p $PYPATH/yaafelib
-cp yaafecore.py _yaafecore.so $PYPATH
-cp src_python/yaafelib/*.py $PYPATH/yaafelib
-
-# deploy root extension
-mkdir -p $1/yaafe_extensions
-cp libyaafe-components.so $1/yaafe_extensions
-cp src_python/yaafefeatures.py $1/yaafe_extensions
-
-# deploy matlab scripts
-mkdir -p $1/matlab
-cp matlab/*.m $1/matlab
-
-echo ""
-echo "export the following vars to use Yaafe from anywhere:"
-echo ""
-echo "export YAAFE_PATH=$1/yaafe_extensions"
-echo "export PATH=$1/bin:\$PATH"
-echo "export LD_LIBRARY_PATH=$1/lib:\$LD_LIBRARY_PATH"
-echo "export PYTHONPATH=$1/python_packages:\$PYTHONPATH"
-echo "export MATLABPATH=$1/matlab:\$MATLABPATH"
+set -e
+rm -rf ./venv
+virtualenv --system-site-package venv
+OS=`uname`
+if [[ "$OS" == "Darwin" ]]; then
+    LD_PARAM_NAME="DYLD_FALLBACK_LIBRARY_PATH"
+else
+    LD_PARAM_NAME="LD_LIBRARY_PATH"
+fi
+echo "export $LD_PARAM_NAME=\$VIRTUAL_ENV/lib" >> ./venv/bin/activate
+VIRTUAL_ENV=`pwd`/venv
+mkdir -p build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_INSTALL_PREFIX=$VIRTUAL_ENV \
+      -DWITH_MPG123=ON ..
+make
+make install
+cd ..
+echo "start virtualenv via: \`source ./venv/bin/activate\` and remeber to unset $LD_PARAM_NAME mannully"
 echo ""
 echo "Enjoy extracting features with Yaafe !"
 echo ""

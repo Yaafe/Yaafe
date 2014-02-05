@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -31,16 +31,16 @@
 
 namespace YAAFE {
 
-class AudioFileProcessor {
-public:
-	AudioFileProcessor();
-	virtual ~AudioFileProcessor();
+  class AudioFileProcessor {
+   public:
+     AudioFileProcessor();
+     virtual ~AudioFileProcessor();
 
-	bool setOutputFormat(const std::string& format, const std::string& outdir, const ParameterMap& params);
-	int processFile(Engine& engine, const std::string& filename);
-private:
-	OutputFormat* m_format;
-};
+     bool setOutputFormat(const std::string& format, const std::string& outdir, const ParameterMap& params);
+     int processFile(Engine& engine, const std::string& filename);
+   private:
+     OutputFormat* m_format;
+  };
 
 }
 
