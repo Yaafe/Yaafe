@@ -34,7 +34,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+
+#ifndef __MINGW32__
 #include <pwd.h>
+#else
+#include <windows.h>
+#endif
 
 //#ifdef WITH_FFTW3
 //#include "fftw3.h"
