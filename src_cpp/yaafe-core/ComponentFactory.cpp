@@ -30,6 +30,15 @@
 #include <iostream>
 #include <sstream>
 
+// defines for library loading and path creation on windows and unix systems
+#ifdef __WIN32
+ #define YAAFE_DYNLIB_EXTENSION ".dll"
+ #define YAAFE_PATH_SEPARATOR "\\"
+#else
+ #define YAAFE_DYNLIB_EXTENSION ".so"
+ #define YAAFE_PATH_SEPARATOR "/"
+#endif
+
 using namespace std;
 
 namespace YAAFE {
@@ -123,32 +132,32 @@ namespace YAAFE {
       return 0;
     }
 
-    // Linux specific code
-    std::string complete_name = "lib" + libnamestr + ".so";
+    std::string complete_name = "lib" + libnamestr + YAAFE_DYNLIB_EXTENSION;
 
     // first look at YAAFE_LIBRARY_DIR
     if (getenv("YAAFE_PATH"))
-    {
-      string tmp = string(getenv("YAAFE_PATH")) + string("/") + complete_name;
-      struct stat st;
-      if (stat(tmp.c_str(),&st)==0)
       {
-        // file exists
-        complete_name = tmp;
+	string tmp = string(getenv("YAAFE_PATH")) + string(YAAFE_PATH_SEPARATOR) + complete_name;
+	struct stat st;
+	if (stat(tmp.c_str(),&st)==0)
+	  {
+	    // file exists
+	    complete_name = tmp;
+	  }
       }
-    }
-
+    
     // then look at VIRTUAL_ENV/lib
     if (getenv("VIRTUAL_ENV"))
-    {
-      string tmp = string(getenv("VIRTUAL_ENV")) + string("/lib/") + complete_name;
-      struct stat st;
-      if (stat(tmp.c_str(),&st)==0)
       {
-        complete_name = tmp;
-      }
-    } // else look at library in default library accessible dirs
-
+	string tmp = string(getenv("VIRTUAL_ENV")) + string(YAAFE_PATH_SEPARATOR) + string("lib") + string(YAAFE_PATH_SEPARATOR) + complete_name;
+	struct stat st;
+	if (stat(tmp.c_str(),&st)==0)
+	  {
+	    // file exists
+	    complete_name = tmp;
+	  }
+      } // else look at library in default library accessible dirs
+    
     const char* libname = complete_name.c_str();
     LIBRARY_HANDLER library = dlopen(libname, RTLD_LAZY);
     if (library == NULL) {
