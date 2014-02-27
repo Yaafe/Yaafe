@@ -27,33 +27,44 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
+// define for path delimiter
+#ifdef __WIN32
+ #define YAAFE_PATH_DELIMITER "\\"
+#else
+ #define YAAFE_PATH_DELIMITER "/"
+#endif
+
 using namespace std;
 
 namespace YAAFE
 {
-
   int preparedirs(const std::string& filename)
   {
-    char DELIMITER = '/';
     struct stat st;
-    for (size_t index=filename.find_first_of(DELIMITER);index!=string::npos;index=filename.find_first_of(DELIMITER,index+1))
-    {
-      std::string path = filename.substr(0,index+1);
-      if (stat(path.c_str(),&st)==0)
+    for (size_t index=filename.find_first_of(YAAFE_PATH_DELIMITER);
+         index!=string::npos;
+         index=filename.find_first_of(YAAFE_PATH_DELIMITER,index+1))
       {
-        // check it is a directory
-        if (!S_ISDIR(st.st_mode))
-        {
-          cerr << path << " is not a directory !" << endl;
-          return -1;
-        }
-        continue;
+	std::string path = filename.substr(0,index+1);
+	if (stat(path.c_str(),&st)==0)
+	  {
+	    // check it is a directory
+	    if (!S_ISDIR(st.st_mode))
+	      {
+		cerr << path << " is not a directory !" << endl;
+		return -1;
+	      }
+	    continue;
+	  }
+	// create dir
+#ifdef __WIN32
+        int res = mkdir(path.c_str());
+#else
+        int res = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+#endif
+        if (res)
+	  return res;
       }
-      // create dir
-      int res = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-      if (res)
-        return res;
-    }
     return 0;
   }
 
