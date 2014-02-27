@@ -25,10 +25,20 @@
 #include "ComponentFactory.h"
 #include <vector>
 #include <stdlib.h>
-#include <dlfcn.h>
 #include <sys/stat.h>
 #include <iostream>
 #include <sstream>
+
+// dynamic libraries
+// NOTE by Georg Holzmann (grh _at_ auphonic (dot) com):
+// - dlfcn_win32 is for loading dynamic libraries on windows (L-GPL)
+// - I included it in the project because otherwise I had strange linking problems
+// - code is here: https://code.google.com/p/dlfcn-win32/
+#ifdef __WIN32
+ #include "dlfcn_win32.h"
+#else
+ #include <dlfcn.h>
+#endif
 
 // defines for library loading and path creation on windows and unix systems
 #ifdef __WIN32

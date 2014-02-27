@@ -2,6 +2,10 @@ file(GLOB yaafe_core_SOURCES *.cpp)
 file(GLOB yaafe_core_HEADERS *.h)
 list(APPEND yaafe_core_SOURCES DataFlowParser.l.c)
 
+if (WIN32)
+    list(APPEND yaafe_core_SOURCES dlfcn_win32.c)
+endif (WIN32)
+
 set(yaafe_core_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${DL_INCLUDE_DIR})
 set(yaafe_core_LIBS ${DL_LIBRARY})
 
@@ -17,4 +21,3 @@ target_link_libraries(yaafe-core ${yaafe_core_LIBS})
 
 install(TARGETS yaafe-core DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT yaafe-targets)
 install(FILES DirectedGraph.h Ports.h Buffer.h Component.h ComponentHelpers.h DataFlow.h Engine.h utils.h ComponentFactory.h DESTINATION ${CMAKE_INSTALL_INCLUDE}/yaafe-core)
-
