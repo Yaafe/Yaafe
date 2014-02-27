@@ -2,7 +2,12 @@ file(GLOB yaafe_core_SOURCES *.cpp)
 file(GLOB yaafe_core_HEADERS *.h)
 list(APPEND yaafe_core_SOURCES DataFlowParser.l.c)
 
-set(yaafe_core_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp ${DL_INCLUDE_DIR})
+if (WIN32)
+    list(APPEND yaafe_core_SOURCES dlfcn_win32.c)
+endif (WIN32)
+
+set(yaafe_core_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${DL_INCLUDE_DIR})
+
 set(yaafe_core_LIBS ${DL_LIBRARY})
 
 if (WITH_TIMERS)

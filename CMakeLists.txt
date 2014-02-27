@@ -21,10 +21,13 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG -ffast-math" CACHE STRING "C RELEASE FLA
 add_definitions(-Wno-write-strings)
 
 find_package(Argtable2 REQUIRED)
-find_package(DL REQUIRED)
+
+if (NOT WIN32)
+    find_package(DL REQUIRED)
+endif (NOT WIN32)
 
 set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/eigen)
-mark_as_advanced(FORCE EIGEN_INCLUDE_DIR) 
+mark_as_advanced(FORCE EIGEN_INCLUDE_DIR)
 set(SMARC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/audio-smarc)
 mark_as_advanced(FORCE SMARC_INCLUDE_DIR)
 if(APPLE)
@@ -88,12 +91,12 @@ if (WITH_MATLAB_MEX)
     endif (NOT MATLAB_FOUND)
 endif (WITH_MATLAB_MEX)
 
-FIND_LIBRARY(RT_LIBRARY NAMES rt PATHS /usr/lib /usr/local/lib)    
+FIND_LIBRARY(RT_LIBRARY NAMES rt PATHS /usr/lib /usr/local/lib)
 option(WITH_TIMERS "Use timers" OFF)
 if (WITH_TIMERS)
     if (NOT RT_LIBRARY)
         message(SEND_ERROR "Cannot find rt library, needed to enable timers")
-    endif (NOT RT_LIBRARY) 
+    endif (NOT RT_LIBRARY)
     add_definitions(-DWITH_TIMERS=1)
 endif(WITH_TIMERS)
 
@@ -123,7 +126,7 @@ install(FILES yaafe-config.cmake DESTINATION lib/yaafe)
 
 # build a CPack driven installer package
 include (InstallRequiredSystemLibraries)
-set (CPACK_RESOURCE_FILE_LICENSE  
+set (CPACK_RESOURCE_FILE_LICENSE
      "${CMAKE_CURRENT_SOURCE_DIR}/COPYING.LESSER")
 set (CPACK_PACKAGE_VERSION_MAJOR "${YAAFE_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${YAAFE_VERSION_MINOR}")
