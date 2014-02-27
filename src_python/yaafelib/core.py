@@ -26,9 +26,13 @@ from ctypes import (cdll, c_int, c_double, Structure,
                     POINTER, c_char_p, c_void_p,
                     cast)
 from itertools import count
+import sys
 
 # load C library
-yaafecore = cdll.LoadLibrary('libyaafecore.so')
+if sys.platform.startswith("win32"):
+    yaafecore = cdll.LoadLibrary('libyaafecore.so')
+else:
+    yaafecore = cdll.LoadLibrary('libyaafecore.dll')
 
 
 ##################################################
