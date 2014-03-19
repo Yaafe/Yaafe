@@ -25,10 +25,29 @@
 #include "ComponentFactory.h"
 #include <vector>
 #include <stdlib.h>
-#include <dlfcn.h>
 #include <sys/stat.h>
 #include <iostream>
 #include <sstream>
+
+// dynamic libraries
+// NOTE by Georg Holzmann (grh _at_ auphonic (dot) com):
+// - dlfcn_win32 is for loading dynamic libraries on windows (L-GPL)
+// - I included it in the project because otherwise I had strange linking problems
+// - code is here: https://code.google.com/p/dlfcn-win32/
+#ifdef __WIN32
+ #include "dlfcn_win32.h"
+#else
+ #include <dlfcn.h>
+#endif
+
+// defines for library loading and path creation on windows and unix systems
+#ifdef __WIN32
+ #define YAAFE_DYNLIB_EXTENSION ".dll"
+ #define YAAFE_PATH_SEPARATOR "\\"
+#else
+ #define YAAFE_DYNLIB_EXTENSION ".so"
+ #define YAAFE_PATH_SEPARATOR "/"
+#endif
 
 using namespace std;
 
@@ -123,13 +142,12 @@ int ComponentFactory::loadLibrary(const std::string& libnamestr) {
         return 0;
     }
 
-    // Linux specific code
-    std::string complete_name = "lib" + libnamestr + ".so";
+    std::string complete_name = "lib" + libnamestr + YAAFE_DYNLIB_EXTENSION;
 
     // first look at YAAFE_LIBRARY_DIR
     if (getenv("YAAFE_PATH"))
     {
-        string tmp = string(getenv("YAAFE_PATH")) + string("/") + complete_name;
+        string tmp = string(getenv("YAAFE_PATH")) + string(YAAFE_PATH_SEPARATOR) + complete_name;
         struct stat st;
         if (stat(tmp.c_str(),&st)==0)
         {
