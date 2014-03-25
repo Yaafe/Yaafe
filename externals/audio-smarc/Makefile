@@ -3,15 +3,15 @@
 #######################################################
 
 # put your favorite compilation options here
-CFLAGS := -msse -msse2 -ffast-math -mfpmath=sse -Wall -fPIC
+CUSTOM_CFLAGS := -msse -msse2 -ffast-math -mfpmath=sse -Wall -fPIC
 
 # switch comment to build DEBUG version 
-CFLAGS	:= $(CFLAGS) -DNDEBUG -O3 -g0
+CUSTOM_CFLAGS	:= $(CUSTOM_CFLAGS) -DNDEBUG -O3 -g0
 #CFLAGS	:= $(CFLAGS) -DDEBUG  -O0 -g2
 
 # Add include locations and library locations
-CFLAGS := $(CFLAGS) -I.
-LDFLAGS := $(LDFLAGS) -L.
+CUSTOM_CFLAGS := $(CUSTOM_FLAGS) -I.
+CUSTOM_LDFLAGS := $(CUSTOM_LDFLAGS) -L.
 
 ##############################################
 # Following lines should not be edited by user
@@ -20,15 +20,18 @@ LDFLAGS := $(LDFLAGS) -L.
 VERSION := 0.3
 
 # align double allocation
-CFLAGS := $(CFLAGS) -malign-double
+CUSTOM_CFLAGS := $(CUSTOM_CFLAGS) -malign-double
 
 # smarc use c99 standard
-CFLAGS := $(CFLAGS) -std=c99
+CUSTOM_CFLAGS := $(CUSTOM_CFLAGS) -std=c99
 
 #add VERSION flag
-CFLAGS := $(CFLAGS) -DVERSION='"$(VERSION)"'
+CUSTOM_CFLAGS := $(CUSTOM_CFLAGS) -DVERSION='"$(VERSION)"'
 
-LDFLAGS := $(LDFLAGS) -lm -lsndfile
+CUSTOM_LDFLAGS := $(CUSTOM_LDFLAGS) -lm -lsndfile
+
+CFLAGS = $(CUSTOM_CFLAGS) $(CFLAGS)
+LDFLAGS = $(CUSTOM_LDFLAGS) $(LDFLAGS)
 
 LIBSRC = remez_lp.c smarc.c stage_impl.c filtering.c polyfilt.c multi_stage.c
 LIBOBJECTS = $(patsubst %.c,%.o,$(LIBSRC))

@@ -92,8 +92,6 @@ bool Engine::load(const DataFlow& df) {
 
 	const DataFlow::NodeList& nodes = df.getNodes();
 
-	// TODO fix memory leaks if errors
-
 	// create processing steps
 	map<DataFlow::Node*,ProcessFlow::Node*> mapping;
 	for (DataFlow::NodeList::const_iterator nodeIt = nodes.begin(); nodeIt

@@ -1,0 +1,55 @@
+
+Yaafe and Windows
+=================
+
+Georg Holzmann <grh _at_ auphonic.com>,
+March 2014
+
+Yaafe also compiles on MS Windows ;)
+
+
+Windows Cross-Compilation
+=========================
+
+I managed to cross-compile Yaafe for windows (Linux host) using the MXE environment:
+http://mxe.cc/
+The same should be possible using a Mac OS X host.
+
+1. Setup MXE on your system:
+- Download MXE (or use git):
+  git clone -b stable https://github.com/mxe/mxe.git
+- Follow the MXE installation instructions:
+  http://mxe.cc/#tutorial
+- Set MXE target to: i686-w64-mingw32.static
+- Compile Yaafe dependencies (in MXE directory):
+  make gcc pthreads cmake
+  NOTE: no need to compile everything!
+
+2. Compile argtable:
+- Download argtable:
+  wget http://prdownloads.sourceforge.net/argtable/argtable2-13.tar.gz
+- tar xvfz argtable2-13.tar.gz && rm argtable2-13.tar.gz
+- mkdir path/to/your/install-dir
+- Compile argtable with MXE:
+  - ./configure --host=i686-w64-mingw32.static --disable-shared --enable-static --prefix=path/to/your/install-dir
+  - make
+  - make install
+
+3. Compile Yaafe:
+- change to Yaafe directory
+- mkdir build && cd build
+- cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/your/mxe/usr/i686-w64-mingw32.static/share/cmake/mxe-conf.cmake -DWITH_FFTW3=OFF -DWITH_HDF5=OFF -DWITH_LAPACK=OFF -DWITH_MATLAB_MEX=OFF -DWITH_SNDFILE=OFF -DWITH_MPG123=OFF -DWITH_TIMERS=OFF -DARGTABLE2_INCLUDE_DIR=/path/to/your/argtable/install-dir/include -DARGTABLE2_LIBRARY=/path/to/your/argtable/install-dir/lib/libargtable2.a ..
+- make
+- Here are your Yaafe binaries (dlls) and you can use them in MS Windows!
+
+NOTE:
+- I disabled many Yaafe features in the above example!
+- If you need these additional features (e.g. libsndfile, fftw, lapack, mpg123, ...) you also have to compile them first - most of them are already included in MXE!
+
+
+Windows Native Compilation
+==========================
+
+Native compilation under windows should be very similar to the description above, if you use the MingW compiler (gcc):
+http://www.mingw.org/
+
