@@ -42,7 +42,7 @@ if (WITH_EIGEN_LIBRARY)
 else (WITH_EIGEN_LIBRARY)
     set(EIGEN3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/eigen)
 endif (WITH_EIGEN_LIBRARY)
-mark_as_advanced(FORCE EIGEN_INCLUDE_DIR)
+mark_as_advanced(FORCE EIGEN3_INCLUDE_DIR)
 
 set(SMARC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/audio-smarc)
 mark_as_advanced(FORCE SMARC_INCLUDE_DIR)
