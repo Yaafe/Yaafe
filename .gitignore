@@ -11,3 +11,6 @@ CPack*.cmake
 # generated binaries
 libyaafe-*.so*
 src_cpp/yaafe-engine
+
+# generated documentation
+doc/build
