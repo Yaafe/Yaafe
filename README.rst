@@ -35,7 +35,7 @@ you can compile with the following steps: ::
  make install
 
 Several options can control Yaafe compilation. More details can be found at:
-	https://yaafe.sourceforge.net/manual/install.html
+	http://yaafe.sourceforge.net/manual/install.html
 
 
 Environment
