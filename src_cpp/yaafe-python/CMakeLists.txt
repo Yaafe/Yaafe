@@ -1,23 +1,23 @@
-file(GLOB yaafecore_SOURCES *.cpp)
-file(GLOB yaafecore_HEADERS *.h)
+file(GLOB yaafe_python_SOURCES *.cpp)
+file(GLOB yaafe_python_HEADERS *.h)
 
-set(yaafecore_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/)
-set(yaafecore_LIBS "")
+set(yaafe_python_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/)
+set(yaafe_python_LIBS "")
 
 if (WITH_HDF5)
-    list(APPEND yaafecore_INCLUDE_DIRS ${HDF5_INCLUDE_DIR})
-    list(APPEND yaafecore_LIBS ${HDF5_LIBRARY} ${HDF5_HL_LIBRARY})
+    list(APPEND yaafe_python_INCLUDE_DIRS ${HDF5_INCLUDE_DIR})
+    list(APPEND yaafe_python_LIBS ${HDF5_LIBRARY} ${HDF5_HL_LIBRARY})
     add_definitions(-DH5Dopen_vers=2 -DH5Tget_array_dims_vers=2)
 endif (WITH_HDF5)
 
-include_directories(${yaafecore_INCLUDE_DIRS})
-add_library (yaafecore MODULE ${yaafecore_SOURCES} ${yaafecore_HEADERS})
+include_directories(${yaafe_python_INCLUDE_DIRS})
+add_library (yaafe-python MODULE ${yaafe_python_SOURCES} ${yaafe_python_HEADERS})
 if (NOT APPLE)
-    set_target_properties(yaafecore PROPERTIES VERSION ${YAAFE_LIBVERSION} SOVERSION ${YAAFE_API_VERSION})
+    set_target_properties(yaafe-python PROPERTIES VERSION ${YAAFE_LIBVERSION} SOVERSION ${YAAFE_API_VERSION})
 endif (NOT APPLE)
-target_link_libraries(yaafecore yaafe-core ${yaafecore_LIBS})
+target_link_libraries(yaafe-python yaafe-core ${yaafe_python_LIBS})
 
-install(TARGETS yaafecore DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT yaafe-targets)
+install(TARGETS yaafe-python DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT yaafe-targets)
 
 
 
