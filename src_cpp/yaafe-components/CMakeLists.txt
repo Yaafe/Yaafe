@@ -1,6 +1,6 @@
 file(GLOB_RECURSE yaafe_components_SOURCES *.cpp)
 
-set(yaafe_components_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${EIGEN_INCLUDE_DIR})
+set(yaafe_components_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${EIGEN3_INCLUDE_DIR})
 set(yaafe_components_LIBS )
 
 if (WITH_FFTW3)
