@@ -10,6 +10,12 @@ set (YAAFE_API_VERSION 0)
 set (YAAFE_VERSION ${YAAFE_VERSION_MAJOR}.${YAAFE_VERSION_MINOR})
 set (YAAFE_LIBVERSION ${YAAFE_VERSION}.${YAAFE_API_VERSION})
 
+set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${YAAFE_VERSION})
+add_custom_target(dist
+    COMMAND git archive --prefix=${ARCHIVE_NAME}/ HEAD
+        | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 # Compiler FLAGS
 if (NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
