@@ -1,1 +1,13 @@
-build
+# cmake stuff
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+CPack*.cmake
+
+# vi stuff
+*.swp
+
+# generated binaries
+libyaafe-*.so*
+src_cpp/yaafe-engine
