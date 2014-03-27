@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -30,17 +30,17 @@ using namespace std;
 namespace YAAFE
 {
 
-SlopeIntegrator::SlopeIntegrator() :
+  SlopeIntegrator::SlopeIntegrator() :
     m_nbFrames(0)
-{
-}
+  {
+  }
 
-SlopeIntegrator::~SlopeIntegrator()
-{
-}
+  SlopeIntegrator::~SlopeIntegrator()
+  {
+  }
 
-ParameterDescriptorList SlopeIntegrator::getParameterDescriptorList() const
-{
+  ParameterDescriptorList SlopeIntegrator::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -55,29 +55,29 @@ ParameterDescriptorList SlopeIntegrator::getParameterDescriptorList() const
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-bool SlopeIntegrator::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool SlopeIntegrator::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_nbFrames = getIntParam("NbFrames",params);
+    m_nbFrames = getIntParam("NbFrames",params);
     if (m_nbFrames<=0) {
-    	cerr << "ERROR: Invalid NbFrames parameter !" << endl;
-    	return false;
+      cerr << "ERROR: Invalid NbFrames parameter !" << endl;
+      return false;
     }
-	m_stepNbFrames = getIntParam("StepNbFrames",params);
+    m_stepNbFrames = getIntParam("StepNbFrames",params);
     if (m_stepNbFrames<=0) {
-    	cerr << "ERROR: Invalid stepNbFrames parameter !" << endl;
-    	return false;
+      cerr << "ERROR: Invalid stepNbFrames parameter !" << endl;
+      return false;
     }
 
-	m_slopeCoeffs = VectorXd::LinSpaced(m_nbFrames,0,m_nbFrames-1);
-	m_slopeCoeffs.array() -= m_slopeCoeffs.mean();
-	m_slopeNorm = m_slopeCoeffs.squaredNorm();
+    m_slopeCoeffs = VectorXd::LinSpaced(m_nbFrames,0,m_nbFrames-1);
+    m_slopeCoeffs.array() -= m_slopeCoeffs.mean();
+    m_slopeNorm = m_slopeCoeffs.squaredNorm();
 
-	StreamInfo out;
+    StreamInfo out;
     out.size = in.size;
     out.sampleRate = in.sampleRate;
     out.frameLength =  in.frameLength + (m_nbFrames - 1) * in.sampleStep;
@@ -85,51 +85,51 @@ bool SlopeIntegrator::init(const ParameterMap& params, const Ports<StreamInfo>& 
     outStreamInfo().add(out);
 
     return true;
-}
+  }
 
-bool SlopeIntegrator::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool SlopeIntegrator::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	if ((out->tokenno()==0) && (in->tokenno()!=-m_nbFrames/2))
-		in->prependZeros(m_nbFrames/2);
-	if (!in->hasTokens(m_nbFrames)) return false;
+    if ((out->tokenno()==0) && (in->tokenno()!=-m_nbFrames/2))
+      in->prependZeros(m_nbFrames/2);
+    if (!in->hasTokens(m_nbFrames)) return false;
 
     while (in->hasTokens(m_nbFrames))
     {
-        double* outPtr = out->writeToken();
-        for (int i = 0; i < in->info().size; i++)
-        {
-        	int nbvalue = 0;
-        	double sumdata = 0;
-        	double sumslope = 0;
-        	double sumcoeffs = 0;
-        	double sumcoeffssqr = 0;
-        	for (int j=0;j<m_nbFrames;j++) {
-        		const double v = *(in->token(j)+i);
-        		if (!std::isnan(v)) {
-        			nbvalue++;
-        			sumdata += v;
-        			double coeff = j - (double)(m_nbFrames-1.0)/2.0;
-        			sumslope += v*coeff;
-        			sumcoeffs += coeff;
-        			sumcoeffssqr += coeff*coeff;
-        		}
-        	}
-        	outPtr[i] = (sumslope - sumcoeffs * sumdata) / (sumcoeffssqr - sumcoeffs*sumcoeffs/nbvalue);
+      double* outPtr = out->writeToken();
+      for (int i = 0; i < in->info().size; i++)
+      {
+        int nbvalue = 0;
+        double sumdata = 0;
+        double sumslope = 0;
+        double sumcoeffs = 0;
+        double sumcoeffssqr = 0;
+        for (int j=0;j<m_nbFrames;j++) {
+          const double v = *(in->token(j)+i);
+          if (!std::isnan(v)) {
+            nbvalue++;
+            sumdata += v;
+            double coeff = j - (double)(m_nbFrames-1.0)/2.0;
+            sumslope += v*coeff;
+            sumcoeffs += coeff;
+            sumcoeffssqr += coeff*coeff;
+          }
         }
-        in->consumeTokens(m_stepNbFrames);
+        outPtr[i] = (sumslope - sumcoeffs * sumdata) / (sumcoeffssqr - sumcoeffs*sumcoeffs/nbvalue);
+      }
+      in->consumeTokens(m_stepNbFrames);
     }
     return true;
-}
+  }
 
-void SlopeIntegrator::flush(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	inp[0].data->appendZeros((m_nbFrames-1)/2);
-	process(inp,outp);
-}
+  void SlopeIntegrator::flush(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    inp[0].data->appendZeros((m_nbFrames-1)/2);
+    process(inp,outp);
+  }
 
 }

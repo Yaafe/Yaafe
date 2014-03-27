@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -29,29 +29,29 @@ using namespace std;
 namespace YAAFE
 {
 
-Decrease::Decrease()
-{
-}
+  Decrease::Decrease()
+  {
+  }
 
-Decrease::~Decrease()
-{
-}
+  Decrease::~Decrease()
+  {
+  }
 
-StreamInfo Decrease::init(const ParameterMap& params, const StreamInfo& in)
-{
-	return StreamInfo(in,1);
-}
+  StreamInfo Decrease::init(const ParameterMap& params, const StreamInfo& in)
+  {
+    return StreamInfo(in,1);
+  }
 
-void Decrease::processToken(double* inData, const int N, double* out, const int outSize)
-{
-	double firstCoeff = inData[0];
-	double sumDec = 0;
-	double sum = 0;
-	for (int i=1;i<N;i++) {
-		sum += inData[i];
-		sumDec += (inData[i]-firstCoeff) / i;
-	}
-	*out = sumDec / sum;
-}
+  void Decrease::processToken(double* inData, const int N, double* out, const int outSize)
+  {
+    double firstCoeff = inData[0];
+    double sumDec = 0;
+    double sum = 0;
+    for (int i=1;i<N;i++) {
+      sum += inData[i];
+      sumDec += (inData[i]-firstCoeff) / i;
+    }
+    *out = sumDec / sum;
+  }
 
 }

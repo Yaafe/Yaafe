@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -29,16 +29,16 @@
 namespace YAAFE
 {
 
-AC2LPC::AC2LPC() : m_nbCoeffs(0)
-{
-}
+  AC2LPC::AC2LPC() : m_nbCoeffs(0)
+  {
+  }
 
-AC2LPC::~AC2LPC()
-{
-}
+  AC2LPC::~AC2LPC()
+  {
+  }
 
-ParameterDescriptorList AC2LPC::getParameterDescriptorList() const
-{
+  ParameterDescriptorList AC2LPC::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -47,33 +47,33 @@ ParameterDescriptorList AC2LPC::getParameterDescriptorList() const
     p.m_defaultValue = "2";
     pList.push_back(p);
     return pList;
-}
+  }
 
-bool AC2LPC::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool AC2LPC::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_nbCoeffs = getIntParam("LPCNbCoeffs",params);
-	outStreamInfo().add(StreamInfo(in,m_nbCoeffs));
+    m_nbCoeffs = getIntParam("LPCNbCoeffs",params);
+    outStreamInfo().add(StreamInfo(in,m_nbCoeffs));
     return true;
-}
+  }
 
-bool AC2LPC::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool AC2LPC::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
     assert(out->info().size==m_nbCoeffs);
     assert(in->info().size>m_nbCoeffs);
     while (!in->empty())
     {
-        ac2lpc(in->readToken(),out->writeToken(),m_nbCoeffs);
-        in->consumeToken();
+      ac2lpc(in->readToken(),out->writeToken(),m_nbCoeffs);
+      in->consumeToken();
     }
     return true;
-}
+  }
 
 }

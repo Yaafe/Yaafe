@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -33,27 +33,27 @@
 namespace YAAFE
 {
 
-class SlopeIntegrator: public YAAFE::ComponentBase<SlopeIntegrator>
-{
-public:
-    SlopeIntegrator();
-    virtual ~SlopeIntegrator();
+  class SlopeIntegrator: public YAAFE::ComponentBase<SlopeIntegrator>
+  {
+   public:
+     SlopeIntegrator();
+     virtual ~SlopeIntegrator();
 
-    virtual const std::string getIdentifier() const { return SLOPEINTEGRATOR_ID;};
+     virtual const std::string getIdentifier() const { return SLOPEINTEGRATOR_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-    virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-protected:
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+   protected:
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-private:
-    int m_nbFrames;
-    int m_stepNbFrames;
-    Eigen::VectorXd m_slopeCoeffs;
-    double m_slopeNorm;
-};
+   private:
+     int m_nbFrames;
+     int m_stepNbFrames;
+     Eigen::VectorXd m_slopeCoeffs;
+     double m_slopeNorm;
+  };
 
 }
 

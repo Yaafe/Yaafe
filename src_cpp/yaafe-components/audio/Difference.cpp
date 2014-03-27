@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -30,16 +30,16 @@ using namespace std;
 namespace YAAFE
 {
 
-Difference::Difference() :
+  Difference::Difference() :
     m_nbCoeffs(0)
-{};
+  {};
 
-Difference::~Difference()
-{
-}
+  Difference::~Difference()
+  {
+  }
 
-ParameterDescriptorList Difference::getParameterDescriptorList() const
-{
+  ParameterDescriptorList Difference::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -49,45 +49,45 @@ ParameterDescriptorList Difference::getParameterDescriptorList() const
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-bool Difference::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool Difference::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_nbCoeffs = getIntParam("DiffNbCoeffs",params);
-	if (m_nbCoeffs==0)
-		m_nbCoeffs = in.size - 1;
-	if (m_nbCoeffs > in.size-1)
-	{
-		cerr << "Warning: cannot compute " << m_nbCoeffs << " difference coefficients from input of size " << in.size << endl;
-		m_nbCoeffs = in.size - 1;
-		cerr << "take only " << m_nbCoeffs << " coefficients" << endl;
-	}
+    m_nbCoeffs = getIntParam("DiffNbCoeffs",params);
+    if (m_nbCoeffs==0)
+      m_nbCoeffs = in.size - 1;
+    if (m_nbCoeffs > in.size-1)
+    {
+      cerr << "Warning: cannot compute " << m_nbCoeffs << " difference coefficients from input of size " << in.size << endl;
+      m_nbCoeffs = in.size - 1;
+      cerr << "take only " << m_nbCoeffs << " coefficients" << endl;
+    }
 
-	outStreamInfo().add(StreamInfo(in,m_nbCoeffs));
+    outStreamInfo().add(StreamInfo(in,m_nbCoeffs));
     return true;
-}
+  }
 
-bool Difference::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	if (in->empty()) return false;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool Difference::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    if (in->empty()) return false;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	const int N = in->info().size - 1;
-	while (!in->empty())
-	{
-		double* inData = in->readToken();
-		double* outData = out->writeToken();
-		for (int i=0;i<N;i++)
-			outData[i] = inData[i+1] - inData[i];
-		in->consumeToken();
-	}
+    const int N = in->info().size - 1;
+    while (!in->empty())
+    {
+      double* inData = in->readToken();
+      double* outData = out->writeToken();
+      for (int i=0;i<N;i++)
+        outData[i] = inData[i+1] - inData[i];
+      in->consumeToken();
+    }
     return true;
-}
+  }
 
 }

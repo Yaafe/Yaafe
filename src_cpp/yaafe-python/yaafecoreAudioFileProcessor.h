@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -27,12 +27,12 @@
 
 extern "C" {
 
-void* audiofileprocessor_create();
-void audiofileprocessor_destroy(void* afp);
+  void* audiofileprocessor_create();
+  void audiofileprocessor_destroy(void* afp);
 
-int audiofileprocessor_setOutputFormat(void* afp, char* format, char* outDir, char** params);
+  int audiofileprocessor_setOutputFormat(void* afp, char* format, char* outDir, char** params);
 
-int audiofileprocessor_processFile(void* afp,void* engine, char* filename);
+  int audiofileprocessor_processFile(void* afp,void* engine, char* filename);
 
 } // extern "C"
 

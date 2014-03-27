@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -42,16 +42,16 @@ using namespace YAAFE;
 
 void registerYaafeComponents(void* componentFactory)
 {
-    ComponentFactory* factory = reinterpret_cast<ComponentFactory*>(componentFactory);
+  ComponentFactory* factory = reinterpret_cast<ComponentFactory*>(componentFactory);
 
-	factory->registerPrototype(new CSVWriter());
+  factory->registerPrototype(new CSVWriter());
 #ifdef WITH_SNDFILE
-	factory->registerPrototype(new AudioFileReader());
+  factory->registerPrototype(new AudioFileReader());
 #endif
 #ifdef WITH_MPG123
-	factory->registerPrototype(new MP3FileReader());
+  factory->registerPrototype(new MP3FileReader());
 #endif
 #ifdef WITH_HDF5
-	factory->registerPrototype(new H5DatasetWriter());
+  factory->registerPrototype(new H5DatasetWriter());
 #endif
 }

@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,30 +32,30 @@
 namespace YAAFE
 {
 
-class AutoCorrelationPeaksIntegrator: public YAAFE::ComponentBase<AutoCorrelationPeaksIntegrator>
-{
-public:
-    AutoCorrelationPeaksIntegrator();
-    virtual ~AutoCorrelationPeaksIntegrator();
+  class AutoCorrelationPeaksIntegrator: public YAAFE::ComponentBase<AutoCorrelationPeaksIntegrator>
+  {
+   public:
+     AutoCorrelationPeaksIntegrator();
+     virtual ~AutoCorrelationPeaksIntegrator();
 
-    virtual const std::string getIdentifier() const { return AUTOCORRELATIONPEAKSINTEGRATOR_ID;};
+     virtual const std::string getIdentifier() const { return AUTOCORRELATIONPEAKSINTEGRATOR_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-    virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_nbFrames;
-    int m_stepNbFrames;
-    int m_nbPeaks;
-    int m_interPeakMinDist;
-    double m_normFactor;
+   private:
+     int m_nbFrames;
+     int m_stepNbFrames;
+     int m_nbPeaks;
+     int m_interPeakMinDist;
+     double m_normFactor;
 
-    void findAutocorrPeaks(double* data, int len, int stride, double* out);
+     void findAutocorrPeaks(double* data, int len, int stride, double* out);
 
-};
+  };
 
 }
 

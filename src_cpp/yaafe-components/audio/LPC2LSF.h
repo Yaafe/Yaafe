@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,22 +32,22 @@
 namespace YAAFE
 {
 
-class LPC2LSF: public YAAFE::StateLessOneInOneOutComponent<LPC2LSF>
-{
-public:
-    LPC2LSF();
-    virtual ~LPC2LSF();
-    virtual const std::string getIdentifier() const { return LPC2LSF_ID;};
+  class LPC2LSF: public YAAFE::StateLessOneInOneOutComponent<LPC2LSF>
+  {
+   public:
+     LPC2LSF();
+     virtual ~LPC2LSF();
+     virtual const std::string getIdentifier() const { return LPC2LSF_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual StreamInfo init(const ParameterMap& params, const StreamInfo& in);
-    virtual void processToken(double* inData, const int inSize, double* outData, const int outSize);
+     virtual StreamInfo init(const ParameterMap& params, const StreamInfo& in);
+     virtual void processToken(double* inData, const int inSize, double* outData, const int outSize);
 
-private:
-    int m_displacement;
-    int m_nbCoeffs;
-};
+   private:
+     int m_displacement;
+     int m_nbCoeffs;
+  };
 
 }
 

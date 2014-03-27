@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -37,67 +37,85 @@
 namespace YAAFE
 {
 
-struct ParameterDescriptor
-{
+  struct ParameterDescriptor
+  {
     std::string m_identifier;
     std::string m_description;
     std::string m_defaultValue;
-};
-typedef std::vector<ParameterDescriptor> ParameterDescriptorList;
-typedef std::map<std::string,std::string> ParameterMap;
-std::string getParam(const std::string& key, const ParameterMap& params, const ParameterDescriptorList& pList);
+  };
+  typedef std::vector<ParameterDescriptor> ParameterDescriptorList;
+  typedef std::map<std::string,std::string> ParameterMap;
+  std::string getParam(const std::string& key, const ParameterMap& params, const ParameterDescriptorList& pList);
 
-std::string encodeParameterMap(const ParameterMap& params);
-ParameterMap decodeParameterMap(const std::string& str);
+  std::string encodeParameterMap(const ParameterMap& params);
+  ParameterMap decodeParameterMap(const std::string& str);
 
-/**
- * verbose flag
- */
-extern bool verboseFlag;
+  /**
+   * verbose flag
+   */
+  extern bool verboseFlag;
 
 
 #ifdef WITH_TIMERS
 
-class Timer
-{
-public:
-    virtual ~Timer()
-    {
-    }
+  class Timer
+  {
+   public:
+     virtual ~Timer()
+     {
+     }
 
-    void start();
-    void stop();
+     void start();
+     void stop();
 
-    static Timer* get_timer(const std::string& name);
-    static void print_all_timers();
+     static Timer* get_timer(const std::string& name);
+     static void print_all_timers();
 
-private:
-    Timer(const std::string& name);
+   private:
+     Timer(const std::string& name);
 
-    std::string m_name;
-    double m_totalTime;
-    double m_lastStart;
+     std::string m_name;
+     double m_totalTime;
+     double m_lastStart;
 
-    static std::vector<Timer*> s_allTimers;
-};
+     static std::vector<Timer*> s_allTimers;
+  };
 
-static double getCPUTime()
-{
-	timespec ts;
+  static double getCPUTime()
+  {
+    timespec ts;
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts);
     return double(ts.tv_sec) + 1e-9 * double(ts.tv_nsec);
-}
+  }
 
-inline void Timer::start()
-{
+  inline void Timer::start()
+  {
     m_lastStart = getCPUTime();
-}
+  }
 
-inline void Timer::stop()
-{
-   m_totalTime += (getCPUTime() - m_lastStart);
-}
+  inline void Timer::stop()
+  {
+    m_totalTime += (getCPUTime() - m_lastStart);
+  }
 
+#endif
+
+#ifdef NDEBUG
+#define DBLOG(...)
+#define DBLOG_IF(...)
+#else
+#define DBLOG(...) \
+  do{ \
+    fprintf(stderr, __VA_ARGS__); \
+    fprintf(stderr, "\n"); \
+  } while(0)
+#define DBLOG_IF(cond, ...) \
+  do{ \
+    if (cond) { \
+      fprintf(stderr, __VA_ARGS__); \
+      fprintf(stderr, "\n"); \
+    } \
+  } while(0)
 #endif
 
 } // end YAAFE

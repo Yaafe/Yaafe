@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -31,14 +31,14 @@ using namespace Eigen;
 namespace YAAFE
 {
 
-Derivate::Derivate()
-{}
+  Derivate::Derivate()
+  {}
 
-Derivate::~Derivate()
-{}
+  Derivate::~Derivate()
+  {}
 
-ParameterDescriptorList Derivate::getParameterDescriptorList() const
-{
+  ParameterDescriptorList Derivate::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -54,50 +54,50 @@ ParameterDescriptorList Derivate::getParameterDescriptorList() const
 
     p.m_identifier = "DO2Len";
     p.m_description
-            = "Horizon used to compute order 2 derivative. Useless if DOrder=1.";
+      = "Horizon used to compute order 2 derivative. Useless if DOrder=1.";
     p.m_defaultValue = "1";
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-bool Derivate::initFilter(const ParameterMap& params, const StreamInfo& in)
-{
-	int order = getIntParam("DOrder",params);
-	int vlen = getIntParam("DO1Len",params);
-	int alen = getIntParam("DO2Len",params);
+  bool Derivate::initFilter(const ParameterMap& params, const StreamInfo& in)
+  {
+    int order = getIntParam("DOrder",params);
+    int vlen = getIntParam("DO1Len",params);
+    int alen = getIntParam("DO2Len",params);
 
-	VectorXd filter;
-	VectorXd vf;
-	vf.setLinSpaced(2*vlen+1,-vlen,vlen);
-	vf /= vf.squaredNorm();
-	if (order == 1)
-	{
-		filter = vf;
-	}
-	else if (order == 2)
-	{
-		VectorXd af;
-		af.setLinSpaced(2 * alen + 1, alen, -alen);
-		af /= af.squaredNorm();
-		filter.setZero(vf.size() + 2 * alen);
-		RowVectorXd tmp;
-		tmp.setZero(vf.size()+2 * (af.size()-1));
-		tmp.segment(af.size()-1,vf.size()) = vf;
-		for (int i=0;i<filter.size();i++)
-			filter(i) = tmp.segment(i,af.size()) * af;
-	}
-	else
-	{
-		cerr << "Derivate: invalid DOrder value " << order << endl;
-		return false;
-	}
+    VectorXd filter;
+    VectorXd vf;
+    vf.setLinSpaced(2*vlen+1,-vlen,vlen);
+    vf /= vf.squaredNorm();
+    if (order == 1)
+    {
+      filter = vf;
+    }
+    else if (order == 2)
+    {
+      VectorXd af;
+      af.setLinSpaced(2 * alen + 1, alen, -alen);
+      af /= af.squaredNorm();
+      filter.setZero(vf.size() + 2 * alen);
+      RowVectorXd tmp;
+      tmp.setZero(vf.size()+2 * (af.size()-1));
+      tmp.segment(af.size()-1,vf.size()) = vf;
+      for (int i=0;i<filter.size();i++)
+        filter(i) = tmp.segment(i,af.size()) * af;
+    }
+    else
+    {
+      cerr << "Derivate: invalid DOrder value " << order << endl;
+      return false;
+    }
 
-	m_delay = (filter.size() - 1) / 2;
-	m_length = filter.size();
-	m_filter = new double[m_length];
-	memcpy(m_filter,filter.data(),m_length*sizeof(double));
+    m_delay = (filter.size() - 1) / 2;
+    m_length = filter.size();
+    m_filter = new double[m_length];
+    memcpy(m_filter,filter.data(),m_length*sizeof(double));
     return true;
-}
+  }
 
 }

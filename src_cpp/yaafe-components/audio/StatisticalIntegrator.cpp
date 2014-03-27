@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,16 +32,16 @@ using namespace std;
 namespace YAAFE
 {
 
-StatisticalIntegrator::StatisticalIntegrator()
-{
-}
+  StatisticalIntegrator::StatisticalIntegrator()
+  {
+  }
 
-StatisticalIntegrator::~StatisticalIntegrator()
-{
-}
+  StatisticalIntegrator::~StatisticalIntegrator()
+  {
+  }
 
-ParameterDescriptorList StatisticalIntegrator::getParameterDescriptorList() const
-{
+  ParameterDescriptorList StatisticalIntegrator::getParameterDescriptorList() const
+  {
     ParameterDescriptorList pList;
     ParameterDescriptor p;
 
@@ -61,22 +61,22 @@ ParameterDescriptorList StatisticalIntegrator::getParameterDescriptorList() cons
     pList.push_back(p);
 
     return pList;
-}
+  }
 
-bool StatisticalIntegrator::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
-{
-	assert(inp.size()==1);
-	const StreamInfo& in = inp[0].data;
+  bool StatisticalIntegrator::init(const ParameterMap& params, const Ports<StreamInfo>& inp)
+  {
+    assert(inp.size()==1);
+    const StreamInfo& in = inp[0].data;
 
-	m_nbFrames = getIntParam("NbFrames",params);
+    m_nbFrames = getIntParam("NbFrames",params);
     if (m_nbFrames<=0) {
-    	cerr << "ERROR: Invalid NbFrames parameter !" << endl;
-    	return false;
+      cerr << "ERROR: Invalid NbFrames parameter !" << endl;
+      return false;
     }
     m_stepNbFrames = getIntParam("StepNbFrames",params);
     if (m_stepNbFrames<=0) {
-    	cerr << "ERROR: Invalid stepNbFrames parameter !" << endl;
-    	return false;
+      cerr << "ERROR: Invalid stepNbFrames parameter !" << endl;
+      return false;
     }
 
     string str = getStringParam("SICompute",params);
@@ -84,9 +84,9 @@ bool StatisticalIntegrator::init(const ParameterMap& params, const Ports<StreamI
     m_stddev = true;
     if (str=="Mean")
     {
-        m_stddev = false;
+      m_stddev = false;
     } else if (str=="Stddev") {
-        m_mean = false;
+      m_mean = false;
     }
     int sizefactor = (m_stddev?1:0) + (m_mean?1:0);
 
@@ -98,59 +98,59 @@ bool StatisticalIntegrator::init(const ParameterMap& params, const Ports<StreamI
     outStreamInfo().add(out);
 
     return true;
-}
+  }
 
-bool StatisticalIntegrator::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	assert(inp.size()==1);
-	InputBuffer* in = inp[0].data;
-	assert(outp.size()==1);
-	OutputBuffer* out = outp[0].data;
+  bool StatisticalIntegrator::process(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    assert(inp.size()==1);
+    InputBuffer* in = inp[0].data;
+    assert(outp.size()==1);
+    OutputBuffer* out = outp[0].data;
 
-	if ((out->tokenno()==0) && (in->tokenno()!=-m_nbFrames/2))
-		in->prependZeros(m_nbFrames/2);
-	if (!in->hasTokens(m_nbFrames)) return false;
+    if ((out->tokenno()==0) && (in->tokenno()!=-m_nbFrames/2))
+      in->prependZeros(m_nbFrames/2);
+    if (!in->hasTokens(m_nbFrames)) return false;
 
-	const int N = in->info().size;
-	assert(out->info().size==2*in->info().size);
+    const int N = in->info().size;
+    assert(out->info().size==2*in->info().size);
     while (in->hasTokens(m_nbFrames))
     {
-        double* outPtr = out->writeToken();
-        for (int j = 0; j < N; j++)
+      double* outPtr = out->writeToken();
+      for (int j = 0; j < N; j++)
+      {
+        int nb = 0;
+        double m = 0;
+        for (int i=0;i<m_nbFrames;i++)
         {
-        	int nb = 0;
-        	double m = 0;
-        	for (int i=0;i<m_nbFrames;i++)
-        	{
-        		double v = *(in->token(i) + j);
-        		if (!isnan(v)) {
-        			++nb;
-        			m += v;
-        		}
-        	}
-    		m /= nb;
-    		if (m_mean)
-    			*outPtr++ = m;
-    		if (m_stddev) {
-    			double stddev = 0;
-    			for (int i=0;i<m_nbFrames;i++) {
-    				double v = *(in->token(i)+j);
-    				if (!isnan(v))
-    					stddev += pow2(v - m);
-    			}
-    			*outPtr++ = sqrt(stddev/nb);
-    		}
+          double v = *(in->token(i) + j);
+          if (!isnan(v)) {
+            ++nb;
+            m += v;
+          }
         }
-        in->consumeTokens(m_stepNbFrames);
+        m /= nb;
+        if (m_mean)
+          *outPtr++ = m;
+        if (m_stddev) {
+          double stddev = 0;
+          for (int i=0;i<m_nbFrames;i++) {
+            double v = *(in->token(i)+j);
+            if (!isnan(v))
+              stddev += pow2(v - m);
+          }
+          *outPtr++ = sqrt(stddev/nb);
+        }
+      }
+      in->consumeTokens(m_stepNbFrames);
     }
     return true;
-}
+  }
 
-void StatisticalIntegrator::flush(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
-{
-	InputBuffer* in = inp[0].data;
-	in->appendZeros((m_nbFrames-1)/2);
-	process(inp,outp);
-}
+  void StatisticalIntegrator::flush(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
+  {
+    InputBuffer* in = inp[0].data;
+    in->appendZeros((m_nbFrames-1)/2);
+    process(inp,outp);
+  }
 
 }

@@ -7,11 +7,18 @@ if (WIN32)
 endif (WIN32)
 
 set(yaafe_core_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/src_cpp/ ${DL_INCLUDE_DIR})
+
 set(yaafe_core_LIBS ${DL_LIBRARY})
 
 if (WITH_TIMERS)
     list(APPEND yaafe_core_LIBS ${RT_LIBRARY})
 endif (WITH_TIMERS)
+
+if(APPLE)
+    list(APPEND yaafe_core_INCLUDE_DIRS ${FMEMOPEN_INCLUDE_DIR})
+    list(APPEND yaafe_core_HEADERS ${FMEMOPEN_INCLUDE_DIR}/fmemopen.h)
+    list(APPEND yaafe_core_SOURCES ${FMEMOPEN_INCLUDE_DIR}/fmemopen.c)
+endif(APPLE)
 
 include_directories(${yaafe_core_INCLUDE_DIRS})
 add_library (yaafe-core SHARED ${yaafe_core_SOURCES} ${yaafe_core_HEADERS})
