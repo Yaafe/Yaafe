@@ -30,7 +30,7 @@ import sys
 if sys.platform.startswith("win32"):
     yaafecore = cdll.LoadLibrary('libyaafecore.dll')
 else:
-    yaafecore = cdll.LoadLibrary('libyaafecore.so')
+    yaafecore = cdll.LoadLibrary('libyaafe-python.so')
 
 ##################################################
 # Convenient functions to parse C array
