@@ -22,6 +22,11 @@ def main(argv):
     fp = FeaturePlan(sample_rate=SAMPLE_RATE, resample=True, time_start=TIME_START, time_limit=TIME_LIMIT)
     fp.addFeature("frames: Frames blockSize={0} stepSize={1}".format(
         SLICE_WINSIZE, SLICE_STEPSIZE))
+    if 'YAAFE_PATH' in os.environ:
+        fp.addFeature(
+            "beat_hist: BeatHistogramSummary ACPNbPeaks=3  BHSBeatFrameSize=128  BHSBeatFrameStep=64  "
+            "BHSHistogramFrameSize=40  BHSHistogramFrameStep=40  FFTLength=0  FFTWindow=Hanning  "
+            "HInf=40  HNbBins=80  HSup=200  NMANbFrames=5000  blockSize=1024  stepSize=512")
     df = fp.getDataFlow()
     engine = Engine()
     engine.load(df)
@@ -36,9 +41,14 @@ def main(argv):
     print 'time limit: %ss' % TIME_LIMIT
     print 'duration:', 1. * frames.size / SAMPLE_RATE
 
-    from pylab import plot, show
-    plot(frames)
-    show()
+    if 'YAAFE_PATH' in os.environ:
+        beat_hist = engine.readOutput('beat_hist')
+        print 'beat_hist: %s' % beat_hist
+
+
+    # from pylab import plot, show
+    # plot(frames)
+    # show()
 
 
 if __name__ == '__main__':
