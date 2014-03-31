@@ -86,6 +86,10 @@ class AudioFileProcessor(object):
             :type params: dict
             :return: True if ok, False if format does not exists.
         """
+        if not AudioFileProcessor._YAAFE_IO_LOADED:
+            AudioFileProcessor._YAAFE_IO_LOADED = (
+                loadComponentLibrary('yaafe-io') == 0)
+
         tmp = ((c_char_p*2)*(len(params)+1))()
         tmp[:-1] = [(c_char_p*2)(c_char_p(k), c_char_p(v))
                     for k, v in params.iteritems()]
