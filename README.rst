@@ -71,3 +71,11 @@ Support
 
 To get help with YAAFE, use the mailing-list yaafe-users@lists.sourceforge.net (registration
 at https://lists.sourceforge.net/lists/listinfo/yaafe-users ).
+
+
+Credits
+=======
+
+Yaafe was first developed at `Telecom Paristech / AAO Team <http://www.tsi.telecom-paristech.fr/aao/en/>`_. It uses several great open-source projects like `Eigen <http://eigen.tuxfamily.org/>`_, `Smarc <http://audio-smarc.sourceforge.net/>`_, `libsndfile <http://www.mega-nerd.com/libsndfile/>`_, `mpg123 <http://www.mpg123.de/>`_, `HDF5 <http://www.hdfgroup.org/HDF5/>`_.
+
+If you want to cite Yaafe in a publication, please see `CITATION <CITATION.txt>`_.
