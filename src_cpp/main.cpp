@@ -92,7 +92,7 @@ struct arg_lit *h, *version, *verbose, *l;
 struct arg_str *d, *libs, *outdir, *format, *formatparams;
 struct arg_file *files, *dataflow;
 struct arg_int *datablock;
-struct arg_end *end;
+struct arg_end *the_end;
 
 int main(int argc, char **argv)
 {
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
         formatparams = arg_strn("p", NULL,"key=value",0,10,"output format parameters (see below)"),
         outdir = arg_str0("b", NULL,"dir","output base directory"),
         files = arg_filen(NULL,NULL,"FILES",0,argc,"audio files to process"),
-        end = arg_end(20) };
+        the_end = arg_end(20) };
 
     int nerrors = arg_parse(argc, argv, argtable);
 
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     if (nerrors > 0)
     {
         /* Display the error details contained in the arg_end struct.*/
-        arg_print_errors(stdout,end, progname);
+        arg_print_errors(stdout,the_end, progname);
         printf("Try '%s --help' for more information.\n", progname);
         exitcode = 1;
         goto exit;
