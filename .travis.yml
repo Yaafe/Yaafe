@@ -24,12 +24,7 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_INSTALL_PREFIX=$VIRTUAL_ENV
-     	  -DWITH_FFTW3=$WITH_FFTW3
-          -DWITH_HDF5=$WITH_HDF5
-          -DWITH_LAPACK=$WITH_LAPACK
-          -DWITH_MPG123=$WITH_MPG123
-          ..
+  - cmake -DCMAKE_INSTALL_PREFIX=$VIRTUAL_ENV -DWITH_FFTW3=$WITH_FFTW3 -DWITH_HDF5=$WITH_HDF5 -DWITH_LAPACK=$WITH_LAPACK -DWITH_MPG123=$WITH_MPG123 ..
   - export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib
 
 script:
