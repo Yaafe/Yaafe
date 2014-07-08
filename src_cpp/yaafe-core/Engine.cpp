@@ -336,19 +336,22 @@ namespace YAAFE {
   }
 
   inline bool Engine::flushStep(ProcessFlow::Node& step) {
+    if (step.v.m_component!=NULL) {
 #ifdef DEBUG
-    if (verboseFlag)
-      cerr << "flush step " << step.v.m_component->getIdentifier() << endl;
+      if (verboseFlag) {
+        cerr << "flush step " << step.v.m_component->getIdentifier() << endl;
+      }
 #endif
+
 #ifdef WITH_TIMERS
-    Timer* t = Timer::get_timer(step.v.m_component->getIdentifier());
-    t->start();
-#endif
-    if (step.v.m_component!=NULL)
+      Timer* t = Timer::get_timer(step.v.m_component->getIdentifier());
+      t->start();
       step.v.m_component->flush(step.v.m_input, step.v.m_output);
-#ifdef WITH_TIMERS
-    t->stop();
+      t->stop();
+#else
+      step.v.m_component->flush(step.v.m_input, step.v.m_output);
 #endif
+    }
     for (int i=0;i<step.v.m_output.size();i++)
       step.v.m_output[i].data->flush();
     return true;
