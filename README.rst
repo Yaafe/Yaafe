@@ -1,8 +1,19 @@
-Yaafe(Yet Another Audio Feature Extractor)
-==========================================
+============================================
+ Yaafe(Yet Another Audio Feature Extractor)
+============================================
 
-.. image:: https://travis-ci.org/mckelvin/Yaafe.png
-   :target: http://travis-ci.org/mckelvin/Yaafe
+
+.
+Build status
+============
+- Branch **master** : |travis_master|
+- Branch **dev** : |travis_dev|
+
+.. |travis_master| image:: https://travis-ci.org/Yaafe/Yaafe.svg?branch=master
+    :target: https://travis-ci.org/Yaafe/Yaafe
+
+.. |travis_dev| image:: https://travis-ci.org/Yaafe/Yaafe.svg?branch=dev
+    :target: https://travis-ci.orgYaafe/Yaafe
 
 
 Install
