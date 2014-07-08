@@ -18,7 +18,12 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install -qq cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-serial-dev libhdf5-serial-1.8.4
+  - sudo apt-get install -qq cmake cmake-curses-gui libargtable2-0 libargtable2-dev
+  - sudo apt-get install -qq libsndfile1 libsndfile1-dev
+  - if [ ${WITH_MPG123} = "ON" ]; then sudo apt-get install -qq libmpg123-0 libmpg123-dev ; fi
+  - if [ ${WITH_FFTW3} = "ON" ]; then sudo apt-get install -qq libfftw3-3 libfftw3-dev ; fi
+  - if [ ${WITH_LAPACK} = "ON" ]; then sudo apt-get install -qq liblapack-dev ; fi
+  - if [ ${WITH_HDF5} = "ON" ]; then sudo apt-get install -qq libhdf5-serial-dev libhdf5-serial-1.8.4 ; fi
   - pip install -r requirements.txt
 
 before_script:
