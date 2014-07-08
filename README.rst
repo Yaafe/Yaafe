@@ -3,7 +3,6 @@
 ============================================
 
 
-.
 Build status
 ============
 - Branch **master** : |travis_master|
