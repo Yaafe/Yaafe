@@ -26,6 +26,7 @@
 #include "yaafe-core/Buffer.h"
 #include "SmarcPFilterCache.h"
 
+#include <cstdio>
 #include <iostream>
 #include <mpg123.h>
 #include <cmath>
