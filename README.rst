@@ -31,7 +31,7 @@ Depending on optional features you want to use, other librairies may be used:
 * `liblapack <http://www.netlib.org/lapack/>`_: enable some audio features (LSF)
 * `FFTW3 <http://www.fftw.org/>`_: use FFTW instead of Eigen for FFT computations (pay attention to licensing issues when linking with the GPL FFTW3 library).
 
-To use the *yaafe.py* script you need Python >= 2.5, and the numpy package.
+To use the *yaafe* script you need Python >= 2.5, and the numpy package.
 
 Once previous libraries are installed (some may have been locally installed in <lib-path>),
 you can compile with the following steps: ::

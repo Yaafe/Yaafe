@@ -23,7 +23,7 @@ Depending on optional features you want to use, other librairies may be used:
 * `liblapack <http://www.netlib.org/lapack/>`_: enable some audio features (LSF)
 * `FFTW3 <http://www.fftw.org/>`_: use FFTW instead of Eigen for FFT computations (pay attention to licensing issues when linking with the GPL FFTW3 library).
 
-To use the *yaafe.py* script you need Python >= 2.5, and the numpy package.
+To use the *yaafe* script you need Python >= 2.5, and the numpy package.
 
 Debian/Ubuntu packages
 """"""""""""""""""""""
@@ -53,7 +53,7 @@ you can compile with the following steps:
 """""""""""""""""""""""""""""""""""""""""""
 
 ::
-	
+
 	> mkdir build
 	> cd build
 
@@ -65,7 +65,7 @@ you can compile with the following steps:
 	> ccmake -DCMAKE_PREFIX_PATH=<lib-path> -DCMAKE_INSTALL_PREFIX=<install-path> ..
 
 The ``CMAKE_PREFIX_PATH`` option allows to specify a directory where Cmake looks for thirdparty libraries (lib/ and include/ directories).
-Additional options can also be used to define the location of a particular library: ``SNDFILE_ROOT``, ``MPG123_ROOT``, ``ARGTABLE2_ROOT``, ``HDF5_ROOT``, ``MATLAB_ROOT``, ``FFTW3_ROOT``.  
+Additional options can also be used to define the location of a particular library: ``SNDFILE_ROOT``, ``MPG123_ROOT``, ``ARGTABLE2_ROOT``, ``HDF5_ROOT``, ``MATLAB_ROOT``, ``FFTW3_ROOT``.
 
 ``ccmake`` starts an interactive gui which enables you to control various build options.
 
@@ -79,7 +79,7 @@ Several options can be set to control *Yaafe* build:
 * WITH_SNDFILE: enable read audio from WAV files (enabled by default)
 * WITH_TIMERS: enable timers for debugging purpose (if enabled, the ``yaafe-engine`` program displays cpu time used by each component).
 
-Those options can be set interactively within the ccmake gui, or can be set passing ``-DWITH_XXX=ON -DWITH_XXX=OFF`` arguments to the ``cmake`` or ``ccmake`` programs. 
+Those options can be set interactively within the ccmake gui, or can be set passing ``-DWITH_XXX=ON -DWITH_XXX=OFF`` arguments to the ``cmake`` or ``ccmake`` programs.
 
 3. Build and install:
 """""""""""""""""""""
@@ -95,7 +95,7 @@ Those options can be set interactively within the ccmake gui, or can be set pass
 You should find the following directories under your installation path::
 
 	INSTALL_DIR/bin/                # scripts and binaries
-	INSTALL_DIR/include/            # C++ headers to develop new components or integrate Yaafe in your application 
+	INSTALL_DIR/include/            # C++ headers to develop new components or integrate Yaafe in your application
 	INSTALL_DIR/lib/                # dynamic libraries
 	INSTALL_DIR/matlab/             # matlab scripts, and mex if WITH_MATLAB_MEX was enabled
 	INSTALL_DIR/python_packages/    # Python part of Yaafe
@@ -117,4 +117,3 @@ if you use Matlab, you can set your MATLABPATH var::
 
 	export MATLABPATH=$MATLABPATH:$INSTALL_DIR/matlab
 
-	
