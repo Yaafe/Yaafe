@@ -22,7 +22,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug \
 make
 make install
 cd ..
-echo "start virtualenv via: \`source ./venv/bin/activate\` and remember to unset $LD_PARAM_NAME mannully"
+echo "start virtualenv via: \`source ./venv/bin/activate\` and remember to unset $LD_PARAM_NAME manually"
 echo ""
 echo "Enjoy extracting features with Yaafe !"
 echo ""
