@@ -71,11 +71,11 @@ Additional options can also be used to define the location of a particular libra
 
 Several options can be set to control *Yaafe* build:
 
-* WITH_FFTW3: enable use of FFTW to compute Fast Fourier transforms
-* WITH_HDF5: enable HDF5 output format
-* WITH_LAPACK: enable some audio features (LSF)
+* WITH_FFTW3: enable use of FFTW to compute Fast Fourier transforms (enabled by default if the library is available)
+* WITH_HDF5: enable HDF5 output format (enabled by default if the library is available)
+* WITH_LAPACK: enable some audio features (LSF) (enabled by default if the library is available)
 * WITH_MATLAB_MEX: enable building of matlab mex to extract features within Matlab environment.
-* WITH_MPG123: enable read audio from MP3 files
+* WITH_MPG123: enable read audio from MP3 files (enabled by default if the library is available)
 * WITH_SNDFILE: enable read audio from WAV files (enabled by default)
 * WITH_TIMERS: enable timers for debugging purpose (if enabled, the ``yaafe-engine`` program displays cpu time used by each component).
 
