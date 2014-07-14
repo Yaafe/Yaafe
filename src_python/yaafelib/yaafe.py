@@ -24,7 +24,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
 import sys
 from optparse import OptionParser
 
@@ -47,15 +46,16 @@ def listFeatures():
         return
     features.sort()
     transforms.sort()
-    print 'Available features:'
-    for f in features:
-        print ' -', f
-    print 'Available feature transforms:'
-    for f in transforms:
-        print ' -', f
-    print 'Available Output formats:'
-    for f in yaafe.getOutputFormatList():
-        print ' -', f
+    list_features = ['Available features:']
+    list_features.extend([' - '+f for f in features])
+    list_features.append('Available feature transforms:')
+    list_features.extend([' - '+f for f in transforms])
+    list_features.append('Available Output formats:')
+    list_features.extend([' - '+f for f in yaafe.getOutputFormatList()])
+
+    list_features_str = '\n'.join(list_features)
+    print list_features_str
+    return list_features_str
 
 
 def describeFeature(name):
