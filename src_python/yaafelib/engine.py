@@ -77,7 +77,7 @@ class Engine(object):
              ('sampleRate', 16000.0), ('sampleStep', 256), ('size', 1)]
             >>> sorted(eng_out['sr']['parameters'].items())
             [('normalize', '-1'), ('resample', 'no'), ('samplerate', '16000'),
-             ('version', '0.64'),
+             ('version', '0.70'),
              ('yaafedefinition', 'SpectralRolloff blockSize=512 stepSize=256')]
             >>> # extract features from a numpy array
             >>> import numpy # needs numpy

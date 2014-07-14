@@ -12,7 +12,7 @@ Yaafe - audio features extraction
 	The user can easily declare the features to extract and their parameters in a text file.
 	Features can be extracted in a batch mode, writing CSV or H5 files. The user can also extract
 	features with Python or Matlab.
-	
+
 **Efficient**
 	*Yaafe* automatically identifies common intermediate representations (spectrum, envelope, autocorrelation, ...) and computes them only once.
 	Extraction is processed block per block so that arbitrarily long files can be processed, and memory occupation is low.
@@ -36,16 +36,16 @@ Project's status
 * Python and Matlab bindings to extract features straight within your favorite environment.
 * automatic input samplerate conversion, using `smarc <http://audio-smarc.sourceforge.net>`_.
 * an extensible framework that allow you to create your own feature library.
-* a C++ API to efficiently integrate *Yaafe* in your project 
-	
+* a C++ API to efficiently integrate *Yaafe* in your project
+
 Download
 --------
 
-*Yaafe*'s source code is released under the terms of the GNU LGPLv3 License. *Yaafe* source code compiles on **Linux** and **MacOsX** platforms.
+*Yaafe*'s source code is released under the terms of the GNU LGPLv3 License. *Yaafe* source code compiles on **Linux**, **MacOsX** and **Windows** platforms.
 
-Download current release: `yaafe-v0.64.tgz <https://sourceforge.net/projects/yaafe/files/yaafe-v0.64.tgz/download>`_, see :doc:`changelog <changelog>`.
-  
-View all releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
+Download current release on GitHub: `yaafe zip <https://github.com/Yaafe/Yaafe/archive/master.zip>`_, see :doc:`changelog <changelog>`.
+
+View all old releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
 
 Documentation
 -------------
@@ -64,7 +64,7 @@ Support
 -------
 
 To get help with *Yaafe*, please use `yaafe-users@lists.sourceforge.net <https://lists.sourceforge.net/lists/listinfo/yaafe-users>`_ mailing list.
-As project is still in progress, any feedback is welcome ! 
+As project is still in progress, any feedback is welcome !
 
 Cite Yaafe
 ----------
