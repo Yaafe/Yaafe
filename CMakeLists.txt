@@ -101,7 +101,6 @@ if (WITH_LAPACK)
     add_definitions(-DWITH_LAPACK=1)
 endif (WITH_LAPACK)
 
-
 find_package(FFTW3)
 if (FFTW3_FOUND)
   option(WITH_FFTW3 "Use Lapack library" ON)
