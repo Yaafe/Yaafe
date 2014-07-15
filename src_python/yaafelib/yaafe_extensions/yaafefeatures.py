@@ -821,7 +821,7 @@ class OnsetDetectionFunction(AudioFeature):
     International Conference on Multimedia and Expo (IEEE-ICME'05), Amsterdam,
     The Netherlands, 2005.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension', 'yaafe-components']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(MagnitudeSpectrum, {}),
               ('NormalizeMaxAll', {'NMANbFrames': '5000'})]
 
@@ -853,7 +853,7 @@ class BeatHistogramSummary(AudioFeature):
     *Musical Genre Classification of Audio Signals*,
     IEEE Transactions on speech and audio processing, vol. 10, No. 5, July 2002.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(OnsetDetectionFunction, {}),
               ('AutoCorrelationPeaksIntegrator', {'NbFrames': None,
                                                   'StepNbFrames': None,
@@ -909,7 +909,7 @@ class CQT(AudioFeature):
     .. [CS2010] C.Schörkhuber and A.Klapuri, *CONSTANT-Q TRANSFORM TOOLBOX FOR MUSIC PROCESSING*, 7th Sound and Music Conference (SMC'2010), 2010, Barcelona.
     .. [JPCQT] J.Prado, *Calcul rapide de la transformée à Q constant*, http://perso.telecom-paristech.fr/~prado/cqt/cqt_modif.pdf
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension', 'yaafe-components']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(Frames, {'blockSize': None}),
               ('CQT', {'CQTMinFreq': '73.42', 'CQTBinsPerOctave': '36',
                'CQTMaxFreq': None}),
@@ -989,7 +989,7 @@ class CQT2(AudioFeature):
     .. [BB] B.Blankertz, *The Constant Q Transform*, http://wwwmath.uni-muenster.de/logik/Personen/blankertz/constQ/constQ.html
     .. [JP2010] J.Prado, *Transformée à Q constant*, technical report 2010D004, Institut TELECOM, TELECOM ParisTech, CNRS LTCI, 2010.'''
 
-    COMPONENT_LIBS = ['tp-yaafe-extension', 'yaafe-components']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(Frames, {'blockSize': None}),
               ('CQT', {})]
 
@@ -1017,7 +1017,7 @@ class SpectralIrregularity(AudioFeature):
 
     .. [Brown2000] J.C. Brown, O.Houix, Stephen McAdams, *Feature dependence in the automatic identification of musical woodwind instruments.*, Journal of the Acoustical Society of America, 109: 1064-1072, 2000.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(CQT, {}),
               ('Difference', {'DiffNbCoeffs': None})]
 
@@ -1036,7 +1036,7 @@ class Chroma2(AudioFeature):
 
     .. [ZK2006] Y. Zhu and M.S. Kankanhalli. *Precise pitch profile feature extraction from musical audio for key detection.* IEEE Transactions on Multimedia, 2006.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [(CQT, {'CQTMinFreq': '27.5',
                      'CQTNbOctaves': '7',
                      'CQTBinsPerOctave': '48'}),
@@ -1075,7 +1075,7 @@ class Chroma(AudioFeature):
 
     .. [BP2005] Bello, J.P. and Pickens, J. *A Robust Mid-level Representation for Harmonic Content in Music Signals.* In Proceedings of the 6th International Conference on Music Information Retrieval (ISMIR-05), London, UK. September 2005.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [('ChromaSmoothing', '0.75s', 'Chroma smoothing duration'),
               (CQT, {'CQTMinFreq': '73.42', 'CQTNbOctaves': '3',
                      'CQTBinsPerOctave': '36'}),
@@ -1108,7 +1108,7 @@ class Chords(AudioFeature):
 
     .. [LO2011] Oudre, L. and Grenier, Y. and Fevotte, C., *Chord recognition by fitting rescaled chroma vectors to chord templates*, IEEE Transactions on Audio, Speech and Language Processing, vol. 19, pages 2222 - 2233, Sep. 2011.
     '''
-    COMPONENT_LIBS = ['tp-yaafe-extension']
+    COMPONENT_LIBS = ['yaafe-components']
     PARAMS = [('FrameTokenizer', {'blockSize': None}),
               ('ChordsUse7', '0',
                'If 1 then use 7th chords to enrich chord dictionnary, else use only major an minor chords'),
