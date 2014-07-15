@@ -66,6 +66,19 @@
 #include "yaafe-components/audio/Sum.h"
 #include "yaafe-components/audio/Variation.h"
 #include "yaafe-components/audio/ZCR.h"
+#include "components/AdvancedFrameTokenizer.h"
+#include "components/CQT.h"
+#include "components/ChordDictDecoder.h"
+#include "components/Chroma2ChordDict.h"
+#include "components/ChromaReduce.h"
+#include "components/ChromaTune.h"
+#include "components/Chroma2.h"
+#include "components/Concatenate.h"
+#include "components/Decimate2.h"
+#include "components/DvornikovDifferentiator.h"
+#include "components/HistogramSummary.h"
+#include "components/LogCompression.h"
+#include "components/NormalizeMaxAll.h"
 
 #include "yaafe-components/flow/Join.h"
 
@@ -116,4 +129,17 @@ void registerYaafeComponents(void* componentFactory)
   factory->registerPrototype(new Variation());
   factory->registerPrototype(new ZCR());
   factory->registerPrototype(new Join());
+  factory->registerPrototype(new AdvancedFrameTokenizer());
+  factory->registerPrototype(new CQT());
+  factory->registerPrototype(new ChordDictDecoder());
+  factory->registerPrototype(new Chroma2ChordDict());
+  factory->registerPrototype(new ChromaReduce());
+  factory->registerPrototype(new ChromaTune());
+  factory->registerPrototype(new Chroma2());
+  factory->registerPrototype(new Concatenate());
+  factory->registerPrototype(new Decimate2());
+  factory->registerPrototype(new DvornikovDifferentiator());
+  factory->registerPrototype(new HistogramSummary());
+  factory->registerPrototype(new LogCompression());
+  factory->registerPrototype(new NormalizeMaxAll());
 }

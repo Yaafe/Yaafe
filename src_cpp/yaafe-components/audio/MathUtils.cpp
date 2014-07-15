@@ -235,5 +235,11 @@ namespace YAAFE
   }
 #endif
 
+	int nextpow2(int v) 
+	{
+	  int p2 = 1;
+	  while (v>p2) p2 *= 2;
+	  return p2;
+	}
 } // YAAFE
 
