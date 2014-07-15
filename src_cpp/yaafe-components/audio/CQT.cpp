@@ -98,7 +98,7 @@ StreamInfo CQT::init(const ParameterMap& params, const StreamInfo& in)
 			len -= len%2;
 		VectorXcd kernel(len);
 		kernel.setZero();
-		kernel.real()  = hammingPeriodic(len); // set real part
+		kernel.real()  = ehammingPeriodic(len); // set real part
 		kernel.real() /= kernel.real().sum();
 		int index = 0;
 		if (align=="l")
