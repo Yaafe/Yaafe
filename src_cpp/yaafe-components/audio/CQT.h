@@ -13,7 +13,7 @@
 
 #define CQT_ID "CQT"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class CQT: public YAAFE::StateLessOneInOneOutComponent<CQT>

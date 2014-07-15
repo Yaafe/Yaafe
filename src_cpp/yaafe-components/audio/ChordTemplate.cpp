@@ -10,7 +10,7 @@
 #include "string.h"
 
 using namespace std;
-using namespace YAAFE_EXT;
+using namespace YAAFE;
 
 const ChordTemplate ChordTemplate::UNKNOWN("unknown",0,"");
 vector<ChordTemplate> ChordTemplate::s_chords;

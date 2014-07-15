@@ -13,7 +13,7 @@
 
 #define CHORDDICT_DECODER_ID "ChordDictDecoder"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class ChordDictDecoder: public YAAFE::StateLessOneInOneOutComponent<ChordDictDecoder> {
 public:

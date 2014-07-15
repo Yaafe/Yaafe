@@ -12,7 +12,7 @@
 
 #define NORMALIZEMAXALL_ID "NormalizeMaxAll"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class NormalizeMaxAll: public YAAFE::ComponentBase<NormalizeMaxAll> {
 public:

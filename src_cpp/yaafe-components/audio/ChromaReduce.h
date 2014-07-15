@@ -13,7 +13,7 @@
 
 #define CHROMAREDUCE_ID "ChromaReduce"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class ChromaReduce: public YAAFE::StateLessOneInOneOutComponent<ChromaReduce> {
 public:

@@ -6,7 +6,7 @@
 
 #define CONCATENATE_ID "Concatenate"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class Concatenate: public YAAFE::ComponentBase<Concatenate>
@@ -25,6 +25,6 @@ private:
 	int* m_portOrder;
 };
 
-} // YAAFE_EXT
+} // YAAFE
 
 #endif

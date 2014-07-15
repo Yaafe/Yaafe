@@ -12,7 +12,7 @@
 
 #define LOGCOMPRESSION_ID "LogCompression"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class LogCompression: public YAAFE::StateLessOneInOneOutComponent<LogCompression> {
 public:

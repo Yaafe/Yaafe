@@ -9,9 +9,8 @@
 #include "math.h"
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 HistogramSummary::HistogramSummary() :
 	m_hstep(0) {

@@ -8,10 +8,9 @@
 #include "LogCompression.h"
 #include "MathUtils.h"
 
-using namespace YAAFE;
 using namespace std;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 LogCompression::LogCompression() {
 }

@@ -10,9 +10,8 @@
 #include <iostream>
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 ChromaTune::ChromaTune() {
 	m_fmin = 0.0;

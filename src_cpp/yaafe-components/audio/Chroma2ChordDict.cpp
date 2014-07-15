@@ -12,10 +12,9 @@
 #define EPS 2.220446049250313e-16
 
 using namespace std;
-using namespace YAAFE;
 using namespace Eigen;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class Chroma2ChordDict::Dict {
 public:

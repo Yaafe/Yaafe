@@ -9,9 +9,8 @@
 #include <iostream>
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 ChordDictDecoder::ChordDictDecoder() :
 	m_chordTypes(), m_chordTemplates() {

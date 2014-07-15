@@ -6,7 +6,7 @@
 
 #define DECIMATE2_ID "Decimate2"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class Decimate2: public YAAFE::ComponentBase<Decimate2>
@@ -31,6 +31,6 @@ private:
 	static void initFilter();
 };
 
-} // YAAFE_EXT
+} // YAAFE
 
 #endif

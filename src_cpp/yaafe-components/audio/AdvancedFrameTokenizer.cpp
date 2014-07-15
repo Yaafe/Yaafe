@@ -10,9 +10,8 @@
 #include <cmath>
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 AdvancedFrameTokenizer::AdvancedFrameTokenizer() :
 		m_blockSize(0), m_outStepSize(0), m_outSampleRate(0)
@@ -100,4 +99,4 @@ void AdvancedFrameTokenizer::flush(YAAFE::Ports<YAAFE::InputBuffer*>& inp, YAAFE
 	process(inp,outp);
 }
 
-} // namespace YAAFE_EXT
+} // namespace YAAFE

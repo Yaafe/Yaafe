@@ -11,10 +11,9 @@
 #include <string.h>
 
 using namespace std;
-using namespace YAAFE;
 using namespace Eigen;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 ChromaReduce::ChromaReduce() {
 	m_shift = 0;

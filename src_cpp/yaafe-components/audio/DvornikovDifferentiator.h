@@ -12,7 +12,7 @@
 
 #define DVORNIKOVDIFFERENTIATOR_ID "DvornikovDifferentiator"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class DvornikovDifferentiator: public YAAFE::TemporalFilter<DvornikovDifferentiator> {
 public:

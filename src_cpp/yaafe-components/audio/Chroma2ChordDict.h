@@ -12,7 +12,7 @@
 
 #define CHROMA2CHORDS_ID "Chroma2ChordDict"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class Chroma2ChordDict: public YAAFE::StateLessOneInOneOutComponent<Chroma2ChordDict> {
 public:

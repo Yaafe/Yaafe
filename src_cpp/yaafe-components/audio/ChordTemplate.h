@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class ChordTemplate {
 public:

@@ -12,7 +12,7 @@
 
 #define HISTOGRAMSUMMARY_ID "HistogramSummary"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class HistogramSummary: public YAAFE::StateLessOneInOneOutComponent<HistogramSummary>

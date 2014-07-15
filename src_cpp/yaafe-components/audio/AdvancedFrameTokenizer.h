@@ -6,7 +6,7 @@
 
 #define ADVANCEDFRAMETOKENIZER_ID "AdvancedFrameTokenizer"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class AdvancedFrameTokenizer : public YAAFE::ComponentBase<AdvancedFrameTokenizer>
@@ -30,6 +30,6 @@ private:
 	double m_outSampleRate;
 };
 
-} // namespace YAAFE_EXT
+} // namespace YAAFE
 
 #endif // ADVANCEDFRAMETOKENIZER_H

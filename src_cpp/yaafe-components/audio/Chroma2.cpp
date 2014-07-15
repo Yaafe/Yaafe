@@ -8,10 +8,9 @@
 #include "Chroma2.h"
 
 using namespace std;
-using namespace YAAFE;
 using namespace Eigen;
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 Chroma2::Chroma2() : m_cqtSize(0)

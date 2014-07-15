@@ -8,9 +8,8 @@
 #include "string.h"
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 Concatenate::Concatenate() : m_portOrder(NULL) {};
 
@@ -88,4 +87,4 @@ bool Concatenate::process(YAAFE::Ports<YAAFE::InputBuffer*>& inp, YAAFE::Ports<Y
 	return true;
 }
 
-} // YAAFE_EXT
+} // YAAFE

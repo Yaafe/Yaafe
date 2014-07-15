@@ -15,7 +15,7 @@ using namespace std;
 using namespace YAAFE;
 using namespace Eigen;
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 CQT::CQT() :

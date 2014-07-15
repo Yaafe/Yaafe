@@ -13,7 +13,7 @@
 
 #define CHROMA2_ID "Chroma2"
 
-namespace YAAFE_EXT
+namespace YAAFE
 {
 
 class Chroma2: public YAAFE::StateLessOneInOneOutComponent<Chroma2>

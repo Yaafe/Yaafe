@@ -13,9 +13,8 @@
 #define DELAY 92 // (369 - 1) / 4
 
 using namespace std;
-using namespace YAAFE;
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 double* Decimate2::s_filter(NULL);
 
@@ -514,4 +513,4 @@ void Decimate2::flush(Ports<InputBuffer*>& inp, Ports<OutputBuffer*>& outp)
 	process(inp,outp);
 }
 
-} // YAAFE_EXT
+} // YAAFE

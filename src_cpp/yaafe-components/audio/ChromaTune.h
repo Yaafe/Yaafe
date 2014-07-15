@@ -12,7 +12,7 @@
 
 #define CHROMATUNE_ID "ChromaTune"
 
-namespace YAAFE_EXT {
+namespace YAAFE {
 
 class ChromaTune: public YAAFE::ComponentBase<ChromaTune> {
 public:
