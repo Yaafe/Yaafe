@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Yaafe
 #
 # Copyright (c) 2009-2010 Institut Telecom - Telecom Paristech
