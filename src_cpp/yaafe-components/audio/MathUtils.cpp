@@ -35,6 +35,13 @@ using namespace Eigen;
 namespace YAAFE
 {
 
+  int nextpow2(int v) 
+  {
+    int p2 = 1;
+    while (v>p2) p2 *= 2;
+    return p2;
+  }
+
   VectorXd ecalc_hanning(int m, int len)
   {
     VectorXd han(m);
@@ -235,11 +242,5 @@ namespace YAAFE
   }
 #endif
 
-	int nextpow2(int v) 
-	{
-	  int p2 = 1;
-	  while (v>p2) p2 *= 2;
-	  return p2;
-	}
 } // YAAFE
 
