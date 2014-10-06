@@ -33,6 +33,11 @@ except ImportError, e:
     print 'ERROR: cannot load yaafe packages: ', e
     sys.exit()
 
+if (yaafe.loadComponentLibrary('yaafe-io') != 0):
+    print 'WARNING: cannot load yaafe-io component library !'
+output_format_choices = ['csv']
+if yaafe.isComponentAvailable('H5DatasetWriter'):
+    output_format_choices.append('h5')
 
 def listFeatures():
     features = [feat.__name__
@@ -92,11 +97,6 @@ def showFeatures(h5file):
 
 
 def main():
-    if (yaafe.loadComponentLibrary('yaafe-io') != 0):
-        print 'WARNING: cannot load yaafe-io component library !'
-    output_format_choices = ['csv']
-    if yaafe.isComponentAvailable('H5DatasetWriter'):
-        output_format_choices.append('h5')
 
     parser = OptionParser(version='yaafe.py, Yaafe v%s' %
                           yaafe.getYaafeVersion())
