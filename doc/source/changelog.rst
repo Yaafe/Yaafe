@@ -2,6 +2,7 @@ Changelog
 =========
 
 **v0.65**, 2015-01-13
+    Bug fix and enhancement release
 
     * First release after having moved the repository to Github
     * Fix some memory leaks (see `Pull request #2 <https://github.com/Yaafe/Yaafe/pull/2>`_ and `Pull request #4 <https://github.com/Yaafe/Yaafe/pull/4>`_ 
