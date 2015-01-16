@@ -31,7 +31,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 # The encoding of source files.
-source_encoding = 'iso-8859-1'
+source_encoding = 'utf-8'
 
 # The master toctree document.
 master_doc = 'index'
@@ -45,7 +45,7 @@ copyright = u'2009-2011 Institut Télécom - Télécom Paristech'
 # built documents.
 #
 # The short X.Y version.
-version = '0.64'
+version = '0.65'
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -158,7 +158,7 @@ html_sidebars = {
                  'manual': ['relations.html','searchbox.html', 'sidebar_tp_logo.html'],
                  'manual/*': ['manualtoc.html', 'relations.html', 'searchbox.html', 'sidebar_tp_logo.html'],
                  '*': ['localtoc.html', 'searchbox.html', 'sidebar_tp_logo.html'],
-} 
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
