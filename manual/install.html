@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Installing Yaafe &mdash; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.65',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="../index.html" />
+    <link rel="up" title="User Manual" href="../manual.html" />
+    <link rel="next" title="2. Quick Start, using yaafe.py" href="quickstart.html" />
+    <link rel="prev" title="User Manual" href="../manual.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-yaafe">
+<h1>1. Installing Yaafe<a class="headerlink" href="#installing-yaafe" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="getting-yaafe">
+<h2>1.1. Getting Yaafe<a class="headerlink" href="#getting-yaafe" title="Permalink to this headline">¶</a></h2>
+<p>You can download <em>Yaafe</em> source code, <em>yaafe-v?.tgz</em>, from the project&#8217;s home page: <a class="reference external" href="http://yaafe.sourceforge.net">http://yaafe.sourceforge.net</a>.</p>
+</div>
+<div class="section" id="getting-dependencies">
+<h2>1.2. Getting Dependencies<a class="headerlink" href="#getting-dependencies" title="Permalink to this headline">¶</a></h2>
+<p><em>Yaafe</em> source code should compile on <em>linux</em> and <em>MacOsX</em> platform, and uses CMake as compilation tool.</p>
+<p>Yaafe requires thirdparty libraries to enable specific features. Some of these library may already be available on your system.</p>
+<p>The <a class="reference external" href="http://argtable.sourceforge.net/">argtable</a> library is required.</p>
+<p>Depending on optional features you want to use, other librairies may be used:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.mega-nerd.com/libsndfile/">libsndfile</a>: enable reading WAV files format (highly recommanded)</li>
+<li><a class="reference external" href="http://http://www.mpg123.de/api/">libmpg123</a>: enable reading MP3 audio files</li>
+<li><a class="reference external" href="http://www.hdfgroup.org/HDF5/">HDF5</a> &gt;= 1.8: enable H5 output format</li>
+<li><a class="reference external" href="http://www.netlib.org/lapack/">liblapack</a>: enable some audio features (LSF)</li>
+<li><a class="reference external" href="http://www.fftw.org/">FFTW3</a>: use FFTW instead of Eigen for FFT computations (pay attention to licensing issues when linking with the GPL FFTW3 library).</li>
+</ul>
+<p>To use the <em>yaafe.py</em> script you need Python &gt;= 2.5, and the numpy package.</p>
+<div class="section" id="debian-ubuntu-packages">
+<h3>1.2.1. Debian/Ubuntu packages<a class="headerlink" href="#debian-ubuntu-packages" title="Permalink to this headline">¶</a></h3>
+<p>The above dependencies can be installed using the following debian/ubuntu packages:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">cmake:</th><td class="field-body">cmake cmake-curses-gui</td>
+</tr>
+<tr class="field-even field"><th class="field-name">argtable2:</th><td class="field-body">libargtable2-0 libargtable2-dev</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">libsndfile:</th><td class="field-body">libsndfile1 libsndfile1-dev</td>
+</tr>
+<tr class="field-even field"><th class="field-name">libmpg123:</th><td class="field-body">libmpg123-0 libmpg123-dev</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">lapack:</th><td class="field-body">liblapack-dev</td>
+</tr>
+<tr class="field-even field"><th class="field-name">hdf5:</th><td class="field-body">libhdf5-serial-dev libhdf5-serial-1.8.4</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">fftw3:</th><td class="field-body">libfftw3-3 libfftw3-dev</td>
+</tr>
+</tbody>
+</table>
+<p>To get all those packages with <code class="docutils literal"><span class="pre">apt-get</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt; sudo apt-get install cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-serial-dev libhdf5-serial-1.8.4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="building-on-unix-macosx">
+<h2>1.3. Building on Unix/MacOsX<a class="headerlink" href="#building-on-unix-macosx" title="Permalink to this headline">¶</a></h2>
+<p>Once previous libraries are installed (some may have been locally installed in &lt;lib-path&gt;),
+you can compile with the following steps:</p>
+<div class="section" id="create-build-directory-and-change-to-it">
+<h3>1.3.1. 1. Create build directory and change to it:<a class="headerlink" href="#create-build-directory-and-change-to-it" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>&gt; mkdir build
+&gt; cd build
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-cmake-and-set-options">
+<h3>1.3.2. 2. Start CMake and set options:<a class="headerlink" href="#start-cmake-and-set-options" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>&gt; ccmake -DCMAKE_PREFIX_PATH=&lt;lib-path&gt; -DCMAKE_INSTALL_PREFIX=&lt;install-path&gt; ..
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">CMAKE_PREFIX_PATH</span></code> option allows to specify a directory where Cmake looks for thirdparty libraries (lib/ and include/ directories).
+Additional options can also be used to define the location of a particular library: <code class="docutils literal"><span class="pre">SNDFILE_ROOT</span></code>, <code class="docutils literal"><span class="pre">MPG123_ROOT</span></code>, <code class="docutils literal"><span class="pre">ARGTABLE2_ROOT</span></code>, <code class="docutils literal"><span class="pre">HDF5_ROOT</span></code>, <code class="docutils literal"><span class="pre">MATLAB_ROOT</span></code>, <code class="docutils literal"><span class="pre">FFTW3_ROOT</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">ccmake</span></code> starts an interactive gui which enables you to control various build options.</p>
+<p>Several options can be set to control <em>Yaafe</em> build:</p>
+<ul class="simple">
+<li>WITH_FFTW3: enable use of FFTW to compute Fast Fourier transforms</li>
+<li>WITH_HDF5: enable HDF5 output format</li>
+<li>WITH_LAPACK: enable some audio features (LSF)</li>
+<li>WITH_MATLAB_MEX: enable building of matlab mex to extract features within Matlab environment.</li>
+<li>WITH_MPG123: enable read audio from MP3 files</li>
+<li>WITH_SNDFILE: enable read audio from WAV files (enabled by default)</li>
+<li>WITH_TIMERS: enable timers for debugging purpose (if enabled, the <code class="docutils literal"><span class="pre">yaafe-engine</span></code> program displays cpu time used by each component).</li>
+</ul>
+<p>Those options can be set interactively within the ccmake gui, or can be set passing <code class="docutils literal"><span class="pre">-DWITH_XXX=ON</span> <span class="pre">-DWITH_XXX=OFF</span></code> arguments to the <code class="docutils literal"><span class="pre">cmake</span></code> or <code class="docutils literal"><span class="pre">ccmake</span></code> programs.</p>
+</div>
+<div class="section" id="build-and-install">
+<h3>1.3.3. 3. Build and install:<a class="headerlink" href="#build-and-install" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>&gt; make
+&gt; make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-your-environment">
+<h3>1.3.4. 4. Setting your environment<a class="headerlink" href="#setting-your-environment" title="Permalink to this headline">¶</a></h3>
+<p>You should find the following directories under your installation path:</p>
+<div class="highlight-python"><div class="highlight"><pre>INSTALL_DIR/bin/                # scripts and binaries
+INSTALL_DIR/include/            # C++ headers to develop new components or integrate Yaafe in your application
+INSTALL_DIR/lib/                # dynamic libraries
+INSTALL_DIR/matlab/             # matlab scripts, and mex if WITH_MATLAB_MEX was enabled
+INSTALL_DIR/python_packages/    # Python part of Yaafe
+INSTALL_DIR/yaafe_extensions/   # Yaafe extensions dir
+</pre></div>
+</div>
+<p>You <em>must</em> set your YAAFE_PATH environment var to the &#8220;yaafe_extensions&#8221; dir so that yaafe can find available features:</p>
+<div class="highlight-python"><div class="highlight"><pre>export YAAFE_PATH=$INSTALL_DIR/yaafe_extensions
+</pre></div>
+</div>
+<p>To easily use Yaafe, you should set the following environment vars:</p>
+<div class="highlight-python"><div class="highlight"><pre>export PATH=$PATH:$INSTALL_DIR/bin
+# on MacOsX replace LD_LIBRARY_PATH =&gt; DYLD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_DIR/lib
+export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/python_packages
+</pre></div>
+</div>
+<p>if you use Matlab, you can set your MATLABPATH var:</p>
+<div class="highlight-python"><div class="highlight"><pre>export MATLABPATH=$MATLABPATH:$INSTALL_DIR/matlab
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/yaafe.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../manual.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Installing Yaafe</a><ul>
+<li><a class="reference internal" href="#getting-yaafe">1.1. Getting Yaafe</a></li>
+<li><a class="reference internal" href="#getting-dependencies">1.2. Getting Dependencies</a><ul>
+<li><a class="reference internal" href="#debian-ubuntu-packages">1.2.1. Debian/Ubuntu packages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-on-unix-macosx">1.3. Building on Unix/MacOsX</a><ul>
+<li><a class="reference internal" href="#create-build-directory-and-change-to-it">1.3.1. 1. Create build directory and change to it:</a></li>
+<li><a class="reference internal" href="#start-cmake-and-set-options">1.3.2. 2. Start CMake and set options:</a></li>
+<li><a class="reference internal" href="#build-and-install">1.3.3. 3. Build and install:</a></li>
+<li><a class="reference internal" href="#setting-your-environment">1.3.4. 4. Setting your environment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../manual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">2. Quick Start, using <code class="docutils literal"><span class="pre">yaafe.py</span></code></a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="../_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="quickstart.html" title="2. Quick Start, using yaafe.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../manual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">YAAFE v0.65</a> &raquo;</li>
+          <li><a href="../manual.html" accesskey="U">User Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3b2.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>

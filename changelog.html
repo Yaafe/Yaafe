@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changelog &mdash; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.65',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="index.html" />
+    <link rel="prev" title="Yaafe core features" href="features.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt><strong>v0.65</strong>, 2015-01-13</dt>
+<dd><p class="first">Bug fix and enhancement release</p>
+<ul class="last simple">
+<li>First release after having moved the repository to Github</li>
+<li>Fix some memory leaks (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/2">Pull request #2</a> and <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/4">Pull request #4</a></li>
+<li>Enhancement: support time_start, time_limit for MP3FileReader and AudioFileReader so that we can extract features in a specific time range.</li>
+<li>Fix installation of Yaafe for windows, (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/5">Pull request #5</a>)</li>
+<li>Fix segmentation fault of timer (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/6">Pull request #5</a>)</li>
+<li>yaafe command line is now <cite>yaafe`instead of `yaafe.py</cite></li>
+</ul>
+</dd>
+<dt><strong>v0.64</strong>, 2011-11-07</dt>
+<dd><p class="first">Minor release.</p>
+<ul class="last simple">
+<li>Fix compilation issue: missing cstddef include in <code class="docutils literal"><span class="pre">src_cpp/yaafe-core/Buffer.h</span></code></li>
+<li>Added MelSpectrum feature</li>
+</ul>
+</dd>
+<dt><strong>v0.63</strong>, 2011-08-10</dt>
+<dd><p class="first">Minor release.</p>
+<ul class="last simple">
+<li>Fix bug when using an invalid stepSize, add error message for empty parameter values</li>
+<li>Fix compilation error with _mpg123_open_64 symbols</li>
+<li>Add documentation about creating new audio features</li>
+</ul>
+</dd>
+<dt><strong>v0.62</strong>, 2011-05-31</dt>
+<dd><p class="first">Minor release.</p>
+<ul class="last simple">
+<li>Enable automatic samplerate conversion using <a class="reference external" href="http://audio-smarc.sourceforge.net">Smarc</a>.</li>
+<li>Improve Loudness feature: add a parameter to enable/disable loudness normalization.</li>
+<li>Yaafe now supports all formats supported by <a class="reference external" href="http://www.mega-nerd.com/libsndfile/">libsndfile</a> and not only wav.</li>
+<li>Fix a bug with the &#8216;-n&#8217; (normalization) option.</li>
+<li>Update <a class="reference external" href="http://eigen.tuxfamily.org/">Eigen</a> to version 3.0.1</li>
+</ul>
+</dd>
+<dt><strong>v0.61</strong>, 2011-02-01</dt>
+<dd><p class="first">Bug-fix release.</p>
+<ul class="last simple">
+<li>Fix shape of feature&#8217;s numpy array returned by <a class="reference internal" href="manual/pythonbindings.html#yaafelib.Engine.readOutput" title="yaafelib.Engine.readOutput"><code class="xref py py-meth docutils literal"><span class="pre">yaafelib.Engine.readOutput()</span></code></a> and <a class="reference internal" href="manual/pythonbindings.html#yaafelib.Engine.readAllOutputs" title="yaafelib.Engine.readAllOutputs"><code class="xref py py-meth docutils literal"><span class="pre">yaafelib.Engine.readAllOutputs()</span></code></a> methods.</li>
+<li>Remove the use of deprecated HDF5 functions.</li>
+<li>Fix compilation errors under Ubuntu 10.10 when trying to use hdf5 packages. Add compilation flags to force HDF5 using 1.8 API.</li>
+<li>Add needed ubuntu packages to documentation.</li>
+</ul>
+</dd>
+<dt><strong>v0.6</strong>, 2010-12-21</dt>
+<dd><p class="first">Deep refactoring of Yaafe internals and adding new features to improve ease of use, building and integration into other projects.</p>
+<p>Most significant changes:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt><em>Yaafe</em> now has several output formats: CSV and H5. Other output format can be added in the future.</dt>
+<dd><div class="first last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Default output format is <strong>CSV</strong> because it does not require any thirdparty library. Use <code class="docutils literal"><span class="pre">-o</span></code> and <code class="docutils literal"><span class="pre">-p</span></code> options to produce HDF5 output identical to yaafe v0.53 output (see <a class="reference internal" href="manual/quickstart.html#output-format"><em>Output format</em></a>).</p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first"><em>HDF5</em>, <em>mpg123</em>, <em>lapack</em> dependencies are optional.</p>
+</li>
+<li><p class="first">Use <a class="reference external" href="http://eigen.tuxfamily.org">Eigen3</a> instead of Blitz++: Eigen3 is a template library (do not need to compile Blitz++ any more). Eigen3 project is active, and provide sometime better performances than Blitz++ with easier integration.</p>
+</li>
+<li><p class="first">Python bindings uses <em>ctypes</em> instead of <em>SWIG</em>. No dependency to Python at compile time is required.</p>
+</li>
+<li><p class="first">C++ API, Python bindings and Matlab bindings to extract features using your favorite language.</p>
+</li>
+<li><p class="first">Internal computation engine has been improved: better computation scheduling and data buffering, reduce memory usage and improve performances.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Components can now have several input ports and output ports. This will allow building new features based on several existing features (for example using classifiers).</dt>
+<dd><div class="first last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Custom features libraries need to upgrade to the new API. Yaafe v0.6 component API is no more compatible with v0.53 component API.</p>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>v0.53</strong>, 2010-06-28</dt>
+<dd><ul class="first last simple">
+<li>Fix an annoying bug on MacOsX: cannot extract more than 1 feature when the output H5 file do not already exist.</li>
+</ul>
+</dd>
+<dt><strong>v0.52</strong>, 2010-06-15</dt>
+<dd><ul class="first last simple">
+<li>Improve compilation, now <em>Yaafe</em> supports Linux and MacOsX platforms</li>
+<li>Improve error messages when failing to load extension</li>
+</ul>
+</dd>
+<dt><strong>v0.51</strong>, 2010-05-10</dt>
+<dd><ul class="first last simple">
+<li>Use CMake as compilation tool</li>
+</ul>
+</dd>
+<dt><strong>v0.5</strong>, 2010-03-30</dt>
+<dd><ul class="first last simple">
+<li>First public release</li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/yaafe.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="features.html" title="Yaafe core features"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">YAAFE v0.65</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3b2.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>
