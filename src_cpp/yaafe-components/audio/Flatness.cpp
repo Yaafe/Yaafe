@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -28,29 +28,29 @@
 namespace YAAFE
 {
 
-Flatness::Flatness()
-{
-}
+  Flatness::Flatness()
+  {
+  }
 
-Flatness::~Flatness()
-{
-}
+  Flatness::~Flatness()
+  {
+  }
 
-StreamInfo Flatness::init(const ParameterMap& params, const StreamInfo& in)
-{
-	return StreamInfo(in,1);
-}
+  StreamInfo Flatness::init(const ParameterMap& params, const StreamInfo& in)
+  {
+    return StreamInfo(in,1);
+  }
 
-void Flatness::processToken(double* inData, const int N, double* outData, const int outSize)
-{
-	assert(outSize==1);
-	double sum = 0;
-	double sumlog = 0;
-	for (int i=0;i<N;i++) {
-		sum += inData[i];
-		sumlog += log(inData[i]);
-	}
-	*outData = exp(sumlog / N) * N / sum;
-}
+  void Flatness::processToken(double* inData, const int N, double* outData, const int outSize)
+  {
+    assert(outSize==1);
+    double sum = 0;
+    double sumlog = 0;
+    for (int i=0;i<N;i++) {
+      sum += inData[i];
+      sumlog += log(inData[i]);
+    }
+    *outData = exp(sumlog / N) * N / sum;
+  }
 
 }

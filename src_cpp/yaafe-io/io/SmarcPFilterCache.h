@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -31,13 +31,13 @@
 namespace YAAFE
 {
 
-class SmarcPFilterCache {
-public:
-	static struct PFilter* getPFilter(int fsint, int fsout);
-	static void release();
-private:
-	static std::list<struct PFilter*> s_cache;
-};
+  class SmarcPFilterCache {
+   public:
+     static struct PFilter* getPFilter(int fsint, int fsout);
+     static void release();
+   private:
+     static std::list<struct PFilter*> s_cache;
+  };
 
 }
 

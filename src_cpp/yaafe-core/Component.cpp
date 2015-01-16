@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -33,50 +33,50 @@ using namespace std;
 namespace YAAFE
 {
 
-Component::Component()
-{
-}
+  Component::Component()
+  {
+  }
 
-Component::~Component()
-{
-}
+  Component::~Component()
+  {
+  }
 
-ParameterDescriptorList Component::getParameterDescriptorList() const
-{
+  ParameterDescriptorList Component::getParameterDescriptorList() const
+  {
     return ParameterDescriptorList();
-}
+  }
 
-const std::string EMPTY_STRING("");
+  const std::string EMPTY_STRING("");
 
-std::string Component::getStringParam(const std::string& id, const ParameterMap& params)
-{
+  std::string Component::getStringParam(const std::string& id, const ParameterMap& params)
+  {
     ParameterMap::const_iterator it=params.find(id);
     if (it!=params.end()) {
-    	if (it->second.size()==0) {
-    		cerr << "ERROR: parameter " << id << " is empty !" << endl;
-    		return EMPTY_STRING;
-    	}
-        return it->second;
+      if (it->second.size()==0) {
+        cerr << "ERROR: parameter " << id << " is empty !" << endl;
+        return EMPTY_STRING;
+      }
+      return it->second;
     }
     ParameterDescriptorList pList = getParameterDescriptorList();
     for (ParameterDescriptorList::const_iterator descIt=pList.begin();
-         descIt!=pList.end(); descIt++)
+        descIt!=pList.end(); descIt++)
     {
-    	if (descIt->m_identifier==id)
-    		return descIt->m_defaultValue;
+      if (descIt->m_identifier==id)
+        return descIt->m_defaultValue;
     }
     cerr << "ERROR: no parameter " << id << " for component " << getIdentifier() << " !" << endl;
     return EMPTY_STRING;
-}
+  }
 
-int Component::getIntParam(const std::string& id, const ParameterMap& params)
-{
+  int Component::getIntParam(const std::string& id, const ParameterMap& params)
+  {
     return atoi(getStringParam(id, params).c_str());
-}
+  }
 
-double Component::getDoubleParam(const std::string& id, const ParameterMap& params)
-{
+  double Component::getDoubleParam(const std::string& id, const ParameterMap& params)
+  {
     return atof(getStringParam(id, params).c_str());
-}
+  }
 
 }

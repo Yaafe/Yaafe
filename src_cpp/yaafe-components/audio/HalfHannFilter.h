@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,17 +32,17 @@
 
 namespace YAAFE {
 
-class HalfHannFilter: public YAAFE::TemporalFilter<HalfHannFilter> {
-public:
-	HalfHannFilter();
-	virtual ~HalfHannFilter();
+  class HalfHannFilter: public YAAFE::TemporalFilter<HalfHannFilter> {
+   public:
+     HalfHannFilter();
+     virtual ~HalfHannFilter();
 
-    virtual const std::string getIdentifier() const { return HALFHANNFILTER_ID;};
+     virtual const std::string getIdentifier() const { return HALFHANNFILTER_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool initFilter(const ParameterMap& params, const StreamInfo& in);
-};
+     virtual bool initFilter(const ParameterMap& params, const StreamInfo& in);
+  };
 
 }
 

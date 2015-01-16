@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,33 +32,33 @@
 namespace YAAFE
 {
 
-class HistogramIntegrator: public YAAFE::ComponentBase<HistogramIntegrator>
-{
-public:
-    HistogramIntegrator();
-    virtual ~HistogramIntegrator();
+  class HistogramIntegrator: public YAAFE::ComponentBase<HistogramIntegrator>
+  {
+   public:
+     HistogramIntegrator();
+     virtual ~HistogramIntegrator();
 
-    virtual const std::string getIdentifier() const { return HISTOGRAMINTEGRATOR_ID;};
+     virtual const std::string getIdentifier() const { return HISTOGRAMINTEGRATOR_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-    virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual void flush(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-private:
-    int m_nbFrames;
-    int m_stepNbFrames;
+   private:
+     int m_nbFrames;
+     int m_stepNbFrames;
 
-    double m_hinf;
-    double m_hsup;
-    double m_hstep;
-    int m_nbbins;
-    bool m_weigthed;
+     double m_hinf;
+     double m_hsup;
+     double m_hstep;
+     int m_nbbins;
+     bool m_weigthed;
 
-    void computeHistogram(const double* inData, int inSize, double* outData);
+     void computeHistogram(const double* inData, int inSize, double* outData);
 
-};
+  };
 
 }
 

@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -31,16 +31,16 @@
 
 namespace YAAFE {
 
-class RMS: public YAAFE::ComponentBase<RMS> {
-public:
-    RMS();
-    virtual ~RMS();
+  class RMS: public YAAFE::ComponentBase<RMS> {
+   public:
+     RMS();
+     virtual ~RMS();
 
-    const std::string getIdentifier() const { return RMS_ID; };
+     const std::string getIdentifier() const { return RMS_ID; };
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
-};
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+  };
 
 }
 

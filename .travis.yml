@@ -1,0 +1,39 @@
+language: python
+
+compiler:
+  - c++
+
+python:
+  - 2.7
+
+env:
+  - WITH_FFTW3=OFF WITH_HDF5=OFF WITH_LAPACK=OFF WITH_MPG123=OFF
+  - WITH_FFTW3=ON WITH_HDF5=OFF WITH_LAPACK=OFF WITH_MPG123=OFF
+  - WITH_FFTW3=OFF WITH_HDF5=ON WITH_LAPACK=OFF WITH_MPG123=OFF
+  - WITH_FFTW3=OFF WITH_HDF5=OFF WITH_LAPACK=ON WITH_MPG123=OFF
+  - WITH_FFTW3=OFF WITH_HDF5=OFF WITH_LAPACK=OFF WITH_MPG123=ON
+  - WITH_FFTW3=ON WITH_HDF5=ON WITH_LAPACK=ON WITH_MPG123=ON
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get install -qq cmake cmake-curses-gui libargtable2-0 libargtable2-dev
+  - sudo apt-get install -qq libsndfile1 libsndfile1-dev
+  - if [ ${WITH_MPG123} = "ON" ]; then sudo apt-get install -qq libmpg123-0 libmpg123-dev ; fi
+  - if [ ${WITH_FFTW3} = "ON" ]; then sudo apt-get install -qq libfftw3-3 libfftw3-dev ; fi
+  - if [ ${WITH_LAPACK} = "ON" ]; then sudo apt-get install -qq liblapack-dev ; fi
+  - if [ ${WITH_HDF5} = "ON" ]; then sudo apt-get install -qq libhdf5-serial-dev libhdf5-serial-1.8.4 ; fi
+  - pip install -r requirements.txt
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_INSTALL_PREFIX=$VIRTUAL_ENV -DWITH_FFTW3=$WITH_FFTW3 -DWITH_HDF5=$WITH_HDF5 -DWITH_LAPACK=$WITH_LAPACK -DWITH_MPG123=$WITH_MPG123 ..
+  - export LD_LIBRARY_PATH=$VIRTUAL_ENV/lib
+
+script:
+  - make
+  - make install
+  - make doctest
+

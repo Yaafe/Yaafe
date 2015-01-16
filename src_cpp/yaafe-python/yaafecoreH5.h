@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -27,7 +27,7 @@
 
 extern "C" {
 
-struct H5FeatureDescription {
+  struct H5FeatureDescription {
     char* name;
     int dim;
     int nbframes;
@@ -35,10 +35,10 @@ struct H5FeatureDescription {
     int blockSize;
     int stepSize;
     char** attrs;
-};
+  };
 
-struct H5FeatureDescription** readH5FeatureDescriptions(char* h5filename);
-void freeH5FeatureDescriptions(struct H5FeatureDescription** feats);
+  struct H5FeatureDescription** readH5FeatureDescriptions(char* h5filename);
+  void freeH5FeatureDescriptions(struct H5FeatureDescription** feats);
 
 }
 

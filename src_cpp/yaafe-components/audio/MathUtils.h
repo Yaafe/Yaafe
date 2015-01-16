@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,43 +32,44 @@
 
 namespace YAAFE {
 
-Eigen::VectorXd ehanning(int len);
-Eigen::VectorXd ehanningPeriodic(int len);
-Eigen::VectorXd ehamming(int len);
-Eigen::VectorXd ehammingPeriodic(int len);
+  Eigen::VectorXd ehanning(int len);
+  Eigen::VectorXd ehanningPeriodic(int len);
+  Eigen::VectorXd ehamming(int len);
+  Eigen::VectorXd ehammingPeriodic(int len);
 
-inline double pow2(double x) { return x*x; }
-inline double pow3(double x) { return x*x*x; }
-inline double pow4(double x) { return x*x*x*x; }
+  int nextpow2(int v);
+  inline double pow2(double x) { return x*x; }
+  inline double pow3(double x) { return x*x*x; }
+  inline double pow4(double x) { return x*x*x*x; }
 
-/**
- * Compute LPC coefficients from autocorrelation coefficients.
- * Return's LPC coefficients corresponding to lag 1 to nbCoeffs
- * Needs nbCoeffs+1 autocorrelation coefficients.
- */
-void ac2lpc(const double* ac, double* lpc, int nbCoeffs);
+  /**
+   * Compute LPC coefficients from autocorrelation coefficients.
+   * Return's LPC coefficients corresponding to lag 1 to nbCoeffs
+   * Needs nbCoeffs+1 autocorrelation coefficients.
+   */
+  void ac2lpc(const double* ac, double* lpc, int nbCoeffs);
 
 
 #ifdef WITH_LAPACK
-/**
- * Compute LSF from LPC coefficients.
- * If displacement <= 1, requires nbLSF LPC coefficients
- * if displacement > 1, requires nbLSF+1-displacement LPC coefficients
- */
-void a2lsf(const double* lpc, int displacement, double* lsf, int nbLSF);
+  /**
+   * Compute LSF from LPC coefficients.
+   * If displacement <= 1, requires nbLSF LPC coefficients
+   * if displacement > 1, requires nbLSF+1-displacement LPC coefficients
+   */
+  void a2lsf(const double* lpc, int displacement, double* lsf, int nbLSF);
 
-/**
- * Deconvolution and polynomial division
- * identical to matlab's deconv function
- */
-void deconv(double* a, int alen, const double* b, int blen);
+  /**
+   * Deconvolution and polynomial division
+   * identical to matlab's deconv function
+   */
+  void deconv(double* a, int alen, const double* b, int blen);
 
-/**
- * compute roots of polynomial defined by coefficients [ar[0] ar[1] ... ar[size-1]]
- * return real part and imaginary part in rootR and rootI arrays of size 'size-1'
- * with consecutive conjugate roots
- */
-void roots(const double* ar, int size,double* rootR,double* rootI, int* nbRoots);
+  /**
+   * compute roots of polynomial defined by coefficients [ar[0] ar[1] ... ar[size-1]]
+   * return real part and imaginary part in rootR and rootI arrays of size 'size-1'
+   * with consecutive conjugate roots
+   */
+  void roots(const double* ar, int size,double* rootR,double* rootI, int* nbRoots);
 #endif
 
 

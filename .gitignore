@@ -1,3 +1,9 @@
+venv
+*.pyc
+
+# the conf.py should be built from conf.py.in
+doc/doc_python/source/conf.py
+
 # cmake stuff
 CMakeCache.txt
 CMakeFiles/
@@ -6,7 +12,7 @@ cmake_install.cmake
 CPack*.cmake
 
 # vi stuff
-*.swp
+*.sw[op]
 
 # generated binaries
 libyaafe-*.so*

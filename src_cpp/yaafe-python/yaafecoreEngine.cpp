@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -33,156 +33,156 @@ using namespace YAAFE;
 using namespace std;
 
 void* engine_create() {
-	return new Engine();
+  return new Engine();
 }
 
 void engine_destroy(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	delete e;
+  Engine* e = static_cast<Engine*>(engine);
+  delete e;
 }
 
 int engine_load(void* engine, void* dataflow) {
-	Engine* e = static_cast<Engine*>(engine);
-	DataFlow* df = static_cast<DataFlow*>(dataflow);
-	return e->load(*df);
+  Engine* e = static_cast<Engine*>(engine);
+  DataFlow* df = static_cast<DataFlow*>(dataflow);
+  return e->load(*df);
 }
 
 char** engine_buildStrList(const vector<string>& vec) {
-	char** strList = (char**) malloc((vec.size()+1)*sizeof(char*));
-	for (int i=0;i<vec.size();i++)
-		strList[i] = strdup(vec[i].c_str());
-	strList[vec.size()] = NULL;
-	return strList;
+  char** strList = (char**) malloc((vec.size()+1)*sizeof(char*));
+  for (int i=0;i<vec.size();i++)
+    strList[i] = strdup(vec[i].c_str());
+  strList[vec.size()] = NULL;
+  return strList;
 }
 
 char** engine_getInputList(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	vector<string> inputs = e->getInputs();
-	return engine_buildStrList(inputs);
+  Engine* e = static_cast<Engine*>(engine);
+  vector<string> inputs = e->getInputs();
+  return engine_buildStrList(inputs);
 }
 
 char** engine_getOutputList(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	vector<string> outputs = e->getOutputs();
-	return engine_buildStrList(outputs);
+  Engine* e = static_cast<Engine*>(engine);
+  vector<string> outputs = e->getOutputs();
+  return engine_buildStrList(outputs);
 }
 
 void engine_freeIOList(char** strList) {
-	char** ptr = strList;
-	while (*ptr!=NULL) {
-		free(*ptr);
-		ptr++;
-	}
-	free(strList);
+  char** ptr = strList;
+  while (*ptr!=NULL) {
+    free(*ptr);
+    ptr++;
+  }
+  free(strList);
 }
 
 char** engine_buildParameterMap(const ParameterMap& params) {
-	char** out = (char**) malloc((params.size()*2+1)*sizeof(char*));
-	char** ptr = out;
-	for (ParameterMap::const_iterator it=params.begin();
-			it!=params.end(); it++)
-	{
-		ptr[0] = strdup(it->first.c_str());
-		ptr[1] = strdup(it->second.c_str());
-		ptr += 2;
-	}
-	*ptr = NULL;
-	return out;
+  char** out = (char**) malloc((params.size()*2+1)*sizeof(char*));
+  char** ptr = out;
+  for (ParameterMap::const_iterator it=params.begin();
+      it!=params.end(); it++)
+  {
+    ptr[0] = strdup(it->first.c_str());
+    ptr[1] = strdup(it->second.c_str());
+    ptr += 2;
+  }
+  *ptr = NULL;
+  return out;
 }
 
 struct IOInfo* engine_getInputInfos(void* engine,char* input) {
-	Engine* e = static_cast<Engine*>(engine);
-	OutputBuffer* buf = e->getInput(input);
-	if (buf==NULL)
-		return NULL;
-	ParameterMap params = e->getInputParams(input);
-	struct IOInfo* info = (struct IOInfo*) malloc(sizeof(struct IOInfo));
-	info->sampleRate = buf->info().sampleRate;
-	info->sampleStep = buf->info().sampleStep;
-	info->frameLength = buf->info().frameLength;
-	info->size = buf->info().size;
-	info->parameters = engine_buildParameterMap(params);
-	return info;
+  Engine* e = static_cast<Engine*>(engine);
+  OutputBuffer* buf = e->getInput(input);
+  if (buf==NULL)
+    return NULL;
+  ParameterMap params = e->getInputParams(input);
+  struct IOInfo* info = (struct IOInfo*) malloc(sizeof(struct IOInfo));
+  info->sampleRate = buf->info().sampleRate;
+  info->sampleStep = buf->info().sampleStep;
+  info->frameLength = buf->info().frameLength;
+  info->size = buf->info().size;
+  info->parameters = engine_buildParameterMap(params);
+  return info;
 }
 
 struct IOInfo* engine_getOutputInfos(void* engine, char* output) {
-	Engine* e = static_cast<Engine*>(engine);
-	InputBuffer* buf = e->getOutput(output);
-	if (buf==NULL)
-		return NULL;
-	ParameterMap params = e->getOutputParams(output);
-	struct IOInfo* info = (struct IOInfo*) malloc(sizeof(struct IOInfo));
-	info->sampleRate = buf->info().sampleRate;
-	info->sampleStep = buf->info().sampleStep;
-	info->frameLength = buf->info().frameLength;
-	info->size = buf->info().size;
-	info->parameters = engine_buildParameterMap(params);
-	return info;
+  Engine* e = static_cast<Engine*>(engine);
+  InputBuffer* buf = e->getOutput(output);
+  if (buf==NULL)
+    return NULL;
+  ParameterMap params = e->getOutputParams(output);
+  struct IOInfo* info = (struct IOInfo*) malloc(sizeof(struct IOInfo));
+  info->sampleRate = buf->info().sampleRate;
+  info->sampleStep = buf->info().sampleStep;
+  info->frameLength = buf->info().frameLength;
+  info->size = buf->info().size;
+  info->parameters = engine_buildParameterMap(params);
+  return info;
 }
 
 void engine_freeIOInfos(struct IOInfo* i) {
-	char** ptr = i->parameters;
-	while (*ptr!=NULL) {
-		free(*ptr);
-		ptr++;
-	}
-	free(i);
+  char** ptr = i->parameters;
+  while (*ptr!=NULL) {
+    free(*ptr);
+    ptr++;
+  }
+  free(i);
 }
 
 void engine_input_write(void* engine, char* input, double* data, int size, int nbtokens) {
-	Engine* e = static_cast<Engine*>(engine);
-	OutputBuffer* buf = e->getInput(input);
-	if (buf==NULL) {
-		cerr << "ERROR: unknown input " << input << endl;
-		return;
-	}
-	if (size!=buf->info().size) {
-		cerr << "ERROR: invalid input size ! input '" << input << "' has size " << buf->info().size << endl;
-		return;
-	}
-	buf->write(data,nbtokens);
+  Engine* e = static_cast<Engine*>(engine);
+  OutputBuffer* buf = e->getInput(input);
+  if (buf==NULL) {
+    cerr << "ERROR: unknown input " << input << endl;
+    return;
+  }
+  if (size!=buf->info().size) {
+    cerr << "ERROR: invalid input size ! input '" << input << "' has size " << buf->info().size << endl;
+    return;
+  }
+  buf->write(data,nbtokens);
 }
 
 void engine_output_available(void* engine, char* output, int* size, int* tokens) {
-	Engine* e = static_cast<Engine*>(engine);
-	InputBuffer* buf = e->getOutput(output);
-	if (buf==NULL) {
-		cerr << "ERROR: unknown output " << output << endl;
-		*tokens = -1;
-		return;
-	}
-	*size = buf->info().size;
-	*tokens = buf->availableTokens();
+  Engine* e = static_cast<Engine*>(engine);
+  InputBuffer* buf = e->getOutput(output);
+  if (buf==NULL) {
+    cerr << "ERROR: unknown output " << output << endl;
+    *tokens = -1;
+    return;
+  }
+  *size = buf->info().size;
+  *tokens = buf->availableTokens();
 }
 
 int engine_output_read(void* engine, char* output, double* data, int size, int maxtokens) {
-	Engine* e = static_cast<Engine*>(engine);
-	InputBuffer* buf = e->getOutput(output);
-	if (buf==NULL) {
-		cerr << "ERROR: unknown output " << output << endl;
-		return -1;
-	}
-	if (size!=buf->info().size) {
-		cerr << "ERROR: invalid output size ! output '" << output << "' has size " << buf->info().size << endl;
-		return -1;
-	}
-	int read = buf->read(data,maxtokens);
-	buf->consumeTokens(read);
-	return read;
+  Engine* e = static_cast<Engine*>(engine);
+  InputBuffer* buf = e->getOutput(output);
+  if (buf==NULL) {
+    cerr << "ERROR: unknown output " << output << endl;
+    return -1;
+  }
+  if (size!=buf->info().size) {
+    cerr << "ERROR: invalid output size ! output '" << output << "' has size " << buf->info().size << endl;
+    return -1;
+  }
+  int read = buf->read(data,maxtokens);
+  buf->consumeTokens(read);
+  return read;
 }
 
 void engine_reset(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	e->reset();
+  Engine* e = static_cast<Engine*>(engine);
+  e->reset();
 }
 
 int engine_process(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	return (e->process() ? 1 : 0);
+  Engine* e = static_cast<Engine*>(engine);
+  return (e->process() ? 1 : 0);
 }
 
 void engine_flush(void* engine) {
-	Engine* e = static_cast<Engine*>(engine);
-	e->flush();
+  Engine* e = static_cast<Engine*>(engine);
+  e->flush();
 }
 

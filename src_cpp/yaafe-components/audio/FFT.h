@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Jacques Prado, Benoit Mathieu
  *
@@ -38,28 +38,28 @@
 namespace YAAFE
 {
 
-class FFT: public YAAFE::StateLessOneInOneOutComponent<FFT>
-{
-public:
-    FFT();
-    virtual ~FFT();
+  class FFT: public YAAFE::StateLessOneInOneOutComponent<FFT>
+  {
+   public:
+     FFT();
+     virtual ~FFT();
 
-    const std::string getIdentifier() const { return FFT_ID; };
+     const std::string getIdentifier() const { return FFT_ID; };
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
 
-	StreamInfo init(const ParameterMap& params, const StreamInfo& in);
-	void processToken(double* inData, const int inSize, double* out, const int outSize);
+     StreamInfo init(const ParameterMap& params, const StreamInfo& in);
+     void processToken(double* inData, const int inSize, double* out, const int outSize);
 
-private:
-    Eigen::VectorXd m_window;
-    int m_nfft;
+   private:
+     Eigen::VectorXd m_window;
+     int m_nfft;
 #ifdef WITH_FFTW3
-    fftw_plan m_plan;
+     fftw_plan m_plan;
 #else
-    Eigen::FFT<double> m_plan;
+     Eigen::FFT<double> m_plan;
 #endif
-};
+  };
 
 }
 

@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,19 +32,19 @@
 namespace YAAFE
 {
 
-class AutoCorrelation: public YAAFE::StateLessOneInOneOutComponent<AutoCorrelation>
-{
-public:
-    AutoCorrelation();
-    virtual ~AutoCorrelation();
+  class AutoCorrelation: public YAAFE::StateLessOneInOneOutComponent<AutoCorrelation>
+  {
+   public:
+     AutoCorrelation();
+     virtual ~AutoCorrelation();
 
-    virtual const std::string getIdentifier() const { return AUTOCORRELATION_ID;};
+     virtual const std::string getIdentifier() const { return AUTOCORRELATION_ID;};
 
-    virtual ParameterDescriptorList getParameterDescriptorList() const;
-    StreamInfo init(const ParameterMap& params, const StreamInfo& in);
-    void processToken(double* inData, const int inSize, double* outData, const int outSize);
+     virtual ParameterDescriptorList getParameterDescriptorList() const;
+     StreamInfo init(const ParameterMap& params, const StreamInfo& in);
+     void processToken(double* inData, const int inSize, double* outData, const int outSize);
 
-};
+  };
 
 }
 

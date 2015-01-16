@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -32,18 +32,18 @@
 namespace YAAFE
 {
 
-class LoudnessSpread: public YAAFE::ComponentBase<LoudnessSpread>
-{
-public:
-    LoudnessSpread();
-    virtual ~LoudnessSpread();
+  class LoudnessSpread: public YAAFE::ComponentBase<LoudnessSpread>
+  {
+   public:
+     LoudnessSpread();
+     virtual ~LoudnessSpread();
 
-    virtual const std::string getIdentifier() const { return LOUDNESS_SPREAD_ID;};
+     virtual const std::string getIdentifier() const { return LOUDNESS_SPREAD_ID;};
 
-    virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
-    virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
+     virtual bool init(const ParameterMap& params, const Ports<StreamInfo>& in);
+     virtual bool process(Ports<InputBuffer*>& in, Ports<OutputBuffer*>& out);
 
-};
+  };
 
 }
 

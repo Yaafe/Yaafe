@@ -1,8 +1,8 @@
 /**
  * Yaafe
  *
- * Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
- * Télécom ParisTech / dept. TSI
+ * Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+ * TÃ©lÃ©com ParisTech / dept. TSI
  *
  * Author : Benoit Mathieu
  *
@@ -66,6 +66,19 @@
 #include "yaafe-components/audio/Sum.h"
 #include "yaafe-components/audio/Variation.h"
 #include "yaafe-components/audio/ZCR.h"
+#include "yaafe-components/audio/AdvancedFrameTokenizer.h"
+#include "yaafe-components/audio/CQT.h"
+#include "yaafe-components/audio/ChordDictDecoder.h"
+#include "yaafe-components/audio/Chroma2ChordDict.h"
+#include "yaafe-components/audio/ChromaReduce.h"
+#include "yaafe-components/audio/ChromaTune.h"
+#include "yaafe-components/audio/Chroma2.h"
+#include "yaafe-components/audio/Concatenate.h"
+#include "yaafe-components/audio/Decimate2.h"
+#include "yaafe-components/audio/DvornikovDifferentiator.h"
+#include "yaafe-components/audio/HistogramSummary.h"
+#include "yaafe-components/audio/LogCompression.h"
+#include "yaafe-components/audio/NormalizeMaxAll.h"
 
 #include "yaafe-components/flow/Join.h"
 
@@ -73,47 +86,60 @@ using namespace YAAFE;
 
 void registerYaafeComponents(void* componentFactory)
 {
-    ComponentFactory* factory = reinterpret_cast<ComponentFactory*>(componentFactory);
+  ComponentFactory* factory = reinterpret_cast<ComponentFactory*>(componentFactory);
 
-	factory->registerPrototype(new AC2LPC());
-	factory->registerPrototype(new Abs());
-	factory->registerPrototype(new AmplitudeModulation());
-	factory->registerPrototype(new AutoCorrelation());
-	factory->registerPrototype(new AutoCorrelationPeaksIntegrator());
-	factory->registerPrototype(new Cepstrum());
-	factory->registerPrototype(new ComplexDomainFlux());
-	factory->registerPrototype(new Decrease());
-	factory->registerPrototype(new Derivate());
-	factory->registerPrototype(new Difference());
-	factory->registerPrototype(new Envelope());
-	factory->registerPrototype(new FFT());
-	factory->registerPrototype(new FilterSmallValues());
-	factory->registerPrototype(new Flatness());
-	factory->registerPrototype(new Flux());
-	factory->registerPrototype(new FrameTokenizer());
-	factory->registerPrototype(new HalfHannFilter());
-	factory->registerPrototype(new HistogramIntegrator());
+  factory->registerPrototype(new AC2LPC());
+  factory->registerPrototype(new Abs());
+  factory->registerPrototype(new AmplitudeModulation());
+  factory->registerPrototype(new AutoCorrelation());
+  factory->registerPrototype(new AutoCorrelationPeaksIntegrator());
+  factory->registerPrototype(new Cepstrum());
+  factory->registerPrototype(new ComplexDomainFlux());
+  factory->registerPrototype(new Decrease());
+  factory->registerPrototype(new Derivate());
+  factory->registerPrototype(new Difference());
+  factory->registerPrototype(new Envelope());
+  factory->registerPrototype(new FFT());
+  factory->registerPrototype(new FilterSmallValues());
+  factory->registerPrototype(new Flatness());
+  factory->registerPrototype(new Flux());
+  factory->registerPrototype(new FrameTokenizer());
+  factory->registerPrototype(new HalfHannFilter());
+  factory->registerPrototype(new HistogramIntegrator());
 #ifdef WITH_LAPACK
-	factory->registerPrototype(new LPC2LSF());
+  factory->registerPrototype(new LPC2LSF());
 #endif
-	factory->registerPrototype(new SpecificLoudness());
-	factory->registerPrototype(new LoudnessSharpness());
-	factory->registerPrototype(new LoudnessSpread());
-	factory->registerPrototype(new MedianFilter());
-	factory->registerPrototype(new MelFilterBank());
-	factory->registerPrototype(new Normalize());
-	factory->registerPrototype(new OBSI());
-    factory->registerPrototype(new RMS());
-	factory->registerPrototype(new Rolloff());
-    factory->registerPrototype(new ShapeStatistics());
-	factory->registerPrototype(new Slope());
-	factory->registerPrototype(new SlopeIntegrator());
-	factory->registerPrototype(new Sqr());
-	factory->registerPrototype(new SpectralCrestFactorPerBand());
-    factory->registerPrototype(new SpectralFlatnessPerBand());
-	factory->registerPrototype(new StatisticalIntegrator());
-	factory->registerPrototype(new Sum());
-	factory->registerPrototype(new Variation());
-	factory->registerPrototype(new ZCR());
-    factory->registerPrototype(new Join());
+  factory->registerPrototype(new SpecificLoudness());
+  factory->registerPrototype(new LoudnessSharpness());
+  factory->registerPrototype(new LoudnessSpread());
+  factory->registerPrototype(new MedianFilter());
+  factory->registerPrototype(new MelFilterBank());
+  factory->registerPrototype(new Normalize());
+  factory->registerPrototype(new OBSI());
+  factory->registerPrototype(new RMS());
+  factory->registerPrototype(new Rolloff());
+  factory->registerPrototype(new ShapeStatistics());
+  factory->registerPrototype(new Slope());
+  factory->registerPrototype(new SlopeIntegrator());
+  factory->registerPrototype(new Sqr());
+  factory->registerPrototype(new SpectralCrestFactorPerBand());
+  factory->registerPrototype(new SpectralFlatnessPerBand());
+  factory->registerPrototype(new StatisticalIntegrator());
+  factory->registerPrototype(new Sum());
+  factory->registerPrototype(new Variation());
+  factory->registerPrototype(new ZCR());
+  factory->registerPrototype(new Join());
+  factory->registerPrototype(new AdvancedFrameTokenizer());
+  factory->registerPrototype(new CQT());
+  factory->registerPrototype(new ChordDictDecoder());
+  factory->registerPrototype(new Chroma2ChordDict());
+  factory->registerPrototype(new ChromaReduce());
+  factory->registerPrototype(new ChromaTune());
+  factory->registerPrototype(new Chroma2());
+  factory->registerPrototype(new Concatenate());
+  factory->registerPrototype(new Decimate2());
+  factory->registerPrototype(new DvornikovDifferentiator());
+  factory->registerPrototype(new HistogramSummary());
+  factory->registerPrototype(new LogCompression());
+  factory->registerPrototype(new NormalizeMaxAll());
 }
