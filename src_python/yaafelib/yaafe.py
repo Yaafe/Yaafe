@@ -173,6 +173,7 @@ def main():
                            normalize=(options.normalize_max
                                       if options.normalize else None),
                            resample=options.resample)
+
     if options.configFile:
         if not fp.loadFeaturePlan(options.configFile):
             return
@@ -180,6 +181,9 @@ def main():
         for feat in options.feature:
             if not fp.addFeature(feat):
                 return
+    else:
+        print "ERROR: please specify features using either a config file or -f [feature]"
+        return
 
     if options.dumpDataflow:
         fp.getDataFlow().save(options.dumpDataflow)
