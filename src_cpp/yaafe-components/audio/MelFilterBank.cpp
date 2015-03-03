@@ -73,6 +73,8 @@ namespace YAAFE
     double sampleRate = in.sampleRate;
     double freqMin = getDoubleParam("MelMinFreq",params);
     double freqMax = getDoubleParam("MelMaxFreq",params);
+    // set freqMax to Nyquist frequency if greater than nyquist frequency
+    freqMax = min(freqMax, sampleRate/2.0);
     double melFreqMin = 1127 * log(1 + freqMin / 700);
     double melFreqMax = 1127 * log(1 + freqMax / 700);
 
