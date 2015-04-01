@@ -53,3 +53,6 @@ Windows Native Compilation
 Native compilation under windows should be very similar to the description above, if you use the MingW compiler (gcc):
 http://www.mingw.org/
 
+A thorough tutorial is given in the following blogpost:
+https://crococode.wordpress.com/2015/04/01/compiling-yaafe-on-windows-using-cmake-and-mingw/
+Feel free to contact!
