@@ -210,6 +210,7 @@ namespace YAAFE
   bool DataFlow::loads(const std::string& df_str)
   {
     // fmemopen  http://www.delorie.com/gnu/docs/glibc/libc_228.html
+    #ifdef APPLE
     const char* buf = df_str.c_str();
     size_t buf_size = sizeof(char) * (df_str.size() + 1);
     FILE* yyin = fmemopen((void *)buf, buf_size, "r");
@@ -217,7 +218,9 @@ namespace YAAFE
       cerr << "cannot parse dataflow:" << endl << df_str << endl;
       return false;
     }
+
     return yyparse(yyin);
+    #endif
   }
 
   bool DataFlow::yyparse(FILE* yyin)
