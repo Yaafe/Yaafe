@@ -210,7 +210,7 @@ namespace YAAFE
   bool DataFlow::loads(const std::string& df_str)
   {
     // fmemopen  http://www.delorie.com/gnu/docs/glibc/libc_228.html
-    #ifdef APPLE
+    #ifdef __APPLE__
     const char* buf = df_str.c_str();
     size_t buf_size = sizeof(char) * (df_str.size() + 1);
     FILE* yyin = fmemopen((void *)buf, buf_size, "r");
