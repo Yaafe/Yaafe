@@ -1,10 +1,9 @@
 FROM debian:jessie
-MAINTAINER Thomas Fillon <fillon@fillon.com>
+MAINTAINER Thomas Fillon <thomas@parisson.com>
 
 # Install Debian dependencies
 RUN apt-get update
-RUN apt-get install -y cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-serial-dev bzip2
-
+RUN apt-get install -y cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-dev libeigen3-dev bzip2 wget gcc g++
 
 # Install conda in /opt/miniconda
 ENV PATH /opt/miniconda/bin:$PATH
@@ -13,8 +12,9 @@ RUN wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O 
     rm miniconda.sh && \
     hash -r && \
     conda config --set always_yes yes --set changeps1 yes && \
-    conda update -q conda && \
-    conda install numpy 
+    conda update -q conda
+RUN conda install numpy sphinx
+
 
 RUN mkdir /srv/src
 RUN mkdir /srv/src/yaafe
@@ -22,12 +22,17 @@ WORKDIR /srv/src/yaafe
 
 COPY . /srv/src/yaafe
 
+#RUN ln -s /usr/bin/g++ /opt/miniconda/bin/
+#RUN ln -s /usr/bin/gcc /opt/miniconda/bin/
+#RUN ls /opt/miniconda/bin/
+
 RUN mkdir build && \
     cd build && \
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local \
-          -DCMAKE_INSTALL_PYTHON_PACKAGES=/usr/local/lib/python2.7/dist-packages \
-          -DCMAKE_INSTALL_YAAFE_EXTENSIONS=/usr/local/lib/python2.7/dist-packages \
+    cmake -DCMAKE_INSTALL_PREFIX=/opt/miniconda/ \
+          -DCMAKE_INSTALL_PYTHON_PACKAGES=/opt/miniconda/lib/python2.7 \
+          -DCMAKE_INSTALL_YAAFE_EXTENSIONS=/opt/miniconda/lib/python2.7 \
           -DWITH_FFTW3=ON \
+	  -DHDF5_ROOT=/usr/lib/x86_64-linux-gnu/hdf5/serial/ \
           -DWITH_HDF5=ON \
           -DWITH_LAPACK=ON \
           -DWITH_MATLAB_MEX=OFF \
@@ -36,10 +41,11 @@ RUN mkdir build && \
           .. && \
     make && \
     make install && \
-    cd ../.. && \
-    rm -rf Yaafe-0.65.1 v0.65.1.tar.gz
+    cd ../.. 
 
-ENV LD_LIBRARY_PATH /usr/local/lib
-ENV YAAFE_PATH /usr/local/lib/python2.7/dist-packages
+
+
+#ENV LD_LIBRARY_PATH /usr/local/lib
+#ENV YAAFE_PATH /usr/local/lib/python2.7/dist-packages
 
 CMD ["/usr/local/bin/yaafe", "--help"]
