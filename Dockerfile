@@ -2,8 +2,20 @@ FROM debian:jessie
 MAINTAINER Thomas Fillon <thomas@parisson.com>
 
 # Install Debian dependencies
-RUN apt-get update
-RUN apt-get install -y cmake cmake-curses-gui libargtable2-0 libargtable2-dev libsndfile1 libsndfile1-dev libmpg123-0 libmpg123-dev libfftw3-3 libfftw3-dev liblapack-dev libhdf5-dev libeigen3-dev bzip2 wget gcc g++
+RUN apt-get update && apt-get install -y \
+    cmake \
+    cmake-curses-gui \ 
+    libargtable2-0 \ 
+    libargtable2-dev \ 
+    libsndfile1 libsndfile1-dev \ 
+    libmpg123-0 libmpg123-dev \ 
+    libfftw3-3 libfftw3-dev \ 
+    liblapack-dev \ 
+    libhdf5-dev \ 
+    libeigen3-dev \ 
+    bzip2 \ 
+    wget \ 
+    gcc g++
 
 # Install conda in /opt/miniconda
 ENV PATH /opt/miniconda/bin:$PATH
@@ -22,15 +34,10 @@ WORKDIR /srv/src/yaafe
 
 COPY . /srv/src/yaafe
 
-#RUN ln -s /usr/bin/g++ /opt/miniconda/bin/
-#RUN ln -s /usr/bin/gcc /opt/miniconda/bin/
-#RUN ls /opt/miniconda/bin/
-
 RUN mkdir build && \
     cd build && \
     cmake -DCMAKE_INSTALL_PREFIX=/opt/miniconda/ \
           -DCMAKE_INSTALL_PYTHON_PACKAGES=/opt/miniconda/lib/python2.7 \
-          -DCMAKE_INSTALL_YAAFE_EXTENSIONS=/opt/miniconda/lib/python2.7 \
           -DWITH_FFTW3=ON \
 	  -DHDF5_ROOT=/usr/lib/x86_64-linux-gnu/hdf5/serial/ \
           -DWITH_HDF5=ON \
@@ -43,9 +50,9 @@ RUN mkdir build && \
     make install && \
     cd ../.. 
 
+#ENV LD_LIBRARY_PATH /opt/miniconda/lib/
 
+COPY ./docker-entrypoint.sh /
 
-#ENV LD_LIBRARY_PATH /usr/local/lib
-#ENV YAAFE_PATH /usr/local/lib/python2.7/dist-packages
-
-CMD ["/usr/local/bin/yaafe", "--help"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["--help"]
