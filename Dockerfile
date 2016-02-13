@@ -27,7 +27,6 @@ RUN wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O 
     conda update -q conda
 RUN conda install numpy sphinx
 
-
 RUN mkdir /srv/src
 RUN mkdir /srv/src/yaafe
 WORKDIR /srv/src/yaafe
