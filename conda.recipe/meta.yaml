@@ -42,6 +42,7 @@ requirements:
   run:
     - python
     - hdf5
+    - libgcc
     - eigen
     - fftw
     - libsndfile
