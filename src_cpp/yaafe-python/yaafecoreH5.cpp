@@ -42,6 +42,7 @@
 #include "H5LTpublic.h"
 #include "H5Tpublic.h"
 #include "H5Apublic.h"
+#include "H5Ppublic.h"
 #endif
 
 using namespace std;
