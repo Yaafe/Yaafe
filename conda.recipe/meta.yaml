@@ -38,6 +38,7 @@ requirements:
     - libmpg123
     - argtable2
     - cmake
+    - lapack
   run:
     - python
     - hdf5
@@ -46,6 +47,7 @@ requirements:
     - libsndfile
     - libmpg123
     - argtable2
+    - lapack
 
 
 test:
