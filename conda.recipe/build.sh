@@ -3,6 +3,7 @@
 ls
 mkdir build
 cd build
+ls -l /opt/miniconda/envs/_build/lib/
 cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DDL_ROOT=/usr/lib/x86_64-linux-gnu/ -DWITH_FFTW3=ON -DWITH_HDF5=ON -DWITH_LAPACK=ON -DWITH_MPG123=ON ..
 make
 make install
