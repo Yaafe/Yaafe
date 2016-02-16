@@ -1,0 +1,81 @@
+package:
+  name: yaafe
+  version: !!str 0.65
+
+source:
+  path: ../
+  
+#  patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+ #detect_binary_files_with_prefix: true
+ rpaths:
+    - lib/
+ # preserve_egg_dir: True
+  # entry_points:
+    # Put any entry points (scripts to be generated automatically) here. The
+    # syntax is module:function.  For example
+    #
+    # - timeside = timeside:main
+    #
+    # Would create an entry point called timeside that calls timeside.main()
+
+
+  # If this is a new build for the same version, increment the build
+  # number. If you do not include this key, it defaults to 0.
+  # number: 1
+
+requirements:
+  build:
+    - python
+    - hdf5
+    - gcc
+    - eigen
+    - fftw
+    - libsndfile
+    - libmpg123
+    - argtable2
+    - cmake
+  run:
+    - python
+    - hdf5
+    - eigen
+    - fftw
+    - libsndfile
+    - libmpg123
+    - argtable2
+
+
+test:
+  files:
+    - yaafe_check.wav
+    - featureplan
+  # Python imports
+  imports:
+    - yaafelib
+
+  commands:
+    - yaafe -h
+    - yaafe -l
+    - yaafe -c featureplan  -r 32000 -o h5 yaafe_check.wav
+    - yaafe -c featureplan  -r 32000 -o csv yaafe_check.wav
+    # You can put test commands to be run here.  Use this to test that the
+    # entry points work.
+
+
+  # You can also put a file called run_test.py in the recipe that will be run
+  # at test time.
+
+  # requires:
+    #- pytest
+
+about:
+  home: https://github.com/Yaafe/Yaafe
+  license: Lesser Gnu Public License V2
+  summary: 'Yaafe - audio features extraction'
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
