@@ -8,10 +8,7 @@ engine:
   - python=2.7
 
 install:
-  - conda config --add channels thomasfillon # libmpg123, fftw
-   #- conda config --add channels menpo  # eigen, fftw3
-  - conda config --add channels cyclus  # lapack
-
+  - conda config --add channels thomasfillon
 
 script:
   - conda build conda.recipe
