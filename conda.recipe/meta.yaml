@@ -32,7 +32,6 @@ requirements:
     - python
     - hdf5
     - gcc
-    - glibc
     - eigen
     - fftw
     - libsndfile
@@ -44,7 +43,6 @@ requirements:
     - python
     - hdf5
     - libgcc
-    - glibc
     - eigen
     - fftw
     - libsndfile
