@@ -1,5 +1,5 @@
 package: yaafe
-user: thomasfillon
+user: yaafe
 
 platform:
   - linux-64
@@ -8,7 +8,7 @@ engine:
   - python=2.7
 
 install:
-  - conda config --add channels thomasfillon
+  - conda config --add channels yaafe
 
 script:
   - conda build conda.recipe

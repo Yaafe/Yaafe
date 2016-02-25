@@ -1,6 +1,6 @@
 package:
   name: yaafe
-  version: !!str 0.65
+  version: !!str 0.70
 
 source:
   path: ../
