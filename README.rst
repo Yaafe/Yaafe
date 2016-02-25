@@ -137,13 +137,13 @@ If you use Matlab, you can set your MATLABPATH var::
 Documentation
 =============
 
-Documentation is also available online: http://yaafe.sourceforge.net/
+Documentation is also available online: http://yaafe.github.io/Yaafe/ (mirror:  http://yaafe.sourceforge.net/)
 
 To build documentation, you need Sphinx.
 Before building documentation, you should set your environment correctly so that sphinx builds documentation
 with automatic features documentation.
 
-To build documentation, just run `make doc` in the `build` directory. Documentation is built in `doc/html`.
+To build documentation, just run `make doc_python` in the `build` directory. Documentation is built in `doc/doc_python/html`.
 
 License
 =======
