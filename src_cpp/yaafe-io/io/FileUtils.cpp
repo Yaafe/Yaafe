@@ -30,6 +30,7 @@
 // define for path delimiter
 #ifdef __WIN32
  #define YAAFE_PATH_DELIMITER "\\"
+ #include <windows.h>
 #else
  #define YAAFE_PATH_DELIMITER "/"
 #endif
@@ -58,7 +59,7 @@ namespace YAAFE
 	  }
 	// create dir
 #ifdef __WIN32
-        int res = mkdir(path.c_str());
+        int res = CreateDirectory(path.c_str(),NULL);
 #else
         int res = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #endif

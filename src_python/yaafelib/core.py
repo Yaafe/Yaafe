@@ -30,7 +30,7 @@ import sys
 
 # load C library
 if sys.platform.startswith("win32"):
-    yaafecore = cdll.LoadLibrary('libyaafecore.dll')
+    yaafecore = cdll.LoadLibrary('libyaafe-python.dll')
 else:
     yaafecore = cdll.LoadLibrary('libyaafe-python.so')
 
