@@ -49,7 +49,7 @@ RUN mkdir build && \
     make install && \
     cd ../.. 
 
-#ENV LD_LIBRARY_PATH /opt/miniconda/lib/
+ENV LD_LIBRARY_PATH /opt/miniconda/lib/
 
 COPY ./docker-entrypoint.sh /
 
