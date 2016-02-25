@@ -1,6 +1,21 @@
 Changelog
 =========
-**v0.7**, 2014-07-14
+**v0.70**, 2015-02-25
+    Major release.
+
+    * Merge `TPYaafeExtension - Télécom ParisTech Yaafe Extension <http://perso.telecom-paristech.fr/~essid/tp-yaafe-extension/>`_ into Yaafe.
+
+      TPYaafeExtension is an extension of the Yaafe toolbox, developed at `Télécom ParisTech <http://www.tsi.telecom-paristech.fr/aao/en/>`_. It provides several useful mid-level audio features (CQT, Chromas, Chords, ...).
+      It is now available under the LGPL licence and was thus merge into Yaafe.
+
+    * Improve Yaafe installation. See :doc:`manual/install`.
+
+      * For Linux-64: Add conda recipes and create conda packages for Yaafe and all its required or optional dependencies. Yaafe can thus now easily be installed in a conda environment.  See https://anaconda.org/Yaafe/yaafe.
+	Only available for Linux-64.
+	*OSX and Windows developers are very welcome to contribute to build conda recipes for these platform.*  
+      * Add docker support to easily deploy Yaafe on every platform. See https://hub.docker.com/r/yaafe/ 
+  
+    
 
 **v0.65**, 2015-01-13
     Bug fix and enhancement release
@@ -9,7 +24,7 @@ Changelog
     * Fix some memory leaks (see `Pull request #2 <https://github.com/Yaafe/Yaafe/pull/2>`_ and `Pull request #4 <https://github.com/Yaafe/Yaafe/pull/4>`_ 
     * Enhancement: support time_start, time_limit for MP3FileReader and AudioFileReader so that we can extract features in a specific time range.
     * Fix installation of Yaafe for windows, (see `Pull request #5 <https://github.com/Yaafe/Yaafe/pull/5>`_)
-    * Fix segmentation fault of timer (see `Pull request #5 <https://github.com/Yaafe/Yaafe/pull/6>`_)
+    * Fix segmentation fault of timer (see `Pull request #6 <https://github.com/Yaafe/Yaafe/pull/6>`_)
     * yaafe command line is now `yaafe`instead of `yaafe.py`
 
 **v0.64**, 2011-11-07
