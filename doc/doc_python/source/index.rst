@@ -24,7 +24,9 @@ Project's status
 .. |date| date::
 	  
 .. highlights::
-	Current version is Yaafe |version|,  this documentation was updated on |date|.
+
+	Current version is Yaafe |version|.  This documentation was updated on |date|.
+
 
 *Yaafe* may evolve in future versions, but current code is pretty stable and feature computation is already reliable.
 *Yaafe* is already used in some Music Information Retrieval systems.
@@ -47,6 +49,7 @@ Download
 Download current release on GitHub: `yaafe zip <https://github.com/Yaafe/Yaafe/archive/master.zip>`_, see :doc:`changelog <changelog>`.
 
 View all old releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
+
 
 Documentation
 -------------

@@ -98,7 +98,7 @@ The `argtable <http://argtable.sourceforge.net/>`_ library is required.
 Depending on optional features you want to use, other librairies may be used:
 
 * `libsndfile <http://www.mega-nerd.com/libsndfile/>`_: enable reading WAV files format (highly recommanded)
-* `libmpg123 <http://http://www.mpg123.de/api/>`_: enable reading MP3 audio files
+* `libmpg123 <http://www.mpg123.de/api/>`_: enable reading MP3 audio files
 * `HDF5 <http://www.hdfgroup.org/HDF5/>`_ >= 1.8: enable H5 output format
 * `liblapack <http://www.netlib.org/lapack/>`_: enable some audio features (LSF)
 * `FFTW3 <http://www.fftw.org/>`_: use FFTW instead of Eigen for FFT computations (pay attention to licensing issues when linking with the GPL FFTW3 library).

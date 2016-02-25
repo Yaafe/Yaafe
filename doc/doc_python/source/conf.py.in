@@ -158,7 +158,7 @@ html_sidebars = {
                  'manual': ['relations.html','searchbox.html', 'sidebar_tp_logo.html'],
                  'manual/*': ['manualtoc.html', 'relations.html', 'searchbox.html', 'sidebar_tp_logo.html'],
                  '*': ['localtoc.html', 'searchbox.html', 'sidebar_tp_logo.html'],
-} 
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
