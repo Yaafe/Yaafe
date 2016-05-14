@@ -22,6 +22,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 from yaafelib.audiofeature import AudioFeature
 from inspect import isclass
 
@@ -31,7 +33,7 @@ def generate_features_parameters(app, what_, name, obj, options, lines):
             not obj is AudioFeature):
         params = obj.get_parameters()
         if params:
-            params.sort(cmp=lambda x, y: cmp(x[0], y[0]))
+            params.sort(key=lambda x: x[0])
             lines.append('')
             lines.append('**Parameters**:')
             for key, defaultValue, desc in params:

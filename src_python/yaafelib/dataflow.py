@@ -22,8 +22,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
+import sys
 from ctypes import cast, c_char_p
 
+from yaafelib._compat import iteritems, to_char, to_str
 from yaafelib.core import yaafecore as yc
 from yaafelib.core import iterPtrList, iterPtrDict
 
@@ -61,7 +65,7 @@ class DataFlowNode(object):
     def __repr__(self):
         return 'DataFlowNode: %s %s' % (
             self.componentId(),
-            ' '.join(['%s=%s' % (k, v) for k, v in self.params().iteritems()]))
+            ' '.join(['%s=%s' % (k, v) for k, v in iteritems(self.params())]))
 
 
 class DataFlow(object):
@@ -104,7 +108,7 @@ class DataFlow(object):
             :type filename: string
             :return: True on success, False on fail.
         """
-        if yc.dataflow_load(self.ptr, filename):
+        if yc.dataflow_load(self.ptr, to_char(filename)):
             self.update_state()
             return True
         return False
@@ -118,7 +122,7 @@ class DataFlow(object):
             :type buf: string
             :return: True on success, False on fail.
         """
-        if yc.dataflow_loads(self.ptr, buf):
+        if yc.dataflow_loads(self.ptr, to_char(buf)):
             self.update_state()
             return True
         return False
@@ -130,7 +134,7 @@ class DataFlow(object):
             :param filename: file to write
             :type filename: string
         """
-        yc.dataflow_save(self.ptr, filename)
+        yc.dataflow_save(self.ptr, to_char(filename))
 
     def __str__(self):
         """
@@ -142,7 +146,7 @@ class DataFlow(object):
         ptr = yc.dataflow_stringify(self.ptr)
         buf = cast(ptr, c_char_p).value
         yc.free_dataflow_stringify(ptr)
-        return buf
+        return to_str(buf)
 
     def dumpdot(self, filename):
         """
@@ -151,7 +155,7 @@ class DataFlow(object):
             :param filename: file to write
             :type filename: string
         """
-        yc.dataflow_dumpdot(self.ptr, filename)
+        yc.dataflow_dumpdot(self.ptr, to_char(filename))
 
     def display(self):
         """
@@ -161,15 +165,16 @@ class DataFlow(object):
 
     def createNode(self, componentId, params):
         tmp = ((c_char_p*2)*(len(params)+1))()
-        tmp[:-1] = [(c_char_p*2)(c_char_p(k), c_char_p(v))
-                    for k, v in params.iteritems()]
-        return DataFlowNode(yc.dataflow_createNode(self.ptr, componentId, tmp))
+        tmp[:-1] = [(c_char_p*2)(c_char_p(to_char(k)), c_char_p(to_char(v)))
+                    for k, v in iteritems(params)]
+        return DataFlowNode(yc.dataflow_createNode(self.ptr,
+                                                   to_char(componentId), tmp))
 
     def setNodeName(self, node, name):
-        yc.dataflow_setNodeName(self.ptr, node.ptr, name)
+        yc.dataflow_setNodeName(self.ptr, node.ptr, to_char(name))
 
     def getNode(self, name):
-        ptr = yc.dataflow_getNode(self.ptr, name)
+        ptr = yc.dataflow_getNode(self.ptr, to_char(name))
         return DataFlowNode(ptr) if ptr else None
 
     def createInput(self, name, params):
@@ -183,8 +188,8 @@ class DataFlow(object):
         return n
 
     def link(self, sourceNode, sourcePort, targetNode, targetPort):
-        yc.dataflow_link(self.ptr, sourceNode.ptr, sourcePort, targetNode.ptr,
-                         targetPort)
+        yc.dataflow_link(self.ptr, sourceNode.ptr, to_char(sourcePort),
+                         targetNode.ptr, to_char(targetPort))
 
     def getNodes(self):
         out = yc.dataflow_getNodes(self.ptr)
@@ -211,7 +216,7 @@ class DataFlow(object):
         yc.dataflow_merge(self.ptr, dataflow.ptr)
 
     def useComponentLibrary(self, libname):
-        yc.dataflow_useComponentLibrary(self.ptr, libname)
+        yc.dataflow_useComponentLibrary(self.ptr, to_char(libname))
 
     def getComponentLibraries(self):
         out = yc.dataflow_getComponentLibraries(self.ptr)

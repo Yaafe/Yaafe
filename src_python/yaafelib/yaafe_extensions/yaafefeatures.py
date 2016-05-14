@@ -24,6 +24,9 @@
 '''
 Yaafe core audio features.
 '''
+
+from __future__ import absolute_import, print_function
+
 from yaafelib.audiofeature import (AudioFeature, check_dataflow_params,
                                    dataflow_safe_append)
 from yaafelib.dataflow import DataFlow
@@ -941,7 +944,7 @@ class CQT(AudioFeature):
 #        stepSize = int(params['stepSize'])
 #        if (stepSize % (2**(nbdecim+nboct-1)))!=0:
 #            stepSize = stepSize - stepSize % (2**(nbdecim+nboct-1))
-#            print 'WARNING: adjust stepSize to %i to make it compatible with successive decimation'%stepSize
+#            print('WARNING: adjust stepSize to %i to make it compatible with successive decimation'%stepSize)
         # compute octave CQT parameters
         Q = 2 / (2 ** (1.0 / int(params['CQTBinsPerOctave'])) - 1)
         fftLen = Q * float(samplerate / minFreq)
@@ -1053,11 +1056,11 @@ class Chroma2(AudioFeature):
             # adjust min freq to a divisor of tuning
             b = int(params['CQTBinsPerOctave'])
             if (b % 12 != 0):
-                print 'WARNING: in Chroma2, CQTBinsPerOctave must be multiple of 12'
+                print('WARNING: in Chroma2, CQTBinsPerOctave must be multiple of 12')
                 b = b - b % 12
                 if b == 0:
                     b = 12
-                print 'use CQTBinsPerOctave=%i' % b
+                print('use CQTBinsPerOctave=%i' % b)
             dev = b * math.log(tuning / fmin) / math.log(2)
             fmin *= pow(2.0, math.fmod(dev, 1) / b)
         params['CQTMinFreq'] = str(fmin)
@@ -1087,11 +1090,11 @@ class Chroma(AudioFeature):
     def get_dataflow(cls, params, samplerate):
         b = int(params['CQTBinsPerOctave'])
         if (b % 12 != 0):
-            print 'WARNING: in Chroma, CQTBinsPerOctave must be multiple of 12'
+            print('WARNING: in Chroma, CQTBinsPerOctave must be multiple of 12')
             b = b - b % 12
             if b == 0:
                 b = 12
-            print 'use CQTBinsPerOctave=%i' % b
+            print('use CQTBinsPerOctave=%i' % b)
             params['CQTBinsPerOctave'] = b
         df = CQT.get_dataflow(CQT.filter_params(params), samplerate)
         dataflow_safe_append(df, 'ChromaTune', params)

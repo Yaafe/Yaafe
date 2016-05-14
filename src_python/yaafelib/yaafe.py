@@ -24,17 +24,21 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
+from __future__ import absolute_import, print_function
+
 import sys
 from optparse import OptionParser
 
 try:
     import yaafelib as yaafe
-except ImportError, e:
-    print 'ERROR: cannot load yaafe packages: ', e
+except ImportError as e:
+    print('ERROR: cannot load yaafe packages: ', e)
     sys.exit()
 
+from yaafelib._compat import iteritems
+
 if (yaafe.loadComponentLibrary('yaafe-io') != 0):
-    print 'WARNING: cannot load yaafe-io component library !'
+    print('WARNING: cannot load yaafe-io component library !')
 output_format_choices = ['csv']
 if yaafe.isComponentAvailable('H5DatasetWriter'):
     output_format_choices.append('h5')
@@ -47,7 +51,7 @@ def listFeatures():
                   for feat in yaafe.AudioFeatureFactory.get_all_features()
                   if feat.TRANSFORM]
     if len(features) == 0:
-        print 'No features available ! Please check that YAAFE_PATH env var is set correctly.'
+        print('No features available ! Please check that YAAFE_PATH env var is set correctly.')
         return
     features.sort()
     transforms.sort()
@@ -59,41 +63,41 @@ def listFeatures():
     list_features.extend([' - '+f for f in yaafe.getOutputFormatList()])
 
     list_features_str = '\n'.join(list_features)
-    print list_features_str
+    print(list_features_str)
     return list_features_str
 
 
 def describeFeature(name):
     feat = yaafe.AudioFeatureFactory.get_feature(name)
-    print feat.__doc__
+    print(feat.__doc__)
     params = feat.get_parameters()
-    print 'Parameters are :'
+    print('Parameters are :')
     for (name, defaultValue, desc) in params:
-        print '- %s (default=%s): %s' % (name, defaultValue, desc)
+        print('- %s (default=%s): %s' % (name, defaultValue, desc))
 
 
 def describeOutputFormat(name):
-    print ''
-    print '[%s] %s' % (name, yaafe.getOutputFormatDescription(name))
-    print ''
-    print 'Parameters are:'
+    print('')
+    print('[%s] %s' % (name, yaafe.getOutputFormatDescription(name)))
+    print('')
+    print('Parameters are:')
     for (p, default, desc) in yaafe.getOutputFormatParameters(name):
-        print '- %s (default=%s): %s' % (p, default, desc)
+        print('- %s (default=%s): %s' % (p, default, desc))
 
 
 def showFeatures(h5file):
     fdict = yaafe.readH5FeatureDescriptions(h5file)
     if len(fdict) == 0:
-        print '%s contains no yaafe features' % h5file
+        print('%s contains no yaafe features' % h5file)
         return
-    for name, fd in fdict.iteritems():
-        print '%s [%ix%i] %iHz:' % (name, fd['dim'], fd['nbframes'],
-                                    fd['sampleRate'])
-        print '  - blockSize = %i' % fd['blockSize']
-        print '  - stepSize = %i' % fd['stepSize']
-        for key, val in fd['attrs'].iteritems():
-            print '  - %s = "%s"' % (key, val)
-        print ''
+    for name, fd in iteritems(fdict):
+        print('%s [%ix%i] %iHz:' % (name, fd['dim'], fd['nbframes'],
+                                    fd['sampleRate']))
+        print('  - blockSize = %i' % fd['blockSize'])
+        print('  - stepSize = %i' % fd['stepSize'])
+        for key, val in iteritems(fd['attrs']):
+            print('  - %s = "%s"' % (key, val))
+        print('')
 
 
 def main():
@@ -161,7 +165,7 @@ def main():
         showFeatures(options.showFeatures)
         return
     if not options.sample_rate:
-        print "ERROR: please specify sample rate !"
+        print("ERROR: please specify sample rate !")
         return
     if options.buffer_size:
         yaafe.setPreferedDataBlockSize(options.buffer_size)
@@ -182,7 +186,7 @@ def main():
             if not fp.addFeature(feat):
                 return
     else:
-        print "ERROR: please specify features using either a config file or -f [feature]"
+        print("ERROR: please specify features using either a config file or -f [feature]")
         return
 
     if options.dumpDataflow:
@@ -208,7 +212,7 @@ def main():
         for pstr in options.formatparams:
             pstrdata = pstr.split('=')
             if len(pstrdata) != 2:
-                print 'ERROR: invalid parameter syntax in "%s" (should be "key=value")' % pstr
+                print('ERROR: invalid parameter syntax in "%s" (should be "key=value")' % pstr)
                 return
             oparams[pstrdata[0]] = pstrdata[1]
         afp.setOutputFormat(options.format, options.out_dir, oparams)
