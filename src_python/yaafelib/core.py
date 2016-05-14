@@ -22,11 +22,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 from ctypes import (cdll, c_int, c_double, Structure,
                     POINTER, c_char_p, c_void_p,
                     cast)
 from itertools import count
 import sys
+
+from yaafelib._compat import to_char, to_str
 
 # load C library
 if sys.platform.startswith("win32"):
@@ -117,11 +121,11 @@ def getYaafeVersion():
 
 
 def loadComponentLibrary(name):
-    return yaafecore.loadComponentLibrary(name)
+    return yaafecore.loadComponentLibrary(to_char(name))
 
 
 def isComponentAvailable(name):
-    return True if yaafecore.isComponentAvailable(name) else False
+    return True if yaafecore.isComponentAvailable(to_char(name)) else False
 
 
 def getComponentList():
@@ -139,22 +143,23 @@ def getOutputFormatList():
 
 
 def getOutputFormatDescription(name):
-    ptr = yaafecore.getOutputFormatDescription(name)
+    ptr = yaafecore.getOutputFormatDescription(to_char(name))
     res = cast(ptr, c_char_p).value
     yaafecore.freeOutputFormatDescription(ptr)
     return res
 
 
 def getComponentParameters(name):
-    ptr = yaafecore.getComponentParameters(name)
-    res = [(p.contents.identifier, p.contents.defaultValue,
-            p.contents.description) for p in iterPtrList(ptr)]
+    ptr = yaafecore.getComponentParameters(to_char(name))
+    res = [(to_str(p.contents.identifier),
+            to_str(p.contents.defaultValue),
+            to_str(p.contents.description)) for p in iterPtrList(ptr)]
     yaafecore.freeComponentParameters(ptr)
     return res
 
 
 def getOutputFormatParameters(name):
-    ptr = yaafecore.getOutputFormatParameters(name)
+    ptr = yaafecore.getOutputFormatParameters(to_char(name))
     res = [(p.contents.identifier, p.contents.defaultValue,
             p.contents.description) for p in iterPtrList(ptr)]
     yaafecore.freeComponentParameters(ptr)
@@ -170,7 +175,7 @@ def setVerbose(flag):
 
 
 def readH5FeatureDescriptions(filename):
-    out = yaafecore.readH5FeatureDescriptions(filename)
+    out = yaafecore.readH5FeatureDescriptions(to_char(filename))
     res = {}
     if out:
         for featDesc in iterPtrList(out):

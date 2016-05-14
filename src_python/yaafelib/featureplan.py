@@ -22,6 +22,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 import yaafelib.core as yaafecore
 from yaafelib.dataflow import DataFlow
 from yaafelib.audiofeature import AudioFeatureFactory
@@ -105,7 +107,7 @@ class FeaturePlan(object):
         """
         data = definition.split(':')
         if not len(data) == 2:
-            print 'Syntax error in "%s"' % definition
+            print('Syntax error in "%s"' % definition)
             return False
         name, featdef = data
         dataflow = DataFlow()
@@ -122,11 +124,11 @@ class FeaturePlan(object):
                     if len(d) == 0:
                         continue
                     if not '=' in d:
-                        print 'Invalid feature parameter "%s"' % d
+                        print('Invalid feature parameter "%s"' % d)
                         return False
                     dd = d.split('=')
                     if not len(dd) == 2:
-                        print 'Syntax error in feature parameter "%s"' % d
+                        print('Syntax error in feature parameter "%s"' % d)
                         return False
                     params[dd[0]] = dd[1]
                 dataflow.append(feat.get_dataflow(params, self.sample_rate))

@@ -22,8 +22,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 from ctypes import c_int, pointer
 
+from yaafelib._compat import to_char, to_str
 from yaafelib.core import yaafecore as yc
 from yaafelib.core import iterPtrList, iterPtrDict
 from yaafelib.dataflow import DataFlow
@@ -165,7 +168,7 @@ class Engine(object):
         res = {}
         iList = yc.engine_getInputList(self.ptr)
         for inputname in iterPtrList(iList):
-            ptr = yc.engine_getInputInfos(self.ptr, inputname)
+            ptr = yc.engine_getInputInfos(self.ptr, to_char(inputname))
             infos = {}
             if ptr:
                 infos['sampleRate'] = ptr.contents.sampleRate
@@ -173,9 +176,10 @@ class Engine(object):
                 infos['frameLength'] = ptr.contents.frameLength
                 infos['size'] = ptr.contents.size
                 infos['parameters'] = dict(
-                    (k, v) for k, v in iterPtrDict(ptr.contents.parameters))
+                    (to_str(k), to_str(v))
+                    for k, v in iterPtrDict(ptr.contents.parameters))
                 yc.engine_freeIOInfos(ptr)
-            res[inputname] = infos
+            res[to_str(inputname)] = infos
         yc.engine_freeIOList(iList)
         return res
 
@@ -194,7 +198,7 @@ class Engine(object):
         res = {}
         oList = yc.engine_getOutputList(self.ptr)
         for outputname in iterPtrList(oList):
-            ptr = yc.engine_getOutputInfos(self.ptr, outputname)
+            ptr = yc.engine_getOutputInfos(self.ptr, to_char(outputname))
             infos = {}
             if ptr:
                 infos['sampleRate'] = ptr.contents.sampleRate
@@ -202,9 +206,10 @@ class Engine(object):
                 infos['frameLength'] = ptr.contents.frameLength
                 infos['size'] = ptr.contents.size
                 infos['parameters'] = dict(
-                    (k, v) for k, v in iterPtrDict(ptr.contents.parameters))
+                    (to_str(k), to_str(v))
+                    for k, v in iterPtrDict(ptr.contents.parameters))
                 yc.engine_freeIOInfos(ptr)
-            res[outputname] = infos
+            res[to_str(outputname)] = infos
         yc.engine_freeIOList(oList)
         return res
 
@@ -224,9 +229,9 @@ class Engine(object):
             size = data.shape[0]
             toks = data.shape[1]
         elif (len(data.shape) > 2):
-            print 'ERROR: data must be a 1-d or 2-d array !'
+            print('ERROR: data must be a 1-d or 2-d array !')
             return
-        yc.engine_input_write(self.ptr, name, data, size, toks)
+        yc.engine_input_write(self.ptr, to_char(name), data, size, toks)
 
     def readOutput(self, name):
         """
@@ -239,12 +244,12 @@ class Engine(object):
         import numpy as np
         size = c_int(0)
         tokens = c_int(0)
-        yc.engine_output_available(self.ptr, name, pointer(size),
+        yc.engine_output_available(self.ptr, to_char(name), pointer(size),
                                    pointer(tokens))
         if tokens == 0:
             return None
         data = np.zeros((tokens.value, size.value))
-        yc.engine_output_read(self.ptr, name, data, data.shape[1],
+        yc.engine_output_read(self.ptr, to_char(name), data, data.shape[1],
                               data.shape[0])
         return data
 
@@ -258,7 +263,7 @@ class Engine(object):
         res = {}
         oList = yc.engine_getOutputList(self.ptr)
         for o in iterPtrList(oList):
-            res[o] = self.readOutput(o)
+            res[to_str(o)] = self.readOutput(o)
         return res
 
     def reset(self):
