@@ -88,6 +88,19 @@ namespace YAAFE {
   std::string OutputFormat::filenameConcat(const std::string& outDir,
       const std::string& filename, const std::string& suffix)
   {
+   #ifdef __WIN32
+      string outfile = "";
+      if (outDir.size()==0)
+        outfile = filename;
+      else{
+        if (outDir[outDir.size()-1]!='\\')
+            outfile = outDir + filename.substr(2);
+        else
+            outfile = outDir + filename.substr(3);
+      }
+      return outfile + suffix;
+
+   #else
     string outfile = "";
     if (filename[0]=='/') {
       if (outDir.size()==0)
@@ -105,6 +118,7 @@ namespace YAAFE {
         outfile = outDir + filename;
     }
     return outfile + suffix;
+    #endif
   }
 
   void OutputFormat::eraseParameterDescriptor(ParameterDescriptorList& list,
