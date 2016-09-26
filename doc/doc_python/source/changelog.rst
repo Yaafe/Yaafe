@@ -14,14 +14,19 @@ Changelog
 	Only available for Linux-64.
 	*OSX and Windows developers are very welcome to contribute to build conda recipes for these platform.*  
       * Add docker support to easily deploy Yaafe on every platform. See https://hub.docker.com/r/yaafe/ 
-  
-    
+    * Improve documentation:
+      * Clean-up and fix thanks to `Pull request #16 <https://github.com/Yaafe/Yaafe/pull/16>`_ and `Pull request #7 <https://github.com/Yaafe/Yaafe/pull/7>`_
+      * Fix windows native compilation thanks to `Pull request #13 <https://github.com/Yaafe/Yaafe/pull/13>`_ 
+    * Fix and improve `Yaafe` python command line tool:
+      * Improve MFCC by limiting the max frequency of Mel filterbank to Nyquist frequency with  `Pull request #12 <https://github.com/Yaafe/Yaafe/pull/12>`_ 
+      * Add meaningful error message when -f missing from command with `Pull request #11 <https://github.com/Yaafe/Yaafe/pull/11>`_  
+
 
 **v0.65**, 2015-01-13
     Bug fix and enhancement release
 
     * First release after having moved the repository to Github
-    * Fix some memory leaks (see `Pull request #2 <https://github.com/Yaafe/Yaafe/pull/2>`_ and `Pull request #4 <https://github.com/Yaafe/Yaafe/pull/4>`_ 
+    * Fix some memory leaks (see `Pull request #2 <https://github.com/Yaafe/Yaafe/pull/2>`_ and `Pull request #4 <https://github.com/Yaafe/Yaafe/pull/4>`_ )
     * Enhancement: support time_start, time_limit for MP3FileReader and AudioFileReader so that we can extract features in a specific time range.
     * Fix installation of Yaafe for windows, (see `Pull request #5 <https://github.com/Yaafe/Yaafe/pull/5>`_)
     * Fix segmentation fault of timer (see `Pull request #6 <https://github.com/Yaafe/Yaafe/pull/6>`_)
