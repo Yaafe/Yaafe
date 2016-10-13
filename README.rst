@@ -139,7 +139,7 @@ There are 3 ways to solve this problem :
 
 * You can move the files to a site-package folder that is in your PYTHONPATH::
 
-	mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print filter(re.compile(".*site-packages$").match, sys.path)[0]'`
+ mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print filter(re.compile(".*site-packages$").match, sys.path)[0]'`
 	
 
 If you use Matlab, you can set your MATLABPATH var::
