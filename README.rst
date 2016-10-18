@@ -40,7 +40,13 @@ Yaafe can be easily install with `conda <http://conda.pydata.org>`_. To install 
 
 Docker
 ------
-Yaafe can also be install through `Docker <https://www.docker.com/>`_.
+
+.. |docker| image:: https://badge.imagelayers.io/yaafe/yaafe:latest.svg
+   :target: https://imagelayers.io/?images=yaafe/yaafe:latest
+
+|docker|
+
+Yaafe can also be install through `Docker <https://www.docker.com/>`_. 
 
 Get the official *Yaafe* image from `Yaafe repository on Docker Hub <https://hub.docker.com/r/yaafe/yaafe/>`_::
   
