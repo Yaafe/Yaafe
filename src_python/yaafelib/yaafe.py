@@ -3,8 +3,8 @@
 #
 # Yaafe
 #
-# Copyright (c) 2009-2010 Institut Télécom - Télécom Paristech
-# Télécom ParisTech / dept. TSI
+# Copyright (c) 2009-2010 Institut TÃ©lÃ©com - TÃ©lÃ©com Paristech
+# TÃ©lÃ©com ParisTech / dept. TSI
 #
 # Author : Benoit Mathieu
 #
@@ -113,7 +113,7 @@ def main():
                       help='feature extraction plan')
     parser.add_option('-r', '--rate', dest='sample_rate', type='int',
                       default=None,
-                      help='working samplerate in Hz. If not set, use input file sample rate. ')
+                      help='working samplerate in Hz.')
     parser.add_option('', '--resample', dest='resample', action='store_true',
                       default=False,
                       help='Resample input signal to the analysis sample rate')
