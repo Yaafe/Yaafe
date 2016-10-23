@@ -1,0 +1,1679 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Yaafe core features &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.70',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="index.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="6. Extending Yaafe" href="manual/extending.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-yaafelib.yaafe_extensions.yaafefeatures">
+<span id="yaafe-core-features"></span><span id="audio-features"></span><h1>Yaafe core features<a class="headerlink" href="#module-yaafelib.yaafe_extensions.yaafefeatures" title="Permalink to this headline">¶</a></h1>
+<p>Yaafe core audio features.</p>
+<div class="section" id="available-features">
+<h2>Available features<a class="headerlink" href="#available-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="amplitudemodulation">
+<h3>AmplitudeModulation<a class="headerlink" href="#amplitudemodulation" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.AmplitudeModulation">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">AmplitudeModulation</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.AmplitudeModulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tremelo and Grain description, according to <a class="reference internal" href="#se2005" id="id1">[SE2005]</a> and <a class="reference internal" href="#ae2001" id="id2">[AE2001]</a>.</p>
+<p>AmplitudeModulation uses <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Envelope" title="yaafelib.yaafe_extensions.yaafefeatures.Envelope"><code class="xref py py-class docutils literal"><span class="pre">Envelope</span></code></a> to describe tremolo and grain.
+Analyzed frequency ranges are :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Tremolo : 4 - 8 Hz</li>
+<li>Grain : 10 - 40 Hz</li>
+</ul>
+</div></blockquote>
+<p>For each of these ranges, it computes :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Frequency of maximum energy in range</li>
+<li>Difference of the energy of this frequency and the mean energy over all
+frequencies</li>
+<li>Difference of the energy of this frequency and the mean energy in range</li>
+<li>Product of the two first values.</li>
+</ol>
+</div></blockquote>
+<table class="docutils citation" frame="void" id="ae2001" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[AE2001]</a></td><td>A.Eronen, <em>Automatic musical instrument recognition.</em> Master&#8217;s
+Thesis, Tempere University of Technology, 2001.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">EnDecim</span></code> (default=200): Decimation factor to compute envelope</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=32768): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=16384): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>AmplitudeModulation EnDecim=200  blockSize=32768  stepSize=16384
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Envelope" title="yaafelib.yaafe_extensions.yaafefeatures.Envelope"><code class="xref py py-class docutils literal"><span class="pre">Envelope</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="autocorrelation">
+<h3>AutoCorrelation<a class="headerlink" href="#autocorrelation" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelation">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">AutoCorrelation</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute autocorrelation coefficients <em>ac</em> on each frames.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">ac(k) = \sum_{i=0}^{N-k-1}x(i)x(i+k)
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">ACNbCoeffs</span></code> (default=49): Number of autocorrelation coefficients to keep</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>AutoCorrelation ACNbCoeffs=49  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="beathistogramsummary">
+<h3>BeatHistogramSummary<a class="headerlink" href="#beathistogramsummary" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.BeatHistogramSummary">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">BeatHistogramSummary</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.BeatHistogramSummary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the beat histogram according to <a class="reference internal" href="#gt2002" id="id3">[GT2002]</a>,
+but using <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction" title="yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction"><code class="xref py py-class docutils literal"><span class="pre">OnsetDetectionFunction</span></code></a> as onset detection function.</p>
+<table class="docutils citation" frame="void" id="gt2002" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[GT2002]</a></td><td>Georges Tzanetakis,</td></tr>
+</tbody>
+</table>
+<p><em>Musical Genre Classification of Audio Signals</em>,
+IEEE Transactions on speech and audio processing, vol. 10, No. 5, July 2002.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">ACPNbPeaks</span></code> (default=3): Number of autocorrelation peaks to keep</li>
+<li><code class="docutils literal"><span class="pre">BHSBeatFrameSize</span></code> (default=128): Number of frames over which autocorrelation peaks is computed</li>
+<li><code class="docutils literal"><span class="pre">BHSBeatFrameStep</span></code> (default=64): Number of frames to skip between two consecutive autocorrelation peaks computation</li>
+<li><code class="docutils literal"><span class="pre">BHSHistogramFrameSize</span></code> (default=40): Number of beat frames over which histogram is computed</li>
+<li><code class="docutils literal"><span class="pre">BHSHistogramFrameStep</span></code> (default=40): Number of beat frames to skip between two consecutive histogram computation</li>
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">HInf</span></code> (default=40): Minimal BPM to take into consideration</li>
+<li><code class="docutils literal"><span class="pre">HNbBins</span></code> (default=80): Nb bins of histogram</li>
+<li><code class="docutils literal"><span class="pre">HSup</span></code> (default=200): Maximal BPM to tage into consideration</li>
+<li><code class="docutils literal"><span class="pre">NMANbFrames</span></code> (default=5000): Number of frames to normalize together, -1 means all frames</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>BeatHistogramSummary ACPNbPeaks=3  BHSBeatFrameSize=128  BHSBeatFrameStep=64  BHSHistogramFrameSize=40  BHSHistogramFrameStep=40  FFTLength=0  FFTWindow=Hanning  HInf=40  HNbBins=80  HSup=200  NMANbFrames=5000  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction" title="yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction"><code class="xref py py-class docutils literal"><span class="pre">OnsetDetectionFunction</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="cqt">
+<h3>CQT<a class="headerlink" href="#cqt" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.CQT">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">CQT</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.CQT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Constant-Q transform according to <a class="reference internal" href="#cs2010" id="id4">[CS2010]</a>
+with improvements from <a class="reference internal" href="#jpcqt" id="id5">[JPCQT]</a>.</p>
+<table class="docutils citation" frame="void" id="cs2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[CS2010]</a></td><td>C.Schörkhuber and A.Klapuri, <em>CONSTANT-Q TRANSFORM TOOLBOX FOR MUSIC PROCESSING</em>, 7th Sound and Music Conference (SMC&#8216;2010), 2010, Barcelona.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="jpcqt" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[JPCQT]</a></td><td>J.Prado, <em>Calcul rapide de la transformée à Q constant</em>, <a class="reference external" href="http://perso.telecom-paristech.fr/~prado/cqt/cqt_modif.pdf">http://perso.telecom-paristech.fr/~prado/cqt/cqt_modif.pdf</a></td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CQTAlign</span></code> (default=c): Alignment of cqt kernels on analysis frame. &#8216;l&#8217; to the left, &#8216;c&#8217; to the center, &#8216;r&#8217; to the right</li>
+<li><code class="docutils literal"><span class="pre">CQTBinsPerOctave</span></code> (default=36): Number of bins per octave to consider</li>
+<li><code class="docutils literal"><span class="pre">CQTMinFreq</span></code> (default=73.42): Minimal frequency. If &lt;0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">CQTNbOctaves</span></code> (default=3): Number of octaves to consider for analysis</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>CQT CQTAlign=c  CQTBinsPerOctave=36  CQTMinFreq=73.42  CQTNbOctaves=3  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="cqt2">
+<h3>CQT2<a class="headerlink" href="#cqt2" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.CQT2">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">CQT2</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.CQT2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Constant-Q transform
+according to Blankertz&#8217;s implementation <a class="reference internal" href="#bb" id="id6">[BB]</a>, with improvments
+from <a class="reference internal" href="#jp2010" id="id7">[JP2010]</a>.</p>
+<table class="docutils citation" frame="void" id="bb" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[BB]</a></td><td>B.Blankertz, <em>The Constant Q Transform</em>, <a class="reference external" href="http://wwwmath.uni-muenster.de/logik/Personen/blankertz/constQ/constQ.html">http://wwwmath.uni-muenster.de/logik/Personen/blankertz/constQ/constQ.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="jp2010" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[JP2010]</a></td><td>J.Prado, <em>Transformée à Q constant</em>, technical report 2010D004, Institut TELECOM, TELECOM ParisTech, CNRS LTCI, 2010.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CQTAlign</span></code> (default=c): Alignment of cqt kernels on analysis frame. &#8216;l&#8217; to the left, &#8216;c&#8217; to the center, &#8216;r&#8217; to the right</li>
+<li><code class="docutils literal"><span class="pre">CQTBinsPerOctave</span></code> (default=3): Number of bins per octave to consider</li>
+<li><code class="docutils literal"><span class="pre">CQTMaxFreq</span></code> (default=0.5): Maximum frequency. 0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">CQTMinFreq</span></code> (default=97.999): Minimal frequency. If &lt;0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>CQT2 CQTAlign=c  CQTBinsPerOctave=3  CQTMaxFreq=0.5  CQTMinFreq=97.999  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="chords">
+<h3>Chords<a class="headerlink" href="#chords" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Chords">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Chords</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Chords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chords recognize chords from chromagrams, according to L.Oudre&#8217;s algorithm <a class="reference internal" href="#lo2011" id="id8">[LO2011]</a>.</p>
+<table class="docutils citation" frame="void" id="lo2011" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[LO2011]</a></td><td>Oudre, L. and Grenier, Y. and Fevotte, C., <em>Chord recognition by fitting rescaled chroma vectors to chord templates</em>, IEEE Transactions on Audio, Speech and Language Processing, vol. 19, pages 2222 - 2233, Sep. 2011.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">ChordsSmoothing</span></code> (default=1.5s): Chords smoothing duration</li>
+<li><code class="docutils literal"><span class="pre">ChordsUse7</span></code> (default=0): If 1 then use 7th chords to enrich chord dictionnary, else use only major an minor chords</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Chords ChordsSmoothing=1.5s  ChordsUse7=0  stepSize=512
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="chroma">
+<h3>Chroma<a class="headerlink" href="#chroma" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Chroma">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Chroma</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Chroma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chroma compute short-term chromagram according to <a class="reference internal" href="#bp2005" id="id9">[BP2005]</a>.</p>
+<table class="docutils citation" frame="void" id="bp2005" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[BP2005]</a></td><td>Bello, J.P. and Pickens, J. <em>A Robust Mid-level Representation for Harmonic Content in Music Signals.</em> In Proceedings of the 6th International Conference on Music Information Retrieval (ISMIR-05), London, UK. September 2005.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CQTAlign</span></code> (default=c): Alignment of cqt kernels on analysis frame. &#8216;l&#8217; to the left, &#8216;c&#8217; to the center, &#8216;r&#8217; to the right</li>
+<li><code class="docutils literal"><span class="pre">CQTBinsPerOctave</span></code> (default=36): Number of bins per octave to consider</li>
+<li><code class="docutils literal"><span class="pre">CQTMinFreq</span></code> (default=73.42): Minimal frequency. If &lt;0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">CQTNbOctaves</span></code> (default=3): Number of octaves to consider for analysis</li>
+<li><code class="docutils literal"><span class="pre">CTInitDuration</span></code> (default=15): Duration on which perform chroma bias initialisation, in seconds.</li>
+<li><code class="docutils literal"><span class="pre">ChromaSmoothing</span></code> (default=0.75s): Chroma smoothing duration</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Chroma CQTAlign=c  CQTBinsPerOctave=36  CQTMinFreq=73.42  CQTNbOctaves=3  CTInitDuration=15  ChromaSmoothing=0.75s  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.CQT" title="yaafelib.yaafe_extensions.yaafefeatures.CQT"><code class="xref py py-class docutils literal"><span class="pre">CQT</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="chroma2">
+<h3>Chroma2<a class="headerlink" href="#chroma2" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Chroma2">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Chroma2</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Chroma2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chroma2 compute short-term pitch profile according to <a class="reference internal" href="#zk2006" id="id10">[ZK2006]</a>.</p>
+<table class="docutils citation" frame="void" id="zk2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[ZK2006]</a></td><td><ol class="first last upperalpha simple" start="25">
+<li>Zhu and M.S. Kankanhalli. <em>Precise pitch profile feature extraction from musical audio for key detection.</em> IEEE Transactions on Multimedia, 2006.</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CQTAlign</span></code> (default=c): Alignment of cqt kernels on analysis frame. &#8216;l&#8217; to the left, &#8216;c&#8217; to the center, &#8216;r&#8217; to the right</li>
+<li><code class="docutils literal"><span class="pre">CQTBinsPerOctave</span></code> (default=48): Number of bins per octave to consider</li>
+<li><code class="docutils literal"><span class="pre">CQTMinFreq</span></code> (default=27.5): Minimal frequency. If &lt;0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">CQTNbOctaves</span></code> (default=7): Number of octaves to consider for analysis</li>
+<li><code class="docutils literal"><span class="pre">CZBinsPerSemitone</span></code> (default=1): number of bins per semitone for the PCP</li>
+<li><code class="docutils literal"><span class="pre">CZNbCQTBinsAggregatedToPCPBin</span></code> (default=-1): number of CQT bins which are aggregated for each PCP bin. if -1 then use CQTBinsPerOctave / 24</li>
+<li><code class="docutils literal"><span class="pre">CZTuning</span></code> (default=440): frequency of the A4, in Hz.</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Chroma2 CQTAlign=c  CQTBinsPerOctave=48  CQTMinFreq=27.5  CQTNbOctaves=7  CZBinsPerSemitone=1  CZNbCQTBinsAggregatedToPCPBin=-1  CZTuning=440  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.CQT" title="yaafelib.yaafe_extensions.yaafefeatures.CQT"><code class="xref py py-class docutils literal"><span class="pre">CQT</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="complexdomainonsetdetection">
+<h3>ComplexDomainOnsetDetection<a class="headerlink" href="#complexdomainonsetdetection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.ComplexDomainOnsetDetection">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">ComplexDomainOnsetDetection</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.ComplexDomainOnsetDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute onset detection using a complex domain spectral flux
+method <a class="reference internal" href="#cd2003" id="id11">[CD2003]</a>.</p>
+<table class="docutils citation" frame="void" id="cd2003" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[CD2003]</a></td><td>C.Duxbury et al., <em>Complex domain onset detection for musical
+signals</em>, Proc. of the 6th Int. Conference on Digital Audio
+Effects (DAFx-03), London, UK, September 8-11, 2003</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>ComplexDomainOnsetDetection FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="energy">
+<h3>Energy<a class="headerlink" href="#energy" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Energy">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Energy</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute energy as root mean square of an audio Frame.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">en = \sqrt\frac{\sum_{i=0}^{N-1}x(i)^2}{N}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Energy blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="envelope">
+<h3>Envelope<a class="headerlink" href="#envelope" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Envelope">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Envelope</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Envelope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract amplitude envelope using hilbert transform, low-pass filtering and
+decimation.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">EnDecim</span></code> (default=200): Decimation factor to compute envelope</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=32768): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=16384): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Envelope EnDecim=200  blockSize=32768  stepSize=16384
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="envelopeshapestatistics">
+<h3>EnvelopeShapeStatistics<a class="headerlink" href="#envelopeshapestatistics" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.EnvelopeShapeStatistics">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">EnvelopeShapeStatistics</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.EnvelopeShapeStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Centroid, spread, skewness and kurtosis of each frame&#8217;s amplitude envelope.
+For more details about moments,
+see <a class="reference internal" href="#shapestatistics"><span class="std std-ref">Shape Statistics</span></a>.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">EnDecim</span></code> (default=200): Decimation factor to compute envelope</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=32768): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=16384): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>EnvelopeShapeStatistics EnDecim=200  blockSize=32768  stepSize=16384
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Envelope" title="yaafelib.yaafe_extensions.yaafefeatures.Envelope"><code class="xref py py-class docutils literal"><span class="pre">Envelope</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="frames">
+<h3>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Frames">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Frames</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segment input signal into frames.</p>
+<p>First frame has zeros on left half so that it is centered on time 0s,
+then consecutive frames are equally spaced.  Consequently,
+frame <em>i</em> (starting from 0) is centered on sample <em>i</em> * <em>stepSize</em>.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Frames blockSize=1024  stepSize=512
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="lpc">
+<h3>LPC<a class="headerlink" href="#lpc" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.LPC">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">LPC</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.LPC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Linear Predictor Coefficients (LPC) of a signal frame.
+It uses autocorrelation and Levinson-Durbin algorithm. see <a class="reference internal" href="#jm1975" id="id12">[JM1975]</a>.</p>
+<table class="docutils citation" frame="void" id="jm1975" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id12">[JM1975]</a></td><td>Makoul J., <em>Linear Prediction: A tutorial Review</em>,
+Proc. IEEE, Vol. 63, pp. 561-580, 1975.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">LPCNbCoeffs</span></code> (default=2): Number of Linear Predictor Coefficients to compute</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>LPC LPCNbCoeffs=2  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelation" title="yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelation"><code class="xref py py-class docutils literal"><span class="pre">AutoCorrelation</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="lsf">
+<h3>LSF<a class="headerlink" href="#lsf" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.LSF">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">LSF</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.LSF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Line Spectral Frequency (LSF) coefficients of a signal
+frame. Algorithm was adapted from (<a class="reference internal" href="#tb2006" id="id13">[TB2006]</a>, <a class="reference internal" href="#sh1976" id="id14">[SH1976]</a>).</p>
+<table class="docutils citation" frame="void" id="tb2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[TB2006]</a></td><td>Tom Backstrom, Carlo Magi, <em>Properties of line spectrum
+pair polynomials&#8211;A review</em>, Signal Processing, Volume 86,
+Issue 11, Special Section: Distributed Source Coding,
+November 2006, Pages 3286-3298, ISSN 0165-1684,
+DOI: 10.1016/j.sigpro.2006.01.010.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sh1976" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id14">[SH1976]</a></td><td>Schussler, H., <em>A stability theorem for discrete systems</em>,
+Acoustics, Speech and Signal Processing, IEEE Transactions
+on , vol.24, no.1, pp. 87-89, Feb 1976</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">LSFDisplacement</span></code> (default=1): LSF Displacement parameter: 1 for classical LSF, 0 for Schussler polynomials, &gt;1 is a generalization</li>
+<li><code class="docutils literal"><span class="pre">LSFNbCoeffs</span></code> (default=10): Number of Line Spectral Frequencies to compute</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>LSF LSFDisplacement=1  LSFNbCoeffs=10  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.LPC" title="yaafelib.yaafe_extensions.yaafefeatures.LPC"><code class="xref py py-class docutils literal"><span class="pre">LPC</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="loudness">
+<h3>Loudness<a class="headerlink" href="#loudness" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Loudness">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Loudness</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Loudness" title="Permalink to this definition">¶</a></dt>
+<dd><p>The loudness coefficients are the energy in each Bark band, normalized by
+the overall sum. see <a class="reference internal" href="#gp2004" id="id15">[GP2004]</a> and <a class="reference internal" href="#mg1997" id="id16">[MG1997]</a> for more details.</p>
+<table class="docutils citation" frame="void" id="mg1997" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id16">[MG1997]</a></td><td>Moore, Glasberg, et al., <em>A Model for the Prediction of
+Thresholds Loudness and Partial Loudness.</em>,
+J. Audio Eng. Soc. 45: 224-240, 1997.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">LMode</span></code> (default=Relative): &#8220;Specific&#8221; computes loudness without normalization, &#8220;Relative&#8221; normalize each band so that they sum to 1, &#8220;Total&#8221; just returns the sum of Loudness in all bands.</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Loudness FFTLength=0  FFTWindow=Hanning  LMode=Relative  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="mfcc">
+<h3>MFCC<a class="headerlink" href="#mfcc" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.MFCC">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">MFCC</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.MFCC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Mel-frequencies cepstrum coefficients <a class="reference internal" href="#dm1980" id="id17">[DM1980]</a>.</p>
+<p>Mel filter bank is built as 40 log-spaced filters according to
+the following mel-scale:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">melfreq = 1127 * log(1 + \frac{freq}{700})
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<p>Each filter is a triangular filter with height <div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">2/(f_{max}-f_{min})</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+.
+Then MFCCs are computed as following, using DCT II:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">mfcc = dct(log(abs(fft(hanning(N).x)).MelFilterBank))
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<table class="docutils citation" frame="void" id="dm1980" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[DM1980]</td><td><em>(<a class="fn-backref" href="#id17">1</a>, <a class="fn-backref" href="#id18">2</a>)</em> S.B. Davis and P.Mermelstrin, <em>Comparison of parametric
+representations for monosyllabic word recognition in
+continuously spoken sentences.</em> IEEE Transactions on
+Acoustics, Speech and Signal Processing,
+28 :357-366, 1980.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CepsIgnoreFirstCoeff</span></code> (default=1): 0 keeps the first cepstral coeffcient, 1 ignore it</li>
+<li><code class="docutils literal"><span class="pre">CepsNbCoeffs</span></code> (default=13): Number of cepstral coefficient to keep.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">MelMaxFreq</span></code> (default=6854.0): Maximum frequency of the mel filter bank</li>
+<li><code class="docutils literal"><span class="pre">MelMinFreq</span></code> (default=130.0): Minimum frequency of the mel filter bank</li>
+<li><code class="docutils literal"><span class="pre">MelNbFilters</span></code> (default=40): Number of mel filters</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>MFCC CepsIgnoreFirstCoeff=1  CepsNbCoeffs=13  FFTWindow=Hanning  MelMaxFreq=6854.0  MelMinFreq=130.0  MelNbFilters=40  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="magnitudespectrum">
+<h3>MagnitudeSpectrum<a class="headerlink" href="#magnitudespectrum" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">MagnitudeSpectrum</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute frame&#8217;s magnitude spectrum, using an analysis window (Hanning
+or Hamming), or not.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">y = abs(fft(w*x))
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>MagnitudeSpectrum FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="melspectrum">
+<h3>MelSpectrum<a class="headerlink" href="#melspectrum" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.MelSpectrum">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">MelSpectrum</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.MelSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the Mel-frequencies spectrum <a class="reference internal" href="#dm1980" id="id18">[DM1980]</a>.</p>
+<p>Mel filter bank is built as 40 log-spaced filters according to the
+following mel-scale:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">melfreq = 1127 * log(1 + \frac{freq}{700})
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<p>Each filter is a triangular filter with height <div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">2/(f_{max}-f_{min})</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">MelMaxFreq</span></code> (default=6854.0): Maximum frequency of the mel filter bank</li>
+<li><code class="docutils literal"><span class="pre">MelMinFreq</span></code> (default=130.0): Minimum frequency of the mel filter bank</li>
+<li><code class="docutils literal"><span class="pre">MelNbFilters</span></code> (default=40): Number of mel filters</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>MelSpectrum FFTWindow=Hanning  MelMaxFreq=6854.0  MelMinFreq=130.0  MelNbFilters=40  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="obsi">
+<h3>OBSI<a class="headerlink" href="#obsi" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.OBSI">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">OBSI</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.OBSI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute Octave band signal intensity using a trigular octave
+filter bank (<a class="reference internal" href="#se2005" id="id19">[SE2005]</a>).</p>
+<table class="docutils citation" frame="void" id="se2005" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[SE2005]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id19">2</a>)</em> S.Essid, <em>Classification automatique des signaux
+audio-frequences: reconnaissance des instruments
+de musique</em>. PhD, UPMC, 2005.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">OBSIMinFreq</span></code> (default=27.5): Minimum frequency for OBSI filter.</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>OBSI FFTLength=0  FFTWindow=Hanning  OBSIMinFreq=27.5  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="obsir">
+<h3>OBSIR<a class="headerlink" href="#obsir" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.OBSIR">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">OBSIR</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.OBSIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute log of <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.OBSI" title="yaafelib.yaafe_extensions.yaafefeatures.OBSI"><code class="xref py py-class docutils literal"><span class="pre">OBSI</span></code></a> ratio between consecutive octave.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">DiffNbCoeffs</span></code> (default=0): Maximum number of coeffs to keep. 0 keeps N-1 value (with N the input feature size)</li>
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">OBSIMinFreq</span></code> (default=27.5): Minimum frequency for OBSI filter.</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>OBSIR DiffNbCoeffs=0  FFTLength=0  FFTWindow=Hanning  OBSIMinFreq=27.5  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.OBSI" title="yaafelib.yaafe_extensions.yaafefeatures.OBSI"><code class="xref py py-class docutils literal"><span class="pre">OBSI</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="onsetdetectionfunction">
+<h3>OnsetDetectionFunction<a class="headerlink" href="#onsetdetectionfunction" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">OnsetDetectionFunction</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.OnsetDetectionFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute onset detection function (spectral energy flux)
+according to <a class="reference internal" href="#ma2005" id="id20">[MA2005]</a> method.</p>
+<table class="docutils citation" frame="void" id="ma2005" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id20">[MA2005]</a></td><td>M.Alonso, G.Richard, B.David,</td></tr>
+</tbody>
+</table>
+<p><em>EXTRACTING NOTE ONSETS FROM MUSICAL RECORDINGS</em>,
+International Conference on Multimedia and Expo (IEEE-ICME&#8216;05), Amsterdam,
+The Netherlands, 2005.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">NMANbFrames</span></code> (default=5000): Number of frames to normalize together, -1 means all frames</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>OnsetDetectionFunction FFTLength=0  FFTWindow=Hanning  NMANbFrames=5000  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="perceptualsharpness">
+<h3>PerceptualSharpness<a class="headerlink" href="#perceptualsharpness" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.PerceptualSharpness">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">PerceptualSharpness</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.PerceptualSharpness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the sharpness of <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Loudness" title="yaafelib.yaafe_extensions.yaafefeatures.Loudness"><code class="xref py py-class docutils literal"><span class="pre">Loudness</span></code></a> coefficients,
+according to <a class="reference internal" href="#gp2004" id="id21">[GP2004]</a>.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>PerceptualSharpness FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Loudness" title="yaafelib.yaafe_extensions.yaafefeatures.Loudness"><code class="xref py py-class docutils literal"><span class="pre">Loudness</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="perceptualspread">
+<h3>PerceptualSpread<a class="headerlink" href="#perceptualspread" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.PerceptualSpread">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">PerceptualSpread</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.PerceptualSpread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the spread of <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Loudness" title="yaafelib.yaafe_extensions.yaafefeatures.Loudness"><code class="xref py py-class docutils literal"><span class="pre">Loudness</span></code></a> coefficients,
+according to <a class="reference internal" href="#gp2004" id="id22">[GP2004]</a>.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>PerceptualSpread FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Loudness" title="yaafelib.yaafe_extensions.yaafefeatures.Loudness"><code class="xref py py-class docutils literal"><span class="pre">Loudness</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralcrestfactorperband">
+<h3>SpectralCrestFactorPerBand<a class="headerlink" href="#spectralcrestfactorperband" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralCrestFactorPerBand">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralCrestFactorPerBand</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralCrestFactorPerBand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute spectral crest factor per log-spaced band of 1/4 octave.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralCrestFactorPerBand FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectraldecrease">
+<h3>SpectralDecrease<a class="headerlink" href="#spectraldecrease" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralDecrease">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralDecrease</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralDecrease" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute spectral decrease accoding to <a class="reference internal" href="#gp2004" id="id23">[GP2004]</a>.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">S_{decrease} = \frac{1}{\sum_{k=2}^{K}a_{k}}
+\sum_{k=2}^{K}\frac{a_{k}-a_{1}}{k-1}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralDecrease FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralflatness">
+<h3>SpectralFlatness<a class="headerlink" href="#spectralflatness" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralFlatness">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralFlatness</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralFlatness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute global spectral flatness using the ratio between geometric and
+arithmetic mean.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">S_{flatness} = \frac{exp(\frac{1}{N}\sum_{k}log(a_{k}))}
+{\frac{1}{N}\sum_{k}a_{k}}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralFlatness FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralflatnessperband">
+<h3>SpectralFlatnessPerBand<a class="headerlink" href="#spectralflatnessperband" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralFlatnessPerBand">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralFlatnessPerBand</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralFlatnessPerBand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute spectral flatness per log-spaced band of 1/4 octave, as proposed
+in MPEG7 standard.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralFlatnessPerBand FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralflux">
+<h3>SpectralFlux<a class="headerlink" href="#spectralflux" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralFlux">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralFlux</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralFlux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute flux of <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">spectrum</span></code></a> between consecutives
+frames.</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">S_{flux} = \frac{\sum_{k}(a_{k}(t) - a_{k}(t-1))^2}
+{\sqrt{\sum_{k}a_{k}(t-1)^2}
+ \sqrt{\sum_{k}a_{k}(t)^2}}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">FluxSupport</span></code> (default=All): support of flux computation. if &#8216;All&#8217; then use all bins (default), if &#8216;Increase&#8217; then use only bins which are increasing</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralFlux FFTLength=0  FFTWindow=Hanning  FluxSupport=All  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralirregularity">
+<h3>SpectralIrregularity<a class="headerlink" href="#spectralirregularity" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralIrregularity">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralIrregularity</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralIrregularity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute difference between consecutive CQT bins, see <a class="reference internal" href="#brown2000" id="id24">[Brown2000]</a>.</p>
+<table class="docutils citation" frame="void" id="brown2000" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id24">[Brown2000]</a></td><td>J.C. Brown, O.Houix, Stephen McAdams, <em>Feature dependence in the automatic identification of musical woodwind instruments.</em>, Journal of the Acoustical Society of America, 109: 1064-1072, 2000.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CQTAlign</span></code> (default=c): Alignment of cqt kernels on analysis frame. &#8216;l&#8217; to the left, &#8216;c&#8217; to the center, &#8216;r&#8217; to the right</li>
+<li><code class="docutils literal"><span class="pre">CQTBinsPerOctave</span></code> (default=36): Number of bins per octave to consider</li>
+<li><code class="docutils literal"><span class="pre">CQTMinFreq</span></code> (default=73.42): Minimal frequency. If &lt;0.5 then assume it&#8217;s a factor of sampleRate else assume it&#8217;s expressed in Hertz.</li>
+<li><code class="docutils literal"><span class="pre">CQTNbOctaves</span></code> (default=3): Number of octaves to consider for analysis</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralIrregularity CQTAlign=c  CQTBinsPerOctave=36  CQTMinFreq=73.42  CQTNbOctaves=3  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.CQT" title="yaafelib.yaafe_extensions.yaafefeatures.CQT"><code class="xref py py-class docutils literal"><span class="pre">CQT</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralrolloff">
+<h3>SpectralRolloff<a class="headerlink" href="#spectralrolloff" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralRolloff">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralRolloff</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralRolloff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectral roll-off is the frequency so that 99% of the energy is contained
+below. see <a class="reference internal" href="#ss1997" id="id25">[SS1997]</a>.</p>
+<table class="docutils citation" frame="void" id="ss1997" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[SS1997]</td><td><em>(<a class="fn-backref" href="#id25">1</a>, <a class="fn-backref" href="#id29">2</a>)</em> E.Scheirer, M.Slaney. <em>Construction and evaluation of a robust
+multifeature speech/music discriminator</em>. IEEE Internation
+Conference on Acoustics, Speech and Signal Processing,
+p.1331-1334, 1997.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralRolloff FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralshapestatistics">
+<h3>SpectralShapeStatistics<a class="headerlink" href="#spectralshapestatistics" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralShapeStatistics">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralShapeStatistics</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralShapeStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute shape statistics of <a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a>, (see <a class="reference internal" href="#gr2004" id="id26">[GR2004]</a>).</p>
+<p id="shapestatistics"><strong>Shape Statistics</strong> are centroid, spread, skewness and kurtosis, defined
+as follow:</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\mu_{i} &amp;= \frac{\sum_{n=1}^{N}f_{k}^{i}*a_{k}}
+                 {\sum_{n=1}^{N}a_{k}}\\
+centroid &amp;= \mu_{1}\\
+spread &amp;= \sqrt{\mu_{2}-\mu_{1}^{2}} \\
+skewness &amp;= \frac{2\mu_{1}^{3} - 3\mu_{1}\mu_{2} + \mu_{3}}
+                  {spread^{3}} \\
+kurtosis &amp;= \frac{-3\mu_{1}^{4} + 6\mu_{1}\mu_{2} - 4\mu_{1}\mu_{3}
+                   + \mu_{4}}{spread^{4}} - 3</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<table class="docutils citation" frame="void" id="gr2004" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id26">[GR2004]</a></td><td>O.Gillet, G.Richard, <em>Automatic transcription of drum loops.</em>
+in IEEE International Conference on Acoustics, Speech and
+Signal Processing (ICASSP), Montreal, Canada, 2004.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralShapeStatistics FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralslope">
+<h3>SpectralSlope<a class="headerlink" href="#spectralslope" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralSlope">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralSlope</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>SpectralSlope is computed by linear regression of the spectral amplitude.
+(see <a class="reference internal" href="#gp2004" id="id27">[GP2004]</a>)</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">S_{slope} = \frac{K\sum_{k}f_{k}a_{k}
+ -\sum_{k}f_{k}\sum_{k}a_{k}}
+{K\sum_{k}f_{k}^2-(\sum_{k}a_{k})^2}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralSlope FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="spectralvariation">
+<h3>SpectralVariation<a class="headerlink" href="#spectralvariation" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SpectralVariation">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SpectralVariation</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SpectralVariation" title="Permalink to this definition">¶</a></dt>
+<dd><p>SpectralVariation is the normalized correlation of
+<a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">spectrum</span></code></a> between consecutive frames.
+(see <a class="reference internal" href="#gp2004" id="id28">[GP2004]</a>)</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">S_{var} = 1 - \frac{\sum_{k}a_{k}(t-1)a_{k}(t)}
+{\sqrt{\sum_{k}a_{k}(t-1)^2}
+\sqrt{\sum_{k}a_{k}(t)^2}}
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<table class="docutils citation" frame="void" id="gp2004" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[GP2004]</td><td><em>(<a class="fn-backref" href="#id15">1</a>, <a class="fn-backref" href="#id21">2</a>, <a class="fn-backref" href="#id22">3</a>, <a class="fn-backref" href="#id23">4</a>, <a class="fn-backref" href="#id27">5</a>, <a class="fn-backref" href="#id28">6</a>)</em> Geoffroy Peeters, <em>A large set of audio features for sound
+description (similarity and classification) in
+the CUIDADO project</em>, 2004.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">FFTLength</span></code> (default=0): Frame&#8217;s length on which perform FFT. Original frame is padded with zeros or truncated to reach this size. If 0 then use original frame length.</li>
+<li><code class="docutils literal"><span class="pre">FFTWindow</span></code> (default=Hanning): Weighting window to apply before fft. Hanning|Hamming|None</li>
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SpectralVariation FFTLength=0  FFTWindow=Hanning  blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum" title="yaafelib.yaafe_extensions.yaafefeatures.MagnitudeSpectrum"><code class="xref py py-class docutils literal"><span class="pre">MagnitudeSpectrum</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="temporalshapestatistics">
+<h3>TemporalShapeStatistics<a class="headerlink" href="#temporalshapestatistics" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.TemporalShapeStatistics">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">TemporalShapeStatistics</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.TemporalShapeStatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <a class="reference internal" href="#shapestatistics"><span class="std std-ref">shape statistics</span></a> of signal frames.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>TemporalShapeStatistics blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zcr">
+<h3>ZCR<a class="headerlink" href="#zcr" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.ZCR">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">ZCR</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.ZCR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute zero-crossing rate in frames. see <a class="reference internal" href="#ss1997" id="id29">[SS1997]</a>.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">blockSize</span></code> (default=1024): output frames size</li>
+<li><code class="docutils literal"><span class="pre">stepSize</span></code> (default=512): step between consecutive frames</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>ZCR blockSize=1024  stepSize=512
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#yaafelib.yaafe_extensions.yaafefeatures.Frames" title="yaafelib.yaafe_extensions.yaafefeatures.Frames"><code class="xref py py-class docutils literal"><span class="pre">Frames</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="available-feature-transforms">
+<h2>Available feature transforms<a class="headerlink" href="#available-feature-transforms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="autocorrelationpeaksintegrator">
+<h3>AutoCorrelationPeaksIntegrator<a class="headerlink" href="#autocorrelationpeaksintegrator" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelationPeaksIntegrator">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">AutoCorrelationPeaksIntegrator</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.AutoCorrelationPeaksIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature transform that compute peaks of the autocorrelation function,
+outputs peaks and amplitude.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">ACPInterPeakMinDist</span></code> (default=5): Minimal distance between consecutive autocorrelation peaks, expressed in lags.</li>
+<li><code class="docutils literal"><span class="pre">ACPNbPeaks</span></code> (default=3): Number of autocorrelation peaks to keep</li>
+<li><code class="docutils literal"><span class="pre">ACPNorm</span></code> (default=No): can be No|BPM|Hz. Normalize output to be expressed respectively in lag, BPM, Hz</li>
+<li><code class="docutils literal"><span class="pre">NbFrames</span></code> (default=60): Number of frames to integrate together</li>
+<li><code class="docutils literal"><span class="pre">StepNbFrames</span></code> (default=30): Number of frames to skip between two integration</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>AutoCorrelationPeaksIntegrator ACPInterPeakMinDist=5  ACPNbPeaks=3  ACPNorm=No  NbFrames=60  StepNbFrames=30
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="cepstrum">
+<h3>Cepstrum<a class="headerlink" href="#cepstrum" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Cepstrum">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Cepstrum</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Cepstrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature transform that compute cepstrum coefficients of input feature
+frames.  (use DCT II)</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">cep = dct(log(x))
+
+</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">CepsIgnoreFirstCoeff</span></code> (default=1): 0 keeps the first cepstral coeffcient, 1 ignore it</li>
+<li><code class="docutils literal"><span class="pre">CepsNbCoeffs</span></code> (default=13): Number of cepstral coefficient to keep.</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Cepstrum CepsIgnoreFirstCoeff=1  CepsNbCoeffs=13
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="derivate">
+<h3>Derivate<a class="headerlink" href="#derivate" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.Derivate">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">Derivate</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.Derivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute temporal derivative of input feature. The derivative is
+approximated by an orthogonal polynomial fit over a finite length
+window. (see <a class="reference internal" href="#rr1993" id="id30">[RR1993]</a> p.117).</p>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\frac{\partial x(t)}{\partial t} = \mu \sum_{k=-N}^{N}k.x(t+k)
+
+where \: \mu = \sum_{k=-N}^{N}k^2</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_1) (preloaded format=latex)
+ restricted \write18 enabled.
+&#8212;! /opt/local/var/db/texmf/web2c/pdftex/latex.fmt doesn&#8217;t match pdftex.pool
+(Fatal format file error; I&#8217;m stymied)
+</div>
+<table class="docutils citation" frame="void" id="rr1993" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id30">[RR1993]</a></td><td>L.R.Rabiner, <em>Fundamentals of Speech Processing</em>.
+Prentice Hall Signal Processing Series.
+PTR Prentice-Hall, 1993.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">DO1Len</span></code> (default=4): Horizon used to compute order 1 derivative.</li>
+<li><code class="docutils literal"><span class="pre">DO2Len</span></code> (default=1): Horizon used to compute order 2 derivative. Useless if DOrder=1.</li>
+<li><code class="docutils literal"><span class="pre">DOrder</span></code> (default=1): Order of the derivative to compute.</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>Derivate DO1Len=4  DO2Len=1  DOrder=1
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="histogramintegrator">
+<h3>HistogramIntegrator<a class="headerlink" href="#histogramintegrator" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.HistogramIntegrator">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">HistogramIntegrator</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.HistogramIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature transform that compute histogram of input values</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">HInf</span></code> (default=0): Minimal value to take into consideration</li>
+<li><code class="docutils literal"><span class="pre">HNbBins</span></code> (default=10): Nb bins of histogram</li>
+<li><code class="docutils literal"><span class="pre">HSup</span></code> (default=1): Maximal value to take into consideration</li>
+<li><code class="docutils literal"><span class="pre">HWeighted</span></code> (default=0): Set it to 1 if input values are weighted. If 1, input is considered to be a list of couple (value,weight).</li>
+<li><code class="docutils literal"><span class="pre">NbFrames</span></code> (default=60): Number of frames to integrate together</li>
+<li><code class="docutils literal"><span class="pre">StepNbFrames</span></code> (default=30): Number of frames to skip between two integration</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>HistogramIntegrator HInf=0  HNbBins=10  HSup=1  HWeighted=0  NbFrames=60  StepNbFrames=30
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="slopeintegrator">
+<h3>SlopeIntegrator<a class="headerlink" href="#slopeintegrator" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.SlopeIntegrator">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">SlopeIntegrator</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.SlopeIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature transform that compute the slope of input feature over the given
+number of frames.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">NbFrames</span></code> (default=60): Number of frames to integrate together</li>
+<li><code class="docutils literal"><span class="pre">StepNbFrames</span></code> (default=30): Number of frames to skip between two integration</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>SlopeIntegrator NbFrames=60  StepNbFrames=30
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="statisticalintegrator">
+<h3>StatisticalIntegrator<a class="headerlink" href="#statisticalintegrator" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="yaafelib.yaafe_extensions.yaafefeatures.StatisticalIntegrator">
+<em class="property">class </em><code class="descclassname">yaafelib.yaafe_extensions.yaafefeatures.</code><code class="descname">StatisticalIntegrator</code><a class="headerlink" href="#yaafelib.yaafe_extensions.yaafefeatures.StatisticalIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feature transform that compute the temporal mean and variance
+of input feature over the given number of frames.</p>
+<dl class="docutils">
+<dt><strong>Parameters</strong>:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">NbFrames</span></code> (default=60): Number of frames to integrate together</li>
+<li><code class="docutils literal"><span class="pre">SICompute</span></code> (default=MeanStddev): if &#8216;MeanStddev&#8217; then compute mean and standard deviation, if &#8216;Mean&#8217; compute only mean, if &#8216;Stddev&#8217; compute only stantard deviation.</li>
+<li><code class="docutils literal"><span class="pre">StepNbFrames</span></code> (default=30): Number of frames to skip between two integration</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Declaration example</strong>:</p>
+<div class="highlight-rest"><div class="highlight"><pre><span></span>StatisticalIntegrator NbFrames=60  SICompute=MeanStddev  StepNbFrames=30
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/yaafe.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Yaafe core features</a><ul>
+<li><a class="reference internal" href="#available-features">Available features</a><ul>
+<li><a class="reference internal" href="#amplitudemodulation">AmplitudeModulation</a></li>
+<li><a class="reference internal" href="#autocorrelation">AutoCorrelation</a></li>
+<li><a class="reference internal" href="#beathistogramsummary">BeatHistogramSummary</a></li>
+<li><a class="reference internal" href="#cqt">CQT</a></li>
+<li><a class="reference internal" href="#cqt2">CQT2</a></li>
+<li><a class="reference internal" href="#chords">Chords</a></li>
+<li><a class="reference internal" href="#chroma">Chroma</a></li>
+<li><a class="reference internal" href="#chroma2">Chroma2</a></li>
+<li><a class="reference internal" href="#complexdomainonsetdetection">ComplexDomainOnsetDetection</a></li>
+<li><a class="reference internal" href="#energy">Energy</a></li>
+<li><a class="reference internal" href="#envelope">Envelope</a></li>
+<li><a class="reference internal" href="#envelopeshapestatistics">EnvelopeShapeStatistics</a></li>
+<li><a class="reference internal" href="#frames">Frames</a></li>
+<li><a class="reference internal" href="#lpc">LPC</a></li>
+<li><a class="reference internal" href="#lsf">LSF</a></li>
+<li><a class="reference internal" href="#loudness">Loudness</a></li>
+<li><a class="reference internal" href="#mfcc">MFCC</a></li>
+<li><a class="reference internal" href="#magnitudespectrum">MagnitudeSpectrum</a></li>
+<li><a class="reference internal" href="#melspectrum">MelSpectrum</a></li>
+<li><a class="reference internal" href="#obsi">OBSI</a></li>
+<li><a class="reference internal" href="#obsir">OBSIR</a></li>
+<li><a class="reference internal" href="#onsetdetectionfunction">OnsetDetectionFunction</a></li>
+<li><a class="reference internal" href="#perceptualsharpness">PerceptualSharpness</a></li>
+<li><a class="reference internal" href="#perceptualspread">PerceptualSpread</a></li>
+<li><a class="reference internal" href="#spectralcrestfactorperband">SpectralCrestFactorPerBand</a></li>
+<li><a class="reference internal" href="#spectraldecrease">SpectralDecrease</a></li>
+<li><a class="reference internal" href="#spectralflatness">SpectralFlatness</a></li>
+<li><a class="reference internal" href="#spectralflatnessperband">SpectralFlatnessPerBand</a></li>
+<li><a class="reference internal" href="#spectralflux">SpectralFlux</a></li>
+<li><a class="reference internal" href="#spectralirregularity">SpectralIrregularity</a></li>
+<li><a class="reference internal" href="#spectralrolloff">SpectralRolloff</a></li>
+<li><a class="reference internal" href="#spectralshapestatistics">SpectralShapeStatistics</a></li>
+<li><a class="reference internal" href="#spectralslope">SpectralSlope</a></li>
+<li><a class="reference internal" href="#spectralvariation">SpectralVariation</a></li>
+<li><a class="reference internal" href="#temporalshapestatistics">TemporalShapeStatistics</a></li>
+<li><a class="reference internal" href="#zcr">ZCR</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#available-feature-transforms">Available feature transforms</a><ul>
+<li><a class="reference internal" href="#autocorrelationpeaksintegrator">AutoCorrelationPeaksIntegrator</a></li>
+<li><a class="reference internal" href="#cepstrum">Cepstrum</a></li>
+<li><a class="reference internal" href="#derivate">Derivate</a></li>
+<li><a class="reference internal" href="#histogramintegrator">HistogramIntegrator</a></li>
+<li><a class="reference internal" href="#slopeintegrator">SlopeIntegrator</a></li>
+<li><a class="reference internal" href="#statisticalintegrator">StatisticalIntegrator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manual/extending.html" title="6. Extending Yaafe"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">YAAFE v0.70</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. The yaafelib Python module &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.70',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="../index.html" />
+    <link rel="up" title="User Manual" href="../manual.html" />
+    <link rel="next" title="6. Extending Yaafe" href="extending.html" />
+    <link rel="prev" title="4. Other Yaafe tools" href="tools.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-yaafelib">
+<span id="the-yaafelib-python-module"></span><h1>5. The <em>yaafelib</em> Python module<a class="headerlink" href="#module-yaafelib" title="Permalink to this headline">¶</a></h1>
+<p>Main Yaafe module, providing classes to extract features with Yaafe.</p>
+<div class="section" id="featureplan">
+<h2>5.1. FeaturePlan<a class="headerlink" href="#featureplan" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yaafelib.FeaturePlan">
+<em class="property">class </em><code class="descclassname">yaafelib.</code><code class="descname">FeaturePlan</code><span class="sig-paren">(</span><em>sample_rate=44100</em>, <em>normalize=None</em>, <em>resample=False</em>, <em>time_start=0.0</em>, <em>time_limit=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.FeaturePlan" title="Permalink to this definition">¶</a></dt>
+<dd><p>FeaturePlan is a collection of features to extract, configured for a
+specific sample rate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sample_rate</strong> &#8211; analysis samplerate</li>
+<li><strong>normalize</strong> &#8211; signal maximum normalization, in [0,1],
+or <cite>None</cite> to skip normalization.</li>
+<li><strong>resample</strong> &#8211; force resample the sample rate of input audio to
+param <cite>sample_rate</cite>, default: False.</li>
+<li><strong>time_start</strong> &#8211; time offset where to start analyse,
+if given a negative value(e.g: &#8220;-10s&#8221; ),
+it will start at the last 10s. default: 0.0(s)</li>
+<li><strong>time_limit</strong> &#8211; longest time duration to keep, 0s means no limit.
+If the given value is longer than the available
+duration, the excess should be ignored.
+default: 0.0(s)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This collection can be load from a file using the
+<a class="reference internal" href="#yaafelib.FeaturePlan.loadFeaturePlan" title="yaafelib.FeaturePlan.loadFeaturePlan"><code class="xref py py-meth docutils literal"><span class="pre">loadFeaturePlan()</span></code></a> method, or built by adding features with
+the <a class="reference internal" href="#yaafelib.FeaturePlan.addFeature" title="yaafelib.FeaturePlan.addFeature"><code class="xref py py-meth docutils literal"><span class="pre">addFeature()</span></code></a> method.</p>
+<p>Then, the <a class="reference internal" href="#yaafelib.FeaturePlan.getDataFlow" title="yaafelib.FeaturePlan.getDataFlow"><code class="xref py py-meth docutils literal"><span class="pre">getDataFlow()</span></code></a> method retrieve the corresponding
+<a class="reference internal" href="#yaafelib.DataFlow" title="yaafelib.DataFlow"><code class="xref py py-class docutils literal"><span class="pre">DataFlow</span></code></a> object.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">FeaturePlan</span><span class="p">(</span><span class="n">sample_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc: MFCC blockSize=512 stepSize=256&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc_d1: MFCC blockSize=512 stepSize=256 &gt; &#39;</span>                              <span class="s1">&#39;Derivate DOrder=1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc_d2: MFCC blockSize=512 stepSize=256 &gt; &#39;</span>                              <span class="s1">&#39;Derivate DOrder=2&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">getDataFlow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="yaafelib.FeaturePlan.addFeature">
+<code class="descname">addFeature</code><span class="sig-paren">(</span><em>definition</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.FeaturePlan.addFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a feature defined according the
+<a class="reference internal" href="internals.html#featplan"><span class="std std-ref">feature definition syntax</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>definition</strong> (<em>string</em>) &#8211; feature definition</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">True on success, False on fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.FeaturePlan.getDataFlow">
+<code class="descname">getDataFlow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.FeaturePlan.getDataFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <a class="reference internal" href="#yaafelib.DataFlow" title="yaafelib.DataFlow"><code class="xref py py-class docutils literal"><span class="pre">DataFlow</span></code></a> object representing how to extract
+defined features.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#yaafelib.DataFlow" title="yaafelib.DataFlow">DataFlow</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.FeaturePlan.loadFeaturePlan">
+<code class="descname">loadFeaturePlan</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.FeaturePlan.loadFeaturePlan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads feature extraction plan from a file.
+The file must be a text file,
+where each line defines a feature
+(see <a class="reference internal" href="quickstart.html#feat-def-format"><span class="std std-ref">feature definition syntax</span></a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">True on success, False on fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dataflow">
+<h2>5.2. DataFlow<a class="headerlink" href="#dataflow" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yaafelib.DataFlow">
+<em class="property">class </em><code class="descclassname">yaafelib.</code><code class="descname">DataFlow</code><a class="headerlink" href="#yaafelib.DataFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>A DataFlow object hold a directed acyclic graph of computational steps
+describing how to compute some audio features.</p>
+<p>DataFlow can be loaded directly from a <a class="reference internal" href="internals.html#dataflow-file"><span class="std std-ref">dataflow file</span></a> using the <a class="reference internal" href="#yaafelib.DataFlow.load" title="yaafelib.DataFlow.load"><code class="xref py py-meth docutils literal"><span class="pre">load()</span></code></a> method, or created with a
+<a class="reference internal" href="#yaafelib.FeaturePlan" title="yaafelib.FeaturePlan"><code class="xref py py-class docutils literal"><span class="pre">FeaturePlan</span></code></a> object.
+The advanced user may also build a dataflow graph from scratch.</p>
+<dl class="method">
+<dt id="yaafelib.DataFlow.display">
+<code class="descname">display</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.DataFlow.display" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the DataFlow to the standard output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.DataFlow.dumpdot">
+<code class="descname">dumpdot</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.DataFlow.dumpdot" title="Permalink to this definition">¶</a></dt>
+<dd><p>write a got graph corresponding to the DataFlow</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>string</em>) &#8211; file to write</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.DataFlow.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.DataFlow.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build DataFlow from a <a class="reference internal" href="internals.html#dataflow-file"><span class="std std-ref">dataflow file</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>string</em>) &#8211; dataflow file name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False on fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.DataFlow.loads">
+<code class="descname">loads</code><span class="sig-paren">(</span><em>buf</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.DataFlow.loads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build DataFlow from buf read from a <a class="reference internal" href="internals.html#dataflow-file"><span class="std std-ref">dataflow file</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>buf</strong> (<em>string</em>) &#8211; buffer read from a dataflow file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False on fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.DataFlow.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.DataFlow.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>write DataFlow into a <a class="reference internal" href="internals.html#dataflow-file"><span class="std std-ref">dataflow file</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>string</em>) &#8211; file to write</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="engine">
+<h2>5.3. Engine<a class="headerlink" href="#engine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yaafelib.Engine">
+<em class="property">class </em><code class="descclassname">yaafelib.</code><code class="descname">Engine</code><a class="headerlink" href="#yaafelib.Engine" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Engine object is in charge of processing computations defined in a
+<a class="reference internal" href="#yaafelib.DataFlow" title="yaafelib.DataFlow"><code class="xref py py-class docutils literal"><span class="pre">DataFlow</span></code></a> object on given inputs.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Initialization</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">FeaturePlan</span><span class="p">(</span><span class="n">sample_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc: MFCC blockSize=512 stepSize=256&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;sr: SpectralRolloff blockSize=512 stepSize=256&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;sf: SpectralFlux blockSize=512 stepSize=256&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">getDataFlow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">DataFlow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get input metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eng_out</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">getInputs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">[&#39;audio&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;frameLength&#39;, 1), (&#39;parameters&#39;, {...}),</span>
+<span class="go"> (&#39;sampleRate&#39;, 16000.0), (&#39;sampleStep&#39;, 1), (&#39;size&#39;, 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">][</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;Resample&#39;, &#39;no&#39;), (&#39;SampleRate&#39;, &#39;16000&#39;),</span>
+<span class="go"> (&#39;TimeLimit&#39;, &#39;0.0s&#39;), (&#39;TimeStart&#39;, &#39;0.0s&#39;)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get output metadata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eng_out</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">getOutputs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;mfcc&#39;, {...}), (&#39;sf&#39;, {...}), (&#39;sr&#39;, {...})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="p">[</span><span class="s1">&#39;sr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;frameLength&#39;, 512), (&#39;parameters&#39;, {...}),</span>
+<span class="go"> (&#39;sampleRate&#39;, 16000.0), (&#39;sampleStep&#39;, 256), (&#39;size&#39;, 1)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">eng_out</span><span class="p">[</span><span class="s1">&#39;sr&#39;</span><span class="p">][</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="go">[(&#39;normalize&#39;, &#39;-1&#39;), (&#39;resample&#39;, &#39;no&#39;), (&#39;samplerate&#39;, &#39;16000&#39;),</span>
+<span class="go"> (&#39;version&#39;, &#39;0.7&#39;),</span>
+<span class="go"> (&#39;yaafedefinition&#39;, &#39;SpectralRolloff blockSize=512 stepSize=256&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># extract features from a numpy array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="c1"># needs numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">audio</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">processAudio</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span><span class="p">[</span><span class="s1">&#39;mfcc&#39;</span><span class="p">]</span>
+<span class="go">array([[...]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span><span class="p">[</span><span class="s1">&#39;sf&#39;</span><span class="p">]</span>
+<span class="go">array([[...]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span><span class="p">[</span><span class="s1">&#39;sr&#39;</span><span class="p">]</span>
+<span class="go">array([[...]])</span>
+</pre></div>
+</div>
+<p>It is also possible to extract features block per block:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># first reset the engine</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># get your audio data</span>
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">32000</span><span class="p">)</span>
+    <span class="c1"># write audio array on &#39;audio&#39; input</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">writeInput</span><span class="p">(</span><span class="s1">&#39;audio&#39;</span><span class="p">,</span><span class="n">audio</span><span class="p">)</span>
+    <span class="c1"># process available data</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
+    <span class="c1"># read available feature data</span>
+    <span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">readAllOutputs</span><span class="p">()</span>
+    <span class="c1"># do what you want your feature data</span>
+<span class="c1"># do not forget to flush</span>
+<span class="n">engine</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">readAllOutputs</span><span class="p">()</span> <span class="c1"># read last data</span>
+<span class="c1"># do what you want your feature data</span>
+</pre></div>
+</div>
+<p>When extracting features block per block, you should be aware of
+<a class="reference internal" href="internals.html#processingengine"><span class="std std-ref">Yaafe&#8217;s engine internals</span></a>.</p>
+<dl class="method">
+<dt id="yaafelib.Engine.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process available data and flush all buffers so that
+all output data is available. Analysis is ended, the
+<a class="reference internal" href="#yaafelib.Engine.reset" title="yaafelib.Engine.reset"><code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code></a> method must be called before any
+further calls to <a class="reference internal" href="#yaafelib.Engine.writeInput" title="yaafelib.Engine.writeInput"><code class="xref py py-meth docutils literal"><span class="pre">writeInput()</span></code></a>
+and <a class="reference internal" href="#yaafelib.Engine.process" title="yaafelib.Engine.process"><code class="xref py py-meth docutils literal"><span class="pre">process()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.getInputs">
+<code class="descname">getInputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.getInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get input metadata. Result format is the same as for
+<a class="reference internal" href="#yaafelib.Engine.getOutputs" title="yaafelib.Engine.getOutputs"><code class="xref py py-meth docutils literal"><span class="pre">getOutputs()</span></code></a> method, but the general case is
+that there is only one input named &#8216;audio&#8217; and the sole
+relevant metadata are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">SampleRate:</th><td class="field-body">expected audio sampleRate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body">attached parameters</td>
+</tr>
+</tbody>
+</table>
+<p>Others fields should be set to 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.getOutputs">
+<code class="descname">getOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.getOutputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get output metadata. For each output feature, you get the following
+metadata:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">SampleRate:</th><td class="field-body">audio analysis samplerate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">SampleStep:</th><td class="field-body">Number of audio samples between consecutive feature
+values</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">FrameLength:</th><td class="field-body">Analysis frame size in number of audio samples</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Size:</th><td class="field-body">size the feature (or number of coefficients)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body">attached parameters.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>dataflow</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure engine according to the given dataflow.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataflow</strong> (<a class="reference internal" href="#yaafelib.DataFlow" title="yaafelib.DataFlow"><code class="xref py py-class docutils literal"><span class="pre">DataFlow</span></code></a> or string) &#8211; dataflow object or filename of a dataflow file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False on fail.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.process">
+<code class="descname">process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process available data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.processAudio">
+<code class="descname">processAudio</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.processAudio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenient method to extract features from <em>data</em>.
+It successively calls <a class="reference internal" href="#yaafelib.Engine.reset" title="yaafelib.Engine.reset"><code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code></a>, <a class="reference internal" href="#yaafelib.Engine.writeInput" title="yaafelib.Engine.writeInput"><code class="xref py py-meth docutils literal"><span class="pre">writeInput()</span></code></a>,
+<a class="reference internal" href="#yaafelib.Engine.process" title="yaafelib.Engine.process"><code class="xref py py-meth docutils literal"><span class="pre">process()</span></code></a>, <a class="reference internal" href="#yaafelib.Engine.flush" title="yaafelib.Engine.flush"><code class="xref py py-meth docutils literal"><span class="pre">flush()</span></code></a>, and returns output
+of <a class="reference internal" href="#yaafelib.Engine.readAllOutputs" title="yaafelib.Engine.readAllOutputs"><code class="xref py py-meth docutils literal"><span class="pre">readAllOutputs()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.readAllOutputs">
+<code class="descname">readAllOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.readAllOutputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all outputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary with output name as key and numpy.array
+as value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.readOutput">
+<code class="descname">readOutput</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.readOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a specific output, and returns values as a numpy.array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>string</em>) &#8211; output name to read</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset engine. All buffers are cleared, and a new analysis
+can start.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.Engine.writeInput">
+<code class="descname">writeInput</code><span class="sig-paren">(</span><em>name</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.Engine.writeInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write data on an input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>string</em>) &#8211; input on which to write</li>
+<li><strong>data</strong> (<em>numpy array</em>) &#8211; data to write.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="audiofileprocessor">
+<h2>5.4. AudioFileProcessor<a class="headerlink" href="#audiofileprocessor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="yaafelib.AudioFileProcessor">
+<em class="property">class </em><code class="descclassname">yaafelib.</code><code class="descname">AudioFileProcessor</code><a class="headerlink" href="#yaafelib.AudioFileProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A AudioFileProcessor object allow to extract features from
+audio files, and possibly write output features into files.</p>
+<p>It must be provided with a configured <a class="reference internal" href="#yaafelib.Engine" title="yaafelib.Engine"><code class="xref py py-class docutils literal"><span class="pre">Engine</span></code></a>.</p>
+<p>Here is how to extract features from audio files and get it
+as numpy arrays:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># configure your engine</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dataflow_file</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># create your AudioFileProcessor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span> <span class="o">=</span> <span class="n">AudioFileProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># leave output format to None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span><span class="o">.</span><span class="n">processFile</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">audiofile</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># retrieve features from engine</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">readAllOutputs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># do what you want with your feature data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span><span class="p">[</span><span class="s1">&#39;mfcc&#39;</span><span class="p">]</span>
+<span class="go">array([[...]])</span>
+</pre></div>
+</div>
+<p>To write features directly to output files, just set an output
+format with the <a class="reference internal" href="#yaafelib.AudioFileProcessor.setOutputFormat" title="yaafelib.AudioFileProcessor.setOutputFormat"><code class="xref py py-meth docutils literal"><span class="pre">setOutputFormat()</span></code></a> method.</p>
+<dl class="method">
+<dt id="yaafelib.AudioFileProcessor.processFile">
+<code class="descname">processFile</code><span class="sig-paren">(</span><em>engine</em>, <em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.AudioFileProcessor.processFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract features from the given file using the given engine.</p>
+<p>If an output format has been set, then output files will be
+written, else output feature data can be read using engine&#8217;s
+<a class="reference internal" href="#yaafelib.Engine.readOutput" title="yaafelib.Engine.readOutput"><code class="xref py py-meth docutils literal"><span class="pre">Engine.readOutput()</span></code></a> or
+<a class="reference internal" href="#yaafelib.Engine.readAllOutputs" title="yaafelib.Engine.readAllOutputs"><code class="xref py py-meth docutils literal"><span class="pre">Engine.readAllOutputs()</span></code></a> methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>engine</strong> (<a class="reference internal" href="#yaafelib.Engine" title="yaafelib.Engine"><code class="xref py py-class docutils literal"><span class="pre">Engine</span></code></a>) &#8211; engine to use for feature extraction.
+It must already have been configured.</li>
+<li><strong>filename</strong> (<em>string</em>) &#8211; audio file to process</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 on success, negative value on fail</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="yaafelib.AudioFileProcessor.setOutputFormat">
+<code class="descname">setOutputFormat</code><span class="sig-paren">(</span><em>format</em>, <em>outDir</em>, <em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.AudioFileProcessor.setOutputFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set output format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>format</strong> (<em>string</em>) &#8211; format to set</li>
+<li><strong>outDir</strong> (<em>string</em>) &#8211; base output directory for output files</li>
+<li><strong>params</strong> (<em>dict</em>) &#8211; format parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if ok, False if format does not exists.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/yaafe.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../manual.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. The <em>yaafelib</em> Python module</a><ul>
+<li><a class="reference internal" href="#featureplan">5.1. FeaturePlan</a></li>
+<li><a class="reference internal" href="#dataflow">5.2. DataFlow</a></li>
+<li><a class="reference internal" href="#engine">5.3. Engine</a></li>
+<li><a class="reference internal" href="#audiofileprocessor">5.4. AudioFileProcessor</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tools.html"
+                        title="previous chapter">4. Other <em>Yaafe</em> tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="extending.html"
+                        title="next chapter">6. Extending Yaafe</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="../_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="extending.html" title="6. Extending Yaafe"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tools.html" title="4. Other Yaafe tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">YAAFE v0.70</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>

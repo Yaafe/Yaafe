@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Yaafe internals &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.70',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="../index.html" />
+    <link rel="up" title="User Manual" href="../manual.html" />
+    <link rel="next" title="4. Other Yaafe tools" href="tools.html" />
+    <link rel="prev" title="2. Quick Start, using yaafe" href="quickstart.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="yaafe-internals">
+<h1>3. Yaafe internals<a class="headerlink" href="#yaafe-internals" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>3.1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="../_images/overview.png" id="id1"><img alt="../_images/overview.png" class="align-center" id="id1" src="../_images/overview.png" style="width: 602.0px; height: 577.0px;" /></a>
+<p><em>Yaafe</em> feature extraction operates in two main steps, that are done together by the <code class="docutils literal"><span class="pre">yaafe</span></code> script, but can be done separately according to your needs.</p>
+<div class="section" id="feature-plan-parser">
+<h3>3.1.1. Feature Plan Parser<a class="headerlink" href="#feature-plan-parser" title="Permalink to this headline">¶</a></h3>
+<p>Each feature is defined as a sequence of computational steps. For example, MFCC is the succession of steps: Frames, FFT,MelFilterBank, Cepstrum. The
+same applies to feature transforms and temporal integrators.</p>
+<p>The <em>Feature Plan Parser</em> is responsible for creating the <em>dataflow graph</em> according to a given <em>feature extraction plan</em> and a working samplerate.
+It decomposes each declared feature into steps and groups together identical steps which have the same input into a reduced
+directed graph of computational steps.</p>
+</div>
+<div class="section" id="dataflow-engine">
+<h3>3.1.2. Dataflow Engine<a class="headerlink" href="#dataflow-engine" title="Permalink to this headline">¶</a></h3>
+<p>Each computational step is implemented in a C++ component which performs computation on a data block. Specific
+components manage audio file reading and output file writing. The dataflow engine loads components, links them according
+to the given dataflow graph, schedule computations and manage data blocks. Reading, computations and writing
+is done block by block, so that arbitrarily long files or signals can be processed with a low memory occupation.</p>
+<p>The <code class="docutils literal"><span class="pre">yaafe-engine</span></code> program consist in loading the dataflow engine configured with a <em>dataflow file</em>, and processing given audio files.</p>
+</div>
+</div>
+<div class="section" id="feature-extraction-plan">
+<span id="featplan"></span><h2>3.2. Feature extraction plan<a class="headerlink" href="#feature-extraction-plan" title="Permalink to this headline">¶</a></h2>
+<p>A feature extraction plan (or feature plan) is a text file defining a list of features to extract.
+Each lines defines a feature according to the feature definition syntax.</p>
+<div class="section" id="feature-definition-syntax">
+<h3>3.2.1. Feature definition syntax<a class="headerlink" href="#feature-definition-syntax" title="Permalink to this headline">¶</a></h3>
+<pre>
+<strong id="grammar-token-feature_definition">feature_definition</strong> ::=  <code class="xref docutils literal"><span class="pre">name</span></code> := <code class="xref docutils literal"><span class="pre">feature</span></code> parameters [transformations]
+<strong id="grammar-token-transformations">transformations   </strong> ::=  &gt; <code class="xref docutils literal"><span class="pre">transform</span></code> parameters [transformations]
+<strong id="grammar-token-parameters">parameters        </strong> ::=  <code class="xref docutils literal"><span class="pre">key</span></code> =&quot;<code class="xref docutils literal"><span class="pre">value</span></code>&quot; [parameters] |
+                        <code class="xref docutils literal"><span class="pre">key</span></code> = <code class="xref docutils literal"><span class="pre">value</span></code> [parameters]
+</pre>
+<p>With the following tokens:</p>
+<dl class="docutils">
+<dt><code class="xref std std-token docutils literal"><span class="pre">name</span></code></dt>
+<dd>Name of declared feature. This name will be used for the output dataset, or the output stream.</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">feature</span></code></dt>
+<dd>Feature name. Use <code class="docutils literal"><span class="pre">yaafe</span> <span class="pre">-l</span></code> to list available features.</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">key</span></code></dt>
+<dd>Parameter key</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">value</span></code></dt>
+<dd>Parameter value. If not delimited by double-quotes (&#8221;), it must contains only [a-zA-Z0-9.:_/-],
+otherwise it may contains any characters.</dd>
+</dl>
+</div>
+<div class="section" id="example">
+<h3>3.2.2. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>The following feature plan defines the extraction of 5 features: mfcc, mfcc_d1, mfcc_d2, sf, sr:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mfcc</span><span class="p">:</span> <span class="n">MFCC</span> <span class="n">blockSize</span><span class="o">=</span><span class="mi">512</span> <span class="n">steSize</span><span class="o">=</span><span class="mi">256</span>
+<span class="n">mfcc_d1</span><span class="p">:</span> <span class="n">MFCC</span> <span class="n">blockSize</span><span class="o">=</span><span class="mi">512</span> <span class="n">steSize</span><span class="o">=</span><span class="mi">256</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">mfcc_d2</span><span class="p">:</span> <span class="n">MFCC</span> <span class="n">blockSize</span><span class="o">=</span><span class="mi">512</span> <span class="n">steSize</span><span class="o">=</span><span class="mi">256</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">sf</span><span class="p">:</span> <span class="n">SpectralFlatness</span> <span class="n">blockSize</span><span class="o">=</span><span class="mi">1024</span> <span class="n">steSize</span><span class="o">=</span><span class="mi">256</span>
+<span class="n">sr</span><span class="p">:</span> <span class="n">SpectralRolloff</span> <span class="n">blockSize</span><span class="o">=</span><span class="mi">1024</span> <span class="n">steSize</span><span class="o">=</span><span class="mi">256</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dataflow-file">
+<span id="id2"></span><h2>3.3. Dataflow file<a class="headerlink" href="#dataflow-file" title="Permalink to this headline">¶</a></h2>
+<p>A dataflow file is a file defining a dataflow graph (see the <a class="reference internal" href="#id1"><span class="std std-ref">overview figure</span></a>). The dataflow graph
+is a directed acyclic graph where nodes define computational steps to compute the desired outputs.</p>
+<p>There mainly 2 ways of building the <em>dataflow graph</em> corresponding to a <a class="reference internal" href="#featplan"><span class="std std-ref">feature extraction plan</span></a>
+The <em>dataflow graph</em> can be dumped into a file using the <code class="docutils literal"><span class="pre">--dump-dataflow</span></code> option of <code class="docutils literal"><span class="pre">yaafe</span></code> (see <a class="reference internal" href="#get-dataflow-file"><span class="std std-ref">here</span></a>).
+It also can be created using the Python <code class="xref py py-class docutils literal"><span class="pre">FeaturePlan</span></code></p>
+<p>The <a class="reference internal" href="#dataflow-syntax"><span class="std std-ref">dataflow file syntax</span></a> is described in the following section.
+The dataflow file can be reused directly by <a class="reference internal" href="tools.html"><span class="doc">other Yaafe tools</span></a>.</p>
+<div class="section" id="dataflow-file-syntax">
+<span id="dataflow-syntax"></span><h3>3.3.1. Dataflow file syntax<a class="headerlink" href="#dataflow-file-syntax" title="Permalink to this headline">¶</a></h3>
+<p>The dataflow file syntax is defined with the following grammar:</p>
+<pre>
+<strong id="grammar-token-dataflow_file">dataflow_file</strong> ::=  flow_stmt+
+<strong id="grammar-token-flow_stmt">flow_stmt    </strong> ::=  (lib_stmt | input_stmt | output_stmt | node_stmt | link_stmt) NEWLINE
+<strong id="grammar-token-lib_stmt">lib_stmt     </strong> ::=  'useComponentLibrary' <code class="xref docutils literal"><span class="pre">libname</span></code>
+<strong id="grammar-token-input_stmt">input_stmt   </strong> ::=  <code class="xref docutils literal"><span class="pre">node</span></code> ':=' 'Input' [parameters]
+<strong id="grammar-token-output_stmt">output_stmt  </strong> ::=  <code class="xref docutils literal"><span class="pre">node</span></code> ':=' 'Output' [parameters]
+<strong id="grammar-token-node_stmt">node_stmt    </strong> ::=  <code class="xref docutils literal"><span class="pre">node</span></code> ':=' <code class="xref docutils literal"><span class="pre">component</span></code> [parameters]
+<strong id="id3">parameters   </strong> ::=  <code class="xref docutils literal"><span class="pre">key</span></code> '=&quot;' <code class="xref docutils literal"><span class="pre">value</span></code> '&quot;' [parameters]
+<strong id="grammar-token-link_stmt">link_stmt    </strong> ::=  <code class="xref docutils literal"><span class="pre">node</span></code>[':' <code class="xref docutils literal"><span class="pre">port</span></code>] '&gt;' <code class="xref docutils literal"><span class="pre">node</span></code>[':' <code class="xref docutils literal"><span class="pre">port</span></code>]
+</pre>
+<dl class="docutils">
+<dt><code class="xref std std-token docutils literal"><span class="pre">libname</span></code></dt>
+<dd>Component library name. This library contains some of the components used in the dataflow</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">node</span></code></dt>
+<dd>Node identifier. In the context of a <em>input_stmt</em> (or <em>output_stmt</em>), <code class="xref std std-token docutils literal"><span class="pre">node</span></code> is
+the input name (or output name).</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">component</span></code></dt>
+<dd>A valid component name.</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">key</span></code></dt>
+<dd>Parameter key</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">value</span></code></dt>
+<dd>Parameter value</dd>
+<dt><code class="xref std std-token docutils literal"><span class="pre">port</span></code></dt>
+<dd>name of the node&#8217;s port to link. If no port defined, assume the node has only
+one input (or output) port.</dd>
+</dl>
+</div>
+<div class="section" id="id4">
+<h3>3.3.2. Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Here is the dataflow generated for extracting MFCC over a 44.1kHz audio file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">yaafe</span> <span class="o">-</span><span class="n">r</span> <span class="mi">44100</span> <span class="o">-</span><span class="n">f</span> <span class="s2">&quot;mfcc: MFCC&quot;</span> <span class="o">--</span><span class="n">dump</span><span class="o">-</span><span class="n">dataflow</span><span class="o">=</span><span class="n">yaflow</span>
+<span class="o">&gt;</span> <span class="n">more</span> <span class="n">yaflow</span>
+<span class="n">useComponentLibrary</span> <span class="n">yaafe</span><span class="o">-</span><span class="n">components</span>
+<span class="n">audio</span> <span class="p">:</span><span class="o">=</span> <span class="n">Input</span> <span class="n">SampleRate</span><span class="o">=</span><span class="s2">&quot;44100&quot;</span>
+<span class="n">n1</span> <span class="p">:</span><span class="o">=</span> <span class="n">FrameTokenizer</span> <span class="n">blockSize</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">stepSize</span><span class="o">=</span><span class="s2">&quot;512&quot;</span>
+<span class="n">n2</span> <span class="p">:</span><span class="o">=</span> <span class="n">FFT</span> <span class="n">FFTLength</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">FFTWindow</span><span class="o">=</span><span class="s2">&quot;Hanning&quot;</span>
+<span class="n">n3</span> <span class="p">:</span><span class="o">=</span> <span class="n">Abs</span>
+<span class="n">n4</span> <span class="p">:</span><span class="o">=</span> <span class="n">MelFilterBank</span> <span class="n">MelMaxFreq</span><span class="o">=</span><span class="s2">&quot;6854.0&quot;</span> <span class="n">MelMinFreq</span><span class="o">=</span><span class="s2">&quot;130.0&quot;</span> <span class="n">MelNbFilters</span><span class="o">=</span><span class="s2">&quot;40&quot;</span>
+<span class="n">n5</span> <span class="p">:</span><span class="o">=</span> <span class="n">Cepstrum</span> <span class="n">CepsIgnoreFirstCoeff</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">CepsNbCoeffs</span><span class="o">=</span><span class="s2">&quot;13&quot;</span>
+<span class="n">mfcc</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;MFCC&quot;</span>
+<span class="n">audio</span> <span class="o">&gt;</span> <span class="n">n1</span>
+<span class="n">n1</span> <span class="o">&gt;</span> <span class="n">n2</span>
+<span class="n">n2</span> <span class="o">&gt;</span> <span class="n">n3</span>
+<span class="n">n3</span> <span class="o">&gt;</span> <span class="n">n4</span>
+<span class="n">n4</span> <span class="o">&gt;</span> <span class="n">n5</span>
+<span class="n">n5</span> <span class="o">&gt;</span> <span class="n">mfcc</span>
+</pre></div>
+</div>
+<p>Here is another example for extracting several features:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cat</span> <span class="o">&gt;</span> <span class="n">featureplan</span>
+<span class="n">mfcc</span><span class="p">:</span> <span class="n">MFCC</span>
+<span class="n">mfcc_d1</span><span class="p">:</span> <span class="n">MFCC</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">mfcc_d2</span><span class="p">:</span> <span class="n">MFCC</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">sf</span><span class="p">:</span> <span class="n">SpectralFlatness</span>
+<span class="n">sr</span><span class="p">:</span> <span class="n">SpectralRolloff</span>
+
+<span class="o">&gt;</span> <span class="n">yaafe</span> <span class="o">-</span><span class="n">c</span> <span class="n">featureplan</span> <span class="o">-</span><span class="n">r</span> <span class="mi">44100</span> <span class="o">--</span><span class="n">dump</span><span class="o">-</span><span class="n">dataflow</span><span class="o">=</span><span class="n">yaflow</span>
+<span class="o">&gt;</span> <span class="n">more</span> <span class="n">yaflow</span>
+<span class="n">useComponentLibrary</span> <span class="n">yaafe</span><span class="o">-</span><span class="n">components</span>
+<span class="n">audio</span> <span class="p">:</span><span class="o">=</span> <span class="n">Input</span> <span class="n">SampleRate</span><span class="o">=</span><span class="s2">&quot;44100&quot;</span>
+<span class="n">n1</span> <span class="p">:</span><span class="o">=</span> <span class="n">FrameTokenizer</span> <span class="n">blockSize</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">stepSize</span><span class="o">=</span><span class="s2">&quot;512&quot;</span>
+<span class="n">n2</span> <span class="p">:</span><span class="o">=</span> <span class="n">FFT</span> <span class="n">FFTLength</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">FFTWindow</span><span class="o">=</span><span class="s2">&quot;Hanning&quot;</span>
+<span class="n">n3</span> <span class="p">:</span><span class="o">=</span> <span class="n">Abs</span>
+<span class="n">n4</span> <span class="p">:</span><span class="o">=</span> <span class="n">MelFilterBank</span> <span class="n">MelMaxFreq</span><span class="o">=</span><span class="s2">&quot;6854.0&quot;</span> <span class="n">MelMinFreq</span><span class="o">=</span><span class="s2">&quot;130.0&quot;</span> <span class="n">MelNbFilters</span><span class="o">=</span><span class="s2">&quot;40&quot;</span>
+<span class="n">n5</span> <span class="p">:</span><span class="o">=</span> <span class="n">Cepstrum</span> <span class="n">CepsIgnoreFirstCoeff</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">CepsNbCoeffs</span><span class="o">=</span><span class="s2">&quot;13&quot;</span>
+<span class="n">mfcc</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;MFCC&quot;</span>
+<span class="n">n7</span> <span class="p">:</span><span class="o">=</span> <span class="n">Derivate</span> <span class="n">DO1Len</span><span class="o">=</span><span class="s2">&quot;4&quot;</span> <span class="n">DO2Len</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">DOrder</span><span class="o">=</span><span class="s2">&quot;1&quot;</span>
+<span class="n">mfcc_d1</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;MFCC &gt; Derivate DOrder=1&quot;</span>
+<span class="n">n9</span> <span class="p">:</span><span class="o">=</span> <span class="n">Derivate</span> <span class="n">DO1Len</span><span class="o">=</span><span class="s2">&quot;4&quot;</span> <span class="n">DO2Len</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">DOrder</span><span class="o">=</span><span class="s2">&quot;2&quot;</span>
+<span class="n">mfcc_d2</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;MFCC &gt; Derivate DOrder=2&quot;</span>
+<span class="n">n11</span> <span class="p">:</span><span class="o">=</span> <span class="n">Flatness</span>
+<span class="n">sf</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;SpectralFlatness&quot;</span>
+<span class="n">n13</span> <span class="p">:</span><span class="o">=</span> <span class="n">Sqr</span>
+<span class="n">n14</span> <span class="p">:</span><span class="o">=</span> <span class="n">Rolloff</span>
+<span class="n">sr</span> <span class="p">:</span><span class="o">=</span> <span class="n">Output</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;-1&quot;</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.6&quot;</span> <span class="n">yaafedefinition</span><span class="o">=</span><span class="s2">&quot;SpectralRolloff&quot;</span>
+<span class="n">audio</span> <span class="o">&gt;</span> <span class="n">n1</span>
+<span class="n">n1</span> <span class="o">&gt;</span> <span class="n">n2</span>
+<span class="n">n2</span> <span class="o">&gt;</span> <span class="n">n3</span>
+<span class="n">n3</span> <span class="o">&gt;</span> <span class="n">n4</span>
+<span class="n">n4</span> <span class="o">&gt;</span> <span class="n">n5</span>
+<span class="n">n5</span> <span class="o">&gt;</span> <span class="n">mfcc</span>
+<span class="n">n5</span> <span class="o">&gt;</span> <span class="n">n7</span>
+<span class="n">n7</span> <span class="o">&gt;</span> <span class="n">mfcc_d1</span>
+<span class="n">n5</span> <span class="o">&gt;</span> <span class="n">n9</span>
+<span class="n">n9</span> <span class="o">&gt;</span> <span class="n">mfcc_d2</span>
+<span class="n">n3</span> <span class="o">&gt;</span> <span class="n">n11</span>
+<span class="n">n11</span> <span class="o">&gt;</span> <span class="n">sf</span>
+<span class="n">n3</span> <span class="o">&gt;</span> <span class="n">n13</span>
+<span class="n">n13</span> <span class="o">&gt;</span> <span class="n">n14</span>
+<span class="n">n14</span> <span class="o">&gt;</span> <span class="n">sr</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-the-dataflow-file-from-the-feature-plan">
+<span id="get-dataflow-file"></span><h3>3.3.3. Get the <em>dataflow file</em> from the <em>feature plan</em><a class="headerlink" href="#get-the-dataflow-file-from-the-feature-plan" title="Permalink to this headline">¶</a></h3>
+<p>First, write your <a class="reference internal" href="#featplan"><span class="std std-ref">feature plan</span></a> to define features to extract. For example, consider
+the following one:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mfcc</span><span class="p">:</span> <span class="n">MFCC</span>
+<span class="n">mfcc_d1</span><span class="p">:</span> <span class="n">MFCC</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">mfcc_d2</span><span class="p">:</span> <span class="n">MFCC</span> <span class="o">&gt;</span> <span class="n">Derivate</span> <span class="n">DOrder</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">sf</span><span class="p">:</span> <span class="n">SpectralFlatness</span>
+<span class="n">sr</span><span class="p">:</span> <span class="n">SpectralRolloff</span>
+</pre></div>
+</div>
+<p>Then, get the corresponding Yaafe dataflow file using the <code class="docutils literal"><span class="pre">yaafe</span></code> script:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">yaafe</span> <span class="o">-</span><span class="n">r</span> <span class="mi">44100</span> <span class="o">-</span><span class="n">c</span> <span class="n">featureplan</span> <span class="o">--</span><span class="n">dump</span><span class="o">-</span><span class="n">dataflow</span><span class="o">=</span><span class="n">yaflow</span>
+</pre></div>
+</div>
+<p>This command produces a file named &#8216;yaflow&#8217;, which is the dataflow file
+corresponding to the given feature extraction plan:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cat</span> <span class="n">yaflow</span>
+<span class="n">useComponentLibrary</span> <span class="n">yaafe</span><span class="o">-</span><span class="n">components</span>
+<span class="n">audio</span> <span class="p">:</span><span class="o">=</span> <span class="n">Input</span> <span class="n">SampleRate</span><span class="o">=</span><span class="s2">&quot;44100&quot;</span>
+<span class="n">n1</span> <span class="p">:</span><span class="o">=</span> <span class="n">FrameTokenizer</span> <span class="n">blockSize</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">stepSize</span><span class="o">=</span><span class="s2">&quot;512&quot;</span>
+<span class="n">n2</span> <span class="p">:</span><span class="o">=</span> <span class="n">FFT</span> <span class="n">FFTLength</span><span class="o">=</span><span class="s2">&quot;1024&quot;</span> <span class="n">FFTWindow</span><span class="o">=</span><span class="s2">&quot;Hanning&quot;</span>
+<span class="n">n3</span> <span class="p">:</span><span class="o">=</span> <span class="n">Abs</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Pay attention to the fact that a Yaafe dataflow file is <strong>designed for a specific analysis
+sample rate</strong>. To extract same features on signals or files with other sample rate, you have
+to create another dataflow file.</p>
+</div>
+</div>
+<div class="section" id="yaafe-s-dataflow-processing-engine">
+<span id="processingengine"></span><h2>3.4. Yaafe&#8217;s dataflow processing engine<a class="headerlink" href="#yaafe-s-dataflow-processing-engine" title="Permalink to this headline">¶</a></h2>
+<p>Yaafe has its own dataflow processing engine, implemented in the <code class="docutils literal"><span class="pre">Engine</span></code> C++ class. Yaafe is able to process audio streams
+block per block, so that it can process arbitrarily long streams. The programmer who wants to use Yaafe to compute features
+providing audio block per block (directly from C++ or from Python bindings) should have an idea how Yaafe&#8217;s engine works.</p>
+<div class="section" id="objectives">
+<h3>3.4.1. Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h3>
+<p>Yaafe&#8217;s dataflow processing engine process data block per block in order to be able to analyze long audio streams efficiently.
+But Yaafe&#8217;s is not &#8216;&#8217;realtime&#8217;&#8216;, and provide no guarantee on when the feature values are available.</p>
+</div>
+<div class="section" id="id5">
+<h3>3.4.2. Overview<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>The dataflow file to process represents a directed acyclic graph where nodes are computation step (FFT, cepstrum, sum, ...) and
+links are communication streams. A stream is a FIFO queue, implemented in the <code class="docutils literal"><span class="pre">Buffer.h</span></code> and <code class="docutils literal"><span class="pre">Buffer.cpp</span></code> C++ files.</p>
+<p>It has been decided to implement a stream with data blocks of fixed size, and only full data block are transmitted. Consequently,
+on every communication streams in the graph, the engine waits to have enough data before transmitting data to the next computation step.
+With a suitable data block size, this strategy has proven to be very cache efficient, for both data and code.</p>
+</div>
+<div class="section" id="feature-values-availability">
+<h3>3.4.3. Feature values availability<a class="headerlink" href="#feature-values-availability" title="Permalink to this headline">¶</a></h3>
+<p>Processing data block per block has an impact on when feature result values will be available. So the programmer should have the following points in mind:</p>
+<ul class="simple">
+<li>Yaafe&#8217;s engine waits to have enough data before processing any computation</li>
+<li>When providing an audio chunk, the programmer has absolutely no guarantee that the features which could be computed will be computed immediatly.</li>
+<li>When computing several features simultaneously, there are no guarantee that all feature values come synchronously. For example, when computing features F1 and F2 simultaneously, F1 value for time t may be available and not F2 value for time t.</li>
+<li>The only fact the programmer can rely on is that, for each feature, results are produced in the natural temporal order.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/yaafe.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../manual.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Yaafe internals</a><ul>
+<li><a class="reference internal" href="#overview">3.1. Overview</a><ul>
+<li><a class="reference internal" href="#feature-plan-parser">3.1.1. Feature Plan Parser</a></li>
+<li><a class="reference internal" href="#dataflow-engine">3.1.2. Dataflow Engine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#feature-extraction-plan">3.2. Feature extraction plan</a><ul>
+<li><a class="reference internal" href="#feature-definition-syntax">3.2.1. Feature definition syntax</a></li>
+<li><a class="reference internal" href="#example">3.2.2. Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dataflow-file">3.3. Dataflow file</a><ul>
+<li><a class="reference internal" href="#dataflow-file-syntax">3.3.1. Dataflow file syntax</a></li>
+<li><a class="reference internal" href="#id4">3.3.2. Example</a></li>
+<li><a class="reference internal" href="#get-the-dataflow-file-from-the-feature-plan">3.3.3. Get the <em>dataflow file</em> from the <em>feature plan</em></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#yaafe-s-dataflow-processing-engine">3.4. Yaafe&#8217;s dataflow processing engine</a><ul>
+<li><a class="reference internal" href="#objectives">3.4.1. Objectives</a></li>
+<li><a class="reference internal" href="#id5">3.4.2. Overview</a></li>
+<li><a class="reference internal" href="#feature-values-availability">3.4.3. Feature values availability</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="previous chapter">2. Quick Start, using <code class="docutils literal"><span class="pre">yaafe</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tools.html"
+                        title="next chapter">4. Other <em>Yaafe</em> tools</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="../_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tools.html" title="4. Other Yaafe tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="2. Quick Start, using yaafe"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">YAAFE v0.70</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Other Yaafe tools &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.70',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="../index.html" />
+    <link rel="up" title="User Manual" href="../manual.html" />
+    <link rel="next" title="5. The yaafelib Python module" href="pythonbindings.html" />
+    <link rel="prev" title="3. Yaafe internals" href="internals.html" /> 
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="other-yaafe-tools">
+<h1>4. Other <em>Yaafe</em> tools<a class="headerlink" href="#other-yaafe-tools" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="matlab-interaction">
+<h2>4.1. Matlab interaction<a class="headerlink" href="#matlab-interaction" title="Permalink to this headline">¶</a></h2>
+<p>If you enabled the WITH_MATLAB_MEX option, you can extract features using the <code class="docutils literal"><span class="pre">Yaafe</span></code> matlab class.</p>
+<p>The Matlab Yaafe engine needs to be configured with a <a class="reference internal" href="internals.html#get-dataflow-file"><span class="std std-ref">dataflow file</span></a>.
+Once you get the dataflow file corresponding to the features to extract and the analysis sample rate,
+you can prepare the Matlab Yaafe engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">yaafe</span> <span class="o">=</span> <span class="n">Yaafe</span><span class="p">();</span>
+<span class="o">&gt;&gt;</span> <span class="n">yaafe</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;yaflow&#39;</span><span class="p">)</span>
+<span class="mi">1</span>
+</pre></div>
+</div>
+<p>&#8216;yaflow&#8217; is the Dataflow file. the &#8216;load&#8217; method returns 1 if success or 0 if failed.</p>
+<p>Then, the Matlab Yaafe is ready to extract features:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">signal</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100000</span><span class="p">);</span>
+<span class="o">&gt;&gt;</span> <span class="n">feats1</span> <span class="o">=</span> <span class="n">yaafe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">signal</span><span class="p">);</span>
+<span class="o">&gt;&gt;</span> <span class="n">feats2</span> <span class="o">=</span> <span class="n">yaafe</span><span class="o">.</span><span class="n">processFile</span><span class="p">(</span><span class="s1">&#39;song.wav&#39;</span><span class="p">);</span>
+<span class="o">&gt;&gt;</span> <span class="n">feats1</span>
+
+<span class="n">feats1</span> <span class="o">=</span>
+
+      <span class="n">mfcc</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+   <span class="n">mfcc_d1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+   <span class="n">mfcc_d2</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+        <span class="n">sf</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+        <span class="n">sr</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Once Dataflow file is loaded, you can call the &#8216;process&#8217; and &#8216;processFile&#8217; methods
+as many times as you want. The output is a struct where each fields holds an audio
+features with the following metadata:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">the feature name has defined in the Dataflow file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">size:</th><td class="field-body">size of the feature</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">sampleRate:</th><td class="field-body">analysis sample rate</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sampleStep:</th><td class="field-body">number of sample between consecutive analysis windows</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">frameLength:</th><td class="field-body">length of analysis window</td>
+</tr>
+<tr class="field-even field"><th class="field-name">data:</th><td class="field-body">feature values</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you prefer to manipulate a feature list, you can use the <code class="docutils literal"><span class="pre">struct2cell</span></code> Matlab function:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">feats</span> <span class="o">=</span> <span class="n">struct2cell</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span>
+<span class="o">&gt;&gt;</span> <span class="n">feats</span>
+
+<span class="n">feats</span> <span class="o">=</span>
+
+    <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+    <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+    <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+    <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+    <span class="p">[</span><span class="mi">1</span><span class="n">x1</span> <span class="n">struct</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="python-interaction">
+<h2>4.2. Python interaction<a class="headerlink" href="#python-interaction" title="Permalink to this headline">¶</a></h2>
+<p><em>Yaafe</em> python bindings allow to easily extract features from Python with a great flexibility.
+The first step is always to build the <a class="reference internal" href="pythonbindings.html#yaafelib.DataFlow" title="yaafelib.DataFlow"><code class="xref py py-class docutils literal"><span class="pre">DataFlow</span></code></a> object corresponding to the audio features
+to extract (for example using a <a class="reference internal" href="pythonbindings.html#yaafelib.FeaturePlan" title="yaafelib.FeaturePlan"><code class="xref py py-class docutils literal"><span class="pre">FeaturePlan</span></code></a> object), and configure an <a class="reference internal" href="pythonbindings.html#yaafelib.Engine" title="yaafelib.Engine"><code class="xref py py-class docutils literal"><span class="pre">Engine</span></code></a>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yaafelib</span> <span class="k">import</span> <span class="o">*</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Build a DataFlow object using FeaturePlan</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">FeaturePlan</span><span class="p">(</span><span class="n">sample_rate</span><span class="o">=</span><span class="mi">16000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc: MFCC blockSize=512 stepSize=256&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc_d1: MFCC blockSize=512 stepSize=256 &gt; Derivate DOrder=1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">addFeature</span><span class="p">(</span><span class="s1">&#39;mfcc_d2: MFCC blockSize=512 stepSize=256 &gt; Derivate DOrder=2&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">getDataFlow</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># or load a DataFlow from dataflow file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">DataFlow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dataflow_file</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># configure an Engine</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># extract features from an audio file using AudioFileProcessor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span> <span class="o">=</span> <span class="n">AudioFileProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span><span class="o">.</span><span class="n">processFile</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">audiofile</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">readAllOutputs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># and play with your features</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># extract features from an audio file and write results to csv files</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span><span class="o">.</span><span class="n">setOutputFormat</span><span class="p">(</span><span class="s1">&#39;csv&#39;</span><span class="p">,</span><span class="s1">&#39;output&#39;</span><span class="p">,{</span><span class="s1">&#39;Precision&#39;</span><span class="p">:</span><span class="s1">&#39;8&#39;</span><span class="p">})</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">afp</span><span class="o">.</span><span class="n">processFile</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">audiofile</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># this creates output/myaudio.wav.mfcc.csv,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#              output/myaudio.wav.mfcc_d1.csv and</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#              output/myaudio.wav.mfcc_d2.csv files.</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># extract features from a numpy array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">audio</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feats</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">processAudio</span><span class="p">(</span><span class="n">audio</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># and play with your features</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="pythonbindings.html#module-yaafelib" title="yaafelib"><code class="xref py py-mod docutils literal"><span class="pre">yaafelib</span></code></a></dt>
+<dd>Documentation of yaafelib module.</dd>
+<dt><a class="reference internal" href="pythonbindings.html#yaafelib.FeaturePlan" title="yaafelib.FeaturePlan"><code class="xref py py-class docutils literal"><span class="pre">FeaturePlan</span></code></a></dt>
+<dd>More on manipulation feature plans</dd>
+<dt><a class="reference internal" href="pythonbindings.html#yaafelib.Engine" title="yaafelib.Engine"><code class="xref py py-class docutils literal"><span class="pre">Engine</span></code></a></dt>
+<dd>Details about metadata and feature extraction</dd>
+<dt><a class="reference internal" href="pythonbindings.html#yaafelib.AudioFileProcessor" title="yaafelib.AudioFileProcessor"><code class="xref py py-class docutils literal"><span class="pre">AudioFileProcessor</span></code></a></dt>
+<dd>Extraction features directly from audio files, writing output to files</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="yaafe-engine-program">
+<h2>4.3. <code class="docutils literal"><span class="pre">yaafe-engine</span></code> program<a class="headerlink" href="#yaafe-engine-program" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">yaafe-engine</span></code> program is a C++ program to process a <a class="reference internal" href="internals.html#get-dataflow-file"><span class="std std-ref">dataflow file</span></a>
+on a list of audio files. It can produce same outputs as the <code class="docutils literal"><span class="pre">yaafe</span></code> script. This program is
+usefull if you need to process feature extraction without any dependency to Python.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/yaafe.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../manual.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Other <em>Yaafe</em> tools</a><ul>
+<li><a class="reference internal" href="#matlab-interaction">4.1. Matlab interaction</a></li>
+<li><a class="reference internal" href="#python-interaction">4.2. Python interaction</a></li>
+<li><a class="reference internal" href="#yaafe-engine-program">4.3. <code class="docutils literal"><span class="pre">yaafe-engine</span></code> program</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="internals.html"
+                        title="previous chapter">3. Yaafe internals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pythonbindings.html"
+                        title="next chapter">5. The <em>yaafelib</em> Python module</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
+<a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="../_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pythonbindings.html" title="5. The yaafelib Python module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="internals.html" title="3. Yaafe internals"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">YAAFE v0.70</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
+	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+    </div>
+
+  </body>
+</html>
