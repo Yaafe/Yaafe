@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>6. Extending Yaafe &mdash; YAAFE - Yet Another Audio Feature Extractor</title>
+    <title>6. Extending Yaafe &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.65',
+        VERSION:     '0.70',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="../index.html" />
     <link rel="up" title="User Manual" href="../manual.html" />
     <link rel="next" title="Yaafe core features" href="../features.html" />
@@ -38,7 +40,7 @@
   <div class="section" id="extending-yaafe">
 <h1>6. Extending Yaafe<a class="headerlink" href="#extending-yaafe" title="Permalink to this headline">¶</a></h1>
 <p>Before extending <em>Yaafe</em>, the developper have to be aware of <em>Yaafe</em>&#8216;s
-general architecture. Please read carefully <a class="reference internal" href="internals.html"><em>Yaafe internals</em></a>.</p>
+general architecture. Please read carefully <a class="reference internal" href="internals.html"><span class="doc">Yaafe internals</span></a>.</p>
 <p>As a summary, keep in mind that a feature is defined by 2 layers:</p>
 <ol class="arabic simple">
 <li>a python class which builds the directed graph of components, representing the steps to compute the feature</li>
@@ -85,8 +87,8 @@ raw feature which is computed directly from the audio signal.</p>
 <dl class="classmethod">
 <dt id="yaafelib.AudioFeature.filter_params">
 <em class="property">classmethod </em><code class="descname">filter_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#yaafelib.AudioFeature.filter_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary holding only parameters defined from the PARAMS attribute
-with default value for those not in the given params dict.</p>
+<dd><p>Returns a dictionary holding only parameters defined from the PARAMS
+attribute with default value for those not in the given params dict.</p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -163,14 +165,11 @@ The programmer who is integrating <em>Yaafe</em>&#8216;s C++ Engine into his pro
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
 <a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="../_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
@@ -191,13 +190,13 @@ The programmer who is integrating <em>Yaafe</em>&#8216;s C++ Engine into his pro
         <li class="right" >
           <a href="pythonbindings.html" title="5. The yaafelib Python module"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">YAAFE v0.65</a> &raquo;</li>
-          <li><a href="../manual.html" accesskey="U">User Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">YAAFE v0.70</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../manual.html" accesskey="U">User Manual</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3b2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
 	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
     </div>
 

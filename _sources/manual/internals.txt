@@ -9,9 +9,9 @@ Overview
 .. image:: images/overview.png
    :scale: 100%
    :align: center
-   
-   
-*Yaafe* feature extraction operates in two main steps, that are done together by the ``yaafe.py`` script, but can be done separately according to your needs.
+
+
+*Yaafe* feature extraction operates in two main steps, that are done together by the ``yaafe`` script, but can be done separately according to your needs.
 
 Feature Plan Parser
 """""""""""""""""""
@@ -21,7 +21,7 @@ same applies to feature transforms and temporal integrators.
 
 The *Feature Plan Parser* is responsible for creating the *dataflow graph* according to a given *feature extraction plan* and a working samplerate.
 It decomposes each declared feature into steps and groups together identical steps which have the same input into a reduced
-directed graph of computational steps. 
+directed graph of computational steps.
 
 Dataflow Engine
 """""""""""""""
@@ -55,10 +55,10 @@ With the following tokens:
 
 :token:`name`
 	Name of declared feature. This name will be used for the output dataset, or the output stream.
-	
+
 :token:`feature`
-	Feature name. Use ``yaafe.py -l`` to list available features.
-	
+	Feature name. Use ``yaafe -l`` to list available features.
+
 :token:`key`
 	Parameter key
 
@@ -88,8 +88,8 @@ A dataflow file is a file defining a dataflow graph (see the :ref:`overview figu
 is a directed acyclic graph where nodes define computational steps to compute the desired outputs.
 
 There mainly 2 ways of building the *dataflow graph* corresponding to a :ref:`feature extraction plan <featplan>`
-The *dataflow graph* can be dumped into a file using the ``--dump-dataflow`` option of ``yaafe.py`` (see :ref:`here <get-dataflow-file>`).
-It also can be created using the Python :py:class:`FeaturePlan` 
+The *dataflow graph* can be dumped into a file using the ``--dump-dataflow`` option of ``yaafe`` (see :ref:`here <get-dataflow-file>`).
+It also can be created using the Python :py:class:`FeaturePlan`
 
 
 The :ref:`dataflow file syntax <dataflow-syntax>` is described in the following section.
@@ -118,7 +118,7 @@ The dataflow file syntax is defined with the following grammar:
 :token:`node`
 	Node identifier. In the context of a *input_stmt* (or *output_stmt*), :token:`node` is
 	the input name (or output name).
-	
+
 :token:`component`
 	A valid component name.
 
@@ -137,7 +137,7 @@ Example
 
 Here is the dataflow generated for extracting MFCC over a 44.1kHz audio file::
 
-	> yaafe.py -r 44100 -f "mfcc: MFCC" --dump-dataflow=yaflow
+	> yaafe -r 44100 -f "mfcc: MFCC" --dump-dataflow=yaflow
 	> more yaflow
 	useComponentLibrary yaafe-components
 	audio := Input SampleRate="44100"
@@ -162,8 +162,8 @@ Here is another example for extracting several features::
 	mfcc_d2: MFCC > Derivate DOrder=2
 	sf: SpectralFlatness
 	sr: SpectralRolloff
-	
-	> yaafe.py -c featureplan -r 44100 --dump-dataflow=yaflow
+
+	> yaafe -c featureplan -r 44100 --dump-dataflow=yaflow
 	> more yaflow
 	useComponentLibrary yaafe-components
 	audio := Input SampleRate="44100"
@@ -211,13 +211,13 @@ the following one::
 	mfcc_d2: MFCC > Derivate DOrder=2
 	sf: SpectralFlatness
 	sr: SpectralRolloff
-	
-Then, get the corresponding Yaafe dataflow file using the ``yaafe.py`` script::
 
-	> yaafe.py -r 44100 -c featureplan --dump-dataflow=yaflow
-	
+Then, get the corresponding Yaafe dataflow file using the ``yaafe`` script::
+
+	> yaafe -r 44100 -c featureplan --dump-dataflow=yaflow
+
 This command produces a file named 'yaflow', which is the dataflow file
-corresponding to the given feature extraction plan:: 
+corresponding to the given feature extraction plan::
 
 	> cat yaflow
 	useComponentLibrary yaafe-components
@@ -226,7 +226,7 @@ corresponding to the given feature extraction plan::
 	n2 := FFT FFTLength="1024" FFTWindow="Hanning"
 	n3 := Abs
 	...
-	
+
 Pay attention to the fact that a Yaafe dataflow file is **designed for a specific analysis
 sample rate**. To extract same features on signals or files with other sample rate, you have
 to create another dataflow file.

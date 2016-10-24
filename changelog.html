@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; YAAFE - Yet Another Audio Feature Extractor</title>
+    <title>Changelog &#8212; YAAFE - Yet Another Audio Feature Extractor</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.65',
+        VERSION:     '0.70',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,6 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="top" title="YAAFE - Yet Another Audio Feature Extractor" href="index.html" />
     <link rel="prev" title="Yaafe core features" href="features.html" /> 
   </head>
@@ -36,14 +38,39 @@
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <dl class="docutils">
+<dt><strong>v0.70</strong>, 2015-02-25</dt>
+<dd><p class="first">Major release.</p>
+<ul class="last">
+<li><p class="first">Merge <a class="reference external" href="http://perso.telecom-paristech.fr/~essid/tp-yaafe-extension/">TPYaafeExtension - Télécom ParisTech Yaafe Extension</a> into Yaafe.</p>
+<p>TPYaafeExtension is an extension of the Yaafe toolbox, developed at <a class="reference external" href="http://www.tsi.telecom-paristech.fr/aao/en/">Télécom ParisTech</a>. It provides several useful mid-level audio features (CQT, Chromas, Chords, ...).
+It is now available under the LGPL licence and was thus merge into Yaafe.</p>
+</li>
+<li><p class="first">Improve Yaafe installation. See <a class="reference internal" href="manual/install.html"><span class="doc">Installing Yaafe</span></a>.</p>
+<ul class="simple">
+<li>For Linux-64: Add conda recipes and create conda packages for Yaafe and all its required or optional dependencies. Yaafe can thus now easily be installed in a conda environment.  See <a class="reference external" href="https://anaconda.org/Yaafe/yaafe">https://anaconda.org/Yaafe/yaafe</a>.
+Only available for Linux-64.
+<em>OSX and Windows developers are very welcome to contribute to build conda recipes for these platform.</em></li>
+<li>Add docker support to easily deploy Yaafe on every platform. See <a class="reference external" href="https://hub.docker.com/r/yaafe/">https://hub.docker.com/r/yaafe/</a></li>
+</ul>
+</li>
+<li><p class="first">Improve documentation:
+* Clean-up and fix thanks to <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/16">Pull request #16</a> and <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/7">Pull request #7</a>
+* Fix windows native compilation thanks to <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/13">Pull request #13</a></p>
+</li>
+<li><p class="first">Fix and improve <cite>Yaafe</cite> python command line tool:
+* Improve MFCC by limiting the max frequency of Mel filterbank to Nyquist frequency with  <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/12">Pull request #12</a>
+* Add meaningful error message when -f missing from command with <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/11">Pull request #11</a></p>
+</li>
+</ul>
+</dd>
 <dt><strong>v0.65</strong>, 2015-01-13</dt>
 <dd><p class="first">Bug fix and enhancement release</p>
 <ul class="last simple">
 <li>First release after having moved the repository to Github</li>
-<li>Fix some memory leaks (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/2">Pull request #2</a> and <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/4">Pull request #4</a></li>
+<li>Fix some memory leaks (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/2">Pull request #2</a> and <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/4">Pull request #4</a> )</li>
 <li>Enhancement: support time_start, time_limit for MP3FileReader and AudioFileReader so that we can extract features in a specific time range.</li>
 <li>Fix installation of Yaafe for windows, (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/5">Pull request #5</a>)</li>
-<li>Fix segmentation fault of timer (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/6">Pull request #5</a>)</li>
+<li>Fix segmentation fault of timer (see <a class="reference external" href="https://github.com/Yaafe/Yaafe/pull/6">Pull request #6</a>)</li>
 <li>yaafe command line is now <cite>yaafe`instead of `yaafe.py</cite></li>
 </ul>
 </dd>
@@ -89,7 +116,7 @@
 <dt><em>Yaafe</em> now has several output formats: CSV and H5. Other output format can be added in the future.</dt>
 <dd><div class="first last admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Default output format is <strong>CSV</strong> because it does not require any thirdparty library. Use <code class="docutils literal"><span class="pre">-o</span></code> and <code class="docutils literal"><span class="pre">-p</span></code> options to produce HDF5 output identical to yaafe v0.53 output (see <a class="reference internal" href="manual/quickstart.html#output-format"><em>Output format</em></a>).</p>
+<p class="last">Default output format is <strong>CSV</strong> because it does not require any thirdparty library. Use <code class="docutils literal"><span class="pre">-o</span></code> and <code class="docutils literal"><span class="pre">-p</span></code> options to produce HDF5 output identical to yaafe v0.53 output (see <a class="reference internal" href="manual/quickstart.html#output-format"><span class="std std-ref">Output format</span></a>).</p>
 </div>
 </dd>
 </dl>
@@ -151,14 +178,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><p style="text-align: center; width: 100%;"> 
 <a href="http://www.tsi.telecom-paristech.fr/aao/en/"><img src="_static/logo_tecomptech_85949.gif" title="T&eacute;l&eacute;com ParisTech - TSI / AAO"/></a>
@@ -176,12 +200,12 @@
         <li class="right" >
           <a href="features.html" title="Yaafe core features"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">YAAFE v0.65</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">YAAFE v0.70</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009-2011 Institut Télécom - Télécom Paristech.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3b2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.8.
 	<br/>Project hosted on <a href="http://sourceforge.net/projects/yaafe"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=312638&amp;type=9" width="80" height="15" alt="Get yaafe at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
     </div>
 

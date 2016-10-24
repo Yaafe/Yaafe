@@ -21,9 +21,12 @@ If you wonder about the *Yaafe* acronym, it's just *Yet Another Audio Feature Ex
 
 Project's status
 ----------------
-
+.. |date| date::
+	  
 .. highlights::
-	Current version is Yaafe |version|,  released on 2011-11-07.
+
+	Current version is Yaafe |version|.  This documentation was updated on |date|.
+
 
 *Yaafe* may evolve in future versions, but current code is pretty stable and feature computation is already reliable.
 *Yaafe* is already used in some Music Information Retrieval systems.
@@ -41,11 +44,12 @@ Project's status
 Download
 --------
 
-*Yaafe*'s source code is released under the terms of the GNU LGPLv3 License. *Yaafe* source code compiles on **Linux** and **MacOsX** platforms.
+*Yaafe*'s source code is released under the terms of the GNU LGPLv3 License. *Yaafe* source code compiles on **Linux**, **MacOsX** and **Windows** platforms.
 
-Download current release: `yaafe-v0.65.tgz <https://sourceforge.net/projects/yaafe/files/yaafe-v0.65.tgz/download>`_, see :doc:`changelog <changelog>`.
+Download current release on GitHub: `yaafe zip <https://github.com/Yaafe/Yaafe/archive/master.zip>`_, see :doc:`changelog <changelog>`.
 
-View all releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
+View all old releases: `Sourceforge project's website <https://sourceforge.net/projects/yaafe/>`_
+
 
 Documentation
 -------------

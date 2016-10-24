@@ -10,32 +10,32 @@ The Matlab Yaafe engine needs to be configured with a :ref:`dataflow file <get-d
 Once you get the dataflow file corresponding to the features to extract and the analysis sample rate,
 you can prepare the Matlab Yaafe engine::
 
- 
+
      >> yaafe = Yaafe();
      >> yaafe.load('yaflow')
-     1 
- 
-'yaflow' is the Dataflow file. the 'load' method returns 1 if success or 0 if failed. 
+     1
 
-Then, the Matlab Yaafe is ready to extract features:: 
- 
+'yaflow' is the Dataflow file. the 'load' method returns 1 if success or 0 if failed.
+
+Then, the Matlab Yaafe is ready to extract features::
+
      >> signal = rand(1,100000);
      >> feats1 = yaafe.process(signal);
      >> feats2 = yaafe.processFile('song.wav');
      >> feats1
- 
-     feats1 = 
- 
+
+     feats1 =
+
            mfcc: [1x1 struct]
         mfcc_d1: [1x1 struct]
         mfcc_d2: [1x1 struct]
              sf: [1x1 struct]
              sr: [1x1 struct]
- 
-Once Dataflow file is loaded, you can call the 'process' and 'processFile' methods 
+
+Once Dataflow file is loaded, you can call the 'process' and 'processFile' methods
 as many times as you want. The output is a struct where each fields holds an audio
 features with the following metadata:
- 
+
 :name: the feature name has defined in the Dataflow file
 :size: size of the feature
 :sampleRate: analysis sample rate
@@ -45,18 +45,18 @@ features with the following metadata:
 
 .. note::
 	If you prefer to manipulate a feature list, you can use the ``struct2cell`` Matlab function::
-		
+
 		>> feats = struct2cell(feats);
 		>> feats
 
-		feats = 
+		feats =
 
 		    [1x1 struct]
 		    [1x1 struct]
 		    [1x1 struct]
 		    [1x1 struct]
 		    [1x1 struct]
-		
+
 
 
 
@@ -65,7 +65,7 @@ Python interaction
 
 *Yaafe* python bindings allow to easily extract features from Python with a great flexibility.
 The first step is always to build the |Dataflow| object corresponding to the audio features
-to extract (for example using a |FeaturePlan| object), and configure an |Engine|. 
+to extract (for example using a |FeaturePlan| object), and configure an |Engine|.
 
 .. testsetup::
 
@@ -128,7 +128,7 @@ to extract (for example using a |FeaturePlan| object), and configure an |Engine|
 
 	|Engine|
 		Details about metadata and feature extraction
-	
+
 	|AudioFileProcessor|
 		Extraction features directly from audio files, writing output to files
 
@@ -137,7 +137,7 @@ to extract (for example using a |FeaturePlan| object), and configure an |Engine|
 ------------------------
 
 The ``yaafe-engine`` program is a C++ program to process a :ref:`dataflow file <get-dataflow-file>`
-on a list of audio files. It can produce same outputs as the ``yaafe.py`` script. This program is
+on a list of audio files. It can produce same outputs as the ``yaafe`` script. This program is
 usefull if you need to process feature extraction without any dependency to Python.
 
 .. |DataFlow| replace:: :py:class:`DataFlow <yaafelib.DataFlow>`
