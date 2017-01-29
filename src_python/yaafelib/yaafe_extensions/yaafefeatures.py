@@ -956,7 +956,7 @@ class CQT(AudioFeature):
                       'CQTMaxFreq': '%s' % str(2 * minFreq / samplerate - decimal.Decimal('1e-14'))}
         # for each octave, analysis, concatenate and decimation
         concat_node = df.createNode('Concatenate', {})
-        for oct in range(nboct, 0, -1):
+        for oct in range(int(nboct), 0, -1):
             frames = df.createNode('AdvancedFrameTokenizer',
                                    {'blockSize': '%i' % fftLen,
                                     'outStepSize': '%i' % original_step,
