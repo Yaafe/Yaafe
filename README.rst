@@ -142,12 +142,10 @@ There are 3 ways to solve this problem :
 * The simplest way is to add the line ``sys.path.append("/usr/local/lib/python2.7/site-packages")`` in ``/usr/local/bin/yaafe`` after ``from optparse import OptionParser``, but it won't let you use the yaafelib unless you add this line (and import sys) before each import of yaafelib.
 
 * You can use ``export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH`` or add it to your ~/.bash_profile, but this will affect other versions of python.
-
 * You can move the files to a site-package folder that is in your PYTHONPATH:
-	* if you use Python 2: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'``
+	* if you use Python 2: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'```
 	
-	* if you use Python 3: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'``
-
+	* if you use Python 3: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'```
 
 If you use Matlab, you can set your MATLABPATH var::
 
