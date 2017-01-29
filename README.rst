@@ -143,16 +143,11 @@ There are 3 ways to solve this problem :
 
 * You can use ``export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH`` or add it to your ~/.bash_profile, but this will affect other versions of python.
 
-* You can move the files to a site-package folder that is in your PYTHONPATH::
-    
- - if you use Python 2 :
-
-	mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'`
+* You can move the files to a site-package folder that is in your PYTHONPATH:
+	* if you use Python 2: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'``
 	
- - if you use Python 3:
-    
-    mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'`
-    
+	* if you use Python 3: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'``
+
 
 If you use Matlab, you can set your MATLABPATH var::
 
