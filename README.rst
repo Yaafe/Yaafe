@@ -19,7 +19,7 @@ Build status
     :target: https://travis-ci.orgYaafe/Yaafe
 
 .. |anaconda_build| image:: https://anaconda.org/yaafe/yaafe/badges/installer/conda.svg
-   :target: https://anaconda.org/yaafe/yaafe/builds
+   :target: https://anaconda.org/yaafe/yaafe
 
 			
 Install
