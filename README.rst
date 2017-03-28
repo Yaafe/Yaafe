@@ -101,6 +101,10 @@ Yaafe requires third-party libraries to enable specific features. Some of these 
 
 The `argtable <http://argtable.sourceforge.net/>`_ library is required.
 
+The `eigen <http://eigen.tuxfamily.org/>`_  library is also required. You could either installed it through your regular packages manager (e.g. `libeigen3-dev <https://packages.debian.org/search?keywords=libeigen3-dev>`__ on Debian) and then pass the ``-DWITH_EIGEN_LIBRARY=ON`` option flag to ``ccmake``. 
+Or you can use the source code provided through the git submodule included in the Yaafe git repository and which you can get with the ``git submodule update --init`` command. *If you used ``git clone --recursive`` to clone Yaafe, you don't need this.*
+
+
 Depending on optional features you want to use, other librairies may be used:
 
 * `libsndfile <http://www.mega-nerd.com/libsndfile/>`_: enable reading WAV files format (highly recommanded)
@@ -114,13 +118,16 @@ To use the *yaafe* script you need Python >= 2.5, and the numpy package.
 Once previous libraries are installed (some may have been locally installed in <lib-path>),
 you can compile with the following steps: ::
 
- git submodule init  # to prepare Eigen code under the externals directory
- git submodule update # if you used git clone --recursive, you don't need those 2 lines
  mkdir build
  cd build
  ccmake -DCMAKE_PREFIX_PATH=<lib-path> -DCMAKE_INSTALL_PREFIX=<install-path> ..
  make
  make install
+
+If you use an external eigen library (and not the one provided by git submodule), don't forget to add the  flag: ::
+
+ ccmake -DCMAKE_PREFIX_PATH=<lib-path> -DCMAKE_INSTALL_PREFIX=<install-path> -DWITH_EIGEN_LIBRARY=ON ..
+
 
 Several options can control Yaafe compilation. More details can be found at:
 	http://yaafe.sourceforge.net/manual/install.html
