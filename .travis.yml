@@ -5,6 +5,7 @@ compiler:
 
 python:
   - 2.7
+  - 3.5
 
 env:
   - WITH_FFTW3=OFF WITH_HDF5=OFF WITH_LAPACK=OFF WITH_MPG123=OFF

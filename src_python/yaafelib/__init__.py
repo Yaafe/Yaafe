@@ -31,6 +31,8 @@ Main Yaafe module, providing classes to extract features with Yaafe.
 
 """
 
+from __future__ import absolute_import, print_function
+
 import os
 import sys
 from yaafelib.core import (loadComponentLibrary,
@@ -76,8 +78,8 @@ __all__ = ['loadComponentLibrary',
 def loadPlugins():
     # load available plugins
     __import__(
-        'yaafe_extensions.yaafefeatures',
-        globals(), locals(), [], -1
+        'yaafelib.yaafe_extensions.yaafefeatures',
+        globals(), locals(), [], 0
     )
 
     yaafe_path = os.getenv('YAAFE_PATH')
@@ -91,9 +93,9 @@ def loadPlugins():
             continue
         extension = '.'.join(parts[:-1])
         try:
-            __import__(extension, globals(), locals(), [], -1)
-        except ImportError, err:
-            print 'ERROR: cannot load yaafe extension %s !' % extension
-            print err
+            __import__(extension, globals(), locals(), [], 0)
+        except ImportError as err:
+            print('ERROR: cannot load yaafe extension %s !' % extension)
+            print(err)
 
 loadPlugins()

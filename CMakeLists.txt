@@ -134,7 +134,7 @@ endif(WITH_TIMERS)
 
 FIND_PROGRAM(SPHINX_BUILD sphinx-build PATHS ENV PATH DOC "sphinx-build script used to build documentation")
 
-execute_process ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(prefix='')" OUTPUT_VARIABLE python_packages OUTPUT_STRIP_TRAILING_WHITESPACE )
+execute_process ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix=''))" OUTPUT_VARIABLE python_packages OUTPUT_STRIP_TRAILING_WHITESPACE )
 # install paths
 set(CMAKE_INSTALL_BINDIR bin CACHE PATH "Output directory for programs")
 set(CMAKE_INSTALL_LIBDIR lib CACHE PATH "Output directory for libraries")

@@ -22,17 +22,20 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import, print_function
+
 import yaafelib.core as yaafecore
+from yaafelib._compat import add_metaclass, iteritems
 
 
 def check_dataflow_params(f):
     def _safe_get_dataflow(cls, params, samplerate):
         # filter parameters and set missing parameters with default values
-        for k, v in params.iteritems():
+        for k, v in iteritems(params):
             if not k in [key for (key, _, _) in
                          cls._EXPOSED_PARAM_DESCRIPTORS]:
-                print 'WARNING: unknown parameter %s for feature %s !' % (
-                    k, cls.__name__)
+                print('WARNING: unknown parameter %s for feature %s !' % (
+                    k, cls.__name__))
         filt_params = dict([
             (name, str(params.get(name, default)))
             for (name, default, desc) in cls._EXPOSED_PARAM_DESCRIPTORS])
@@ -56,8 +59,8 @@ def dataflow_safe_append(dataflow, component, params):
     fNodes = dataflow.finalNodes()
     n = dataflow.createNode(component, filtered_params)
     if (len(fNodes) != 1):
-        print 'WARNING: dataflow has %i final nodes when appending '\
-              'component %s !' % (len(fNodes), component)
+        print('WARNING: dataflow has %i final nodes when appending '\
+              'component %s !' % (len(fNodes), component))
         return
     dataflow.link(fNodes[0], '', n, '')
 
@@ -81,7 +84,8 @@ class AudioFeatureFactory(type):
         components_available = True
         for p in kdict['PARAMS']:
             if not type(p) == tuple or not len(p) in [2, 3]:
-                print 'ERROR: invalid PARAMS attribute for feature %s !' % name
+                print('ERROR: invalid PARAMS attribute for feature %s !'
+                      % name)
                 return None
             if len(p) == 3:
                 # explicit parameter
@@ -104,7 +108,7 @@ class AudioFeatureFactory(type):
                           for (key, value, desc) in params
                           if p[1].get(key, True)]
                 exposed_params.extend(params)
-        exposed_params.sort(cmp=lambda x, y: cmp(x[0], y[0]))
+        exposed_params.sort(key=lambda x: x[0])
         kdict['_EXPOSED_PARAM_DESCRIPTORS'] = exposed_params
         kdict['_COMPONENTS_AVAILABLE'] = components_available
         # list all params
@@ -126,7 +130,7 @@ class AudioFeatureFactory(type):
         for feat in cls._FEATURES:
             if (feat.__name__ == name):
                 return feat
-        print 'ERROR: unknown feature %s' % name
+        print('ERROR: unknown feature %s' % name)
         return None
 
     @classmethod
@@ -134,11 +138,11 @@ class AudioFeatureFactory(type):
         return cls._FEATURES
 
 
+@add_metaclass(AudioFeatureFactory)
 class AudioFeature(object):
     '''
     classdocs
     '''
-    __metaclass__ = AudioFeatureFactory
 
     TRANSFORM = False
     '''

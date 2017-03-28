@@ -22,8 +22,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from core import yaafecore as yc
-from core import loadComponentLibrary
+from __future__ import absolute_import, print_function
+
+from yaafelib._compat import iteritems, to_char
+from yaafelib.core import yaafecore as yc
+from yaafelib.core import loadComponentLibrary
 from ctypes import c_char_p
 
 
@@ -91,10 +94,10 @@ class AudioFileProcessor(object):
                 loadComponentLibrary('yaafe-io') == 0)
 
         tmp = ((c_char_p*2)*(len(params)+1))()
-        tmp[:-1] = [(c_char_p*2)(c_char_p(k), c_char_p(v))
-                    for k, v in params.iteritems()]
-        if yc.audiofileprocessor_setOutputFormat(self.ptr, format,
-                                                 outDir, tmp):
+        tmp[:-1] = [(c_char_p*2)(c_char_p(to_char(k)), c_char_p(to_char(v)))
+                    for k, v in iteritems(params)]
+        if yc.audiofileprocessor_setOutputFormat(self.ptr, to_char(format),
+                                                 to_char(outDir), tmp):
             return True
         return False
 
@@ -118,4 +121,4 @@ class AudioFileProcessor(object):
             AudioFileProcessor._YAAFE_IO_LOADED = (
                 loadComponentLibrary('yaafe-io') == 0)
         return yc.audiofileprocessor_processFile(self.ptr, engine.ptr,
-                                                 filename)
+                                                 to_char(filename))
