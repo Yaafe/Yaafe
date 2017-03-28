@@ -11,7 +11,7 @@ Build status
 - Branch **master** : |travis_master|
 - Branch **dev** : |travis_dev|
 - Anaconda : |anaconda_build|
-  
+
 .. |travis_master| image:: https://travis-ci.org/Yaafe/Yaafe.svg?branch=master
     :target: https://travis-ci.org/Yaafe/Yaafe
 
@@ -21,7 +21,7 @@ Build status
 .. |anaconda_build| image:: https://anaconda.org/yaafe/yaafe/badges/installer/conda.svg
    :target: https://anaconda.org/yaafe/yaafe/builds
 
-			
+
 Install
 =======
 
@@ -32,10 +32,10 @@ Conda
    :target: https://conda.anaconda.org/yaafe
 
 |conda|
-	    
+
 Yaafe can be easily install with `conda <http://conda.pydata.org>`_. To install this package with conda run::
-    
-  conda install -c https://conda.anaconda.org/yaafe yaafe  
+
+  conda install -c https://conda.anaconda.org/yaafe yaafe
 
 
 Docker
@@ -46,15 +46,15 @@ Docker
 
 |docker|
 
-Yaafe can also be install through `Docker <https://www.docker.com/>`_. 
+Yaafe can also be install through `Docker <https://www.docker.com/>`_.
 
 Get the official *Yaafe* image from `Yaafe repository on Docker Hub <https://hub.docker.com/r/yaafe/yaafe/>`_::
-  
+
   docker pull yaafe/yaafe
   docker tag yaafe yaafe/yaafe
 
 or build it from the sources directory::
-    
+
     docker build --tag=yaafe .
 
 Following both of the method above, you then have a docker image tagged as *yaafe*.
@@ -71,18 +71,18 @@ You could then simply run::
 
   yaafe --help
   yaafe -l
-    
+
 et voilà !
 
 If you need to set the docker user as the current user on the host, you could try to run docker with the  ``-u $(id -u):$(id -g)`` option ::
-  
+
     docker run -it --rm=true --volume=$(pwd):/wd  --workdir=/wd -u $(id -u):$(id -g) yaafe -c resources/featureplan -o h5 -r 16000 --resample resources/yaafe_check.wav
 
 Last but not least, the entry-point for the *yaafe* docker image is smart :
 
 - every command that start with a dash ``-`` will be pass as options to the ``yaafe`` command inside the docker container
 - every command that does not start with a dash will be treated as a regular command. For example::
-      
+
     docker run -it yaafe /bin/bash
 
 will give you access to a bash terminal inside the docker. And ::
@@ -91,7 +91,7 @@ will give you access to a bash terminal inside the docker. And ::
 
 will launch the  ``yaafe-engine` batch processing tool.
 
-    
+
 
 From sources
 ------------
@@ -114,7 +114,7 @@ To use the *yaafe* script you need Python >= 2.5, and the numpy package.
 Once previous libraries are installed (some may have been locally installed in <lib-path>),
 you can compile with the following steps: ::
 
- git submodule init  # to prepare Eigen and fmemopen code under the externals directory
+ git submodule init  # to prepare Eigen code under the externals directory
  git submodule update # if you used git clone --recursive, you don't need those 2 lines
  mkdir build
  cd build
@@ -143,9 +143,8 @@ There are 3 ways to solve this problem :
 
 * You can use ``export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH`` or add it to your ~/.bash_profile, but this will affect other versions of python.
 * You can move the files to a site-package folder that is in your PYTHONPATH:
-	* if you use Python 2: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'```
-	
-	* if you use Python 3: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'```
+	* if you use Python 2: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python -c 'import sys, re ; print next(i for i in sys.path if re.match(".*site-packages$", i))'``
+	* if you use Python 3: ``mv /usr/local/lib/python2.7/site-packages/yaafefeatures.py /usr/local/lib/python2.7/site-packages/yaafelib `python3 -c 'import sys, re ; print(next(i for i in sys.path if re.match(".*site-packages$", i)))'``
 
 If you use Matlab, you can set your MATLABPATH var::
 
