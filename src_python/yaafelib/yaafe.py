@@ -56,11 +56,11 @@ def listFeatures():
     features.sort()
     transforms.sort()
     list_features = ['Available features:']
-    list_features.extend([' - '+f for f in features])
+    list_features.extend([' - ' + f for f in features])
     list_features.append('Available feature transforms:')
-    list_features.extend([' - '+f for f in transforms])
+    list_features.extend([' - ' + f for f in transforms])
     list_features.append('Available Output formats:')
-    list_features.extend([' - '+f for f in yaafe.getOutputFormatList()])
+    list_features.extend([' - ' + f.decode('utf-8') for f in yaafe.getOutputFormatList()])
 
     list_features_str = '\n'.join(list_features)
     print(list_features_str)
