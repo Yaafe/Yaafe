@@ -29,13 +29,13 @@ Conda
 -----
 
 .. |conda| image:: https://anaconda.org/yaafe/yaafe/badges/installer/conda.svg
-   :target: https://conda.anaconda.org/yaafe
+   :target: https://anaconda.org/conda-forge/yaafe
 
 |conda|
 
 Yaafe can be easily install with `conda <http://conda.pydata.org>`_. To install this package with conda run::
 
-  conda install -c https://conda.anaconda.org/yaafe yaafe
+  conda install -c conda-forge yaafe
 
 
 Docker
