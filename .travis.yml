@@ -24,7 +24,7 @@ install:
   - if [ ${WITH_MPG123} = "ON" ]; then sudo apt-get install -qq libmpg123-0 libmpg123-dev ; fi
   - if [ ${WITH_FFTW3} = "ON" ]; then sudo apt-get install -qq libfftw3-3 libfftw3-dev ; fi
   - if [ ${WITH_LAPACK} = "ON" ]; then sudo apt-get install -qq liblapack-dev ; fi
-  - if [ ${WITH_HDF5} = "ON" ]; then sudo apt-get install -qq libhdf5-serial-dev libhdf5-serial-1.8.4 ; fi
+  - if [ ${WITH_HDF5} = "ON" ]; then sudo apt-get install -qq libhdf5-serial-dev ; fi
   - pip install -r requirements.txt
 
 before_script:
