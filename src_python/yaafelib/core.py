@@ -48,14 +48,14 @@ def iterPtrList(plist):
     """ usefull function """
     for i in count(0):
         if not plist[i]:
-            raise StopIteration
+            return
         yield plist[i]
 
 
 def iterPtrDict(plist):
     for i in count(0):
         if not plist[i][0]:
-            raise StopIteration
+            return
         yield plist[i][0], plist[i][1]
 
 
