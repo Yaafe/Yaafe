@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: ISO-8859-1 -*-
 #
 # Yaafe
